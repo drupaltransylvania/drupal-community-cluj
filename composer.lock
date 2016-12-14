@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2340f1b9e20cf93e7bafdc4a6fd9af72",
-    "content-hash": "c1111a935ac42e6a2443eb75c16bbf37",
+    "hash": "d01c77e47e697144a4a4d805ce986c0c",
+    "content-hash": "44b94c1def10363e0d8d9c366dfac63e",
     "packages": [
         {
             "name": "alchemy/zippy",
@@ -1065,6 +1065,48 @@
             "time": "2016-11-05 10:46:44"
         },
         {
+            "name": "drupal/businessgroup_zymphonies_theme",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/businessgroup_zymphonies_theme",
+                "reference": "8.x-1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/businessgroup_zymphonies_theme-8.x-1.0.zip",
+                "reference": null,
+                "shasum": "e129de5e76c1dc952a9c9c164fb6c2985507b113"
+            },
+            "require": {
+                "drupal/core": "~8.0"
+            },
+            "type": "drupal-theme",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.0",
+                    "datestamp": "1454606639"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "zymphonies.com",
+                    "homepage": "https://www.drupal.org/user/2280310"
+                }
+            ],
+            "homepage": "https://www.drupal.org/project/businessgroup_zymphonies_theme",
+            "support": {
+                "source": "http://cgit.drupalcode.org/businessgroup_zymphonies_theme"
+            }
+        },
+        {
             "name": "drupal/console",
             "version": "1.0.0-rc10",
             "source": {
@@ -1464,7 +1506,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/devel-8.x-1.0-beta1.zip",
-                "reference": null,
+                "reference": "8.x-1.0-beta1",
                 "shasum": "439d9cab6af0ddb5efbd31e16fbb5da1f510fe6f"
             },
             "require": {
