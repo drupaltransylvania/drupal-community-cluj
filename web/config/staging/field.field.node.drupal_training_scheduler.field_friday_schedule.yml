@@ -1,0 +1,21 @@
+uuid: e7f897a8-bb36-47d2-ac8a-40a51dd111f4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_friday_schedule
+    - node.type.drupal_training_scheduler
+  module:
+    - text
+id: node.drupal_training_scheduler.field_friday_schedule
+field_name: field_friday_schedule
+entity_type: node
+bundle: drupal_training_scheduler
+label: 'Friday schedule'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long
