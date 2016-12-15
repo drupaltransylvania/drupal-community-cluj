@@ -1,0 +1,147 @@
+uuid: 0a771105-c8c1-4ab0-9ddd-783d6c0f8a20
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.global_training_day_registration.field_address
+    - field.field.node.global_training_day_registration.field_age
+    - field.field.node.global_training_day_registration.field_city
+    - field.field.node.global_training_day_registration.field_country
+    - field.field.node.global_training_day_registration.field_d
+    - field.field.node.global_training_day_registration.field_email
+    - field.field.node.global_training_day_registration.field_first_name
+    - field.field.node.global_training_day_registration.field_gender
+    - field.field.node.global_training_day_registration.field_industry_experience
+    - field.field.node.global_training_day_registration.field_key_expectations
+    - field.field.node.global_training_day_registration.field_last_name
+    - field.field.node.global_training_day_registration.field_occupation
+    - field.field.node.global_training_day_registration.field_on_which_days_will_you_att
+    - field.field.node.global_training_day_registration.field_organization
+    - field.field.node.global_training_day_registration.field_phone
+    - field.field.node.global_training_day_registration.field_preferred_language
+    - field.field.node.global_training_day_registration.field_will_you_carry_a_laptop
+    - node.type.global_training_day_registration
+  module:
+    - country
+    - options
+    - user
+id: node.global_training_day_registration.default
+targetEntityType: node
+bundle: global_training_day_registration
+mode: default
+content:
+  field_address:
+    weight: 113
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+  field_age:
+    weight: 106
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    type: number_integer
+  field_city:
+    weight: 112
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  field_country:
+    weight: 111
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: country_default
+  field_d:
+    weight: 105
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  field_email:
+    weight: 104
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+  field_first_name:
+    weight: 102
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  field_gender:
+    weight: 117
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
+  field_industry_experience:
+    weight: 116
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    type: number_integer
+  field_key_expectations:
+    weight: 121
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+  field_last_name:
+    weight: 103
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  field_occupation:
+    weight: 114
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  field_on_which_days_will_you_att:
+    weight: 118
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
+  field_organization:
+    weight: 115
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  field_phone:
+    weight: 110
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+  field_preferred_language:
+    weight: 120
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
+  field_will_you_carry_a_laptop:
+    weight: 119
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
+  links:
+    weight: 100
+hidden: {  }

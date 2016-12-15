@@ -1,0 +1,27 @@
+uuid: 67a304d6-0ebd-4de6-8a63-d8be41a6835a
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_on_which_days_will_you_att
+field_name: field_on_which_days_will_you_att
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: Friday
+      label: Friday
+    -
+      value: Saturday
+      label: Saturday
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

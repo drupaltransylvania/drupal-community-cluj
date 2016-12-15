@@ -1,0 +1,30 @@
+uuid: 25f3f454-178f-43dd-8150-ff02614ac925
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_preferred_language
+field_name: field_preferred_language
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: English
+      label: English
+    -
+      value: Romanian
+      label: Romanian
+    -
+      value: 'Not relevant'
+      label: 'Not relevant'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

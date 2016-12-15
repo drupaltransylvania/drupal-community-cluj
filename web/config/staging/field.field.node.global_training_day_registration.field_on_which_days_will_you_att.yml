@@ -1,0 +1,21 @@
+uuid: acf5747d-65fb-46f3-ab90-53ab7664503e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_on_which_days_will_you_att
+    - node.type.global_training_day_registration
+  module:
+    - options
+id: node.global_training_day_registration.field_on_which_days_will_you_att
+field_name: field_on_which_days_will_you_att
+entity_type: node
+bundle: global_training_day_registration
+label: 'On which days will you attend the training?'
+description: 'See the shedule !'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

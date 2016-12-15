@@ -1,0 +1,21 @@
+uuid: 71a34918-487e-45ce-88bd-f667fff886f7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_will_you_carry_a_laptop
+    - node.type.global_training_day_registration
+  module:
+    - options
+id: node.global_training_day_registration.field_will_you_carry_a_laptop
+field_name: field_will_you_carry_a_laptop
+entity_type: node
+bundle: global_training_day_registration
+label: 'Will you carry a laptop'
+description: "To know how many working stations will we need we should know if will you come with your own laptop. In case you will, please pre-configure your environment to be able to install Drupal 8 on it (if you need help check Drupal tools).\r\n\r\nNote: You will need your laptop for development only on Saturday "
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

@@ -1,0 +1,19 @@
+uuid: 33c9ef79-3b1e-4b0f-b84c-dfa8dc7e6ea9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_first_name
+    - node.type.global_training_day_registration
+id: node.global_training_day_registration.field_first_name
+field_name: field_first_name
+entity_type: node
+bundle: global_training_day_registration
+label: 'First name'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
