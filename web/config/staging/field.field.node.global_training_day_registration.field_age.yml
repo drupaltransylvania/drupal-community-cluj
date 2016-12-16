@@ -1,0 +1,23 @@
+uuid: d387e9a9-7518-4007-9f3e-5b64d54e4600
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_age
+    - node.type.global_training_day_registration
+id: node.global_training_day_registration.field_age
+field_name: field_age
+entity_type: node
+bundle: global_training_day_registration
+label: Age
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: years
+field_type: integer

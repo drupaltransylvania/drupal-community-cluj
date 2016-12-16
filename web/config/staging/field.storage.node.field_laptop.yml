@@ -1,0 +1,27 @@
+uuid: a958679e-2ba6-4815-946d-437b4306879e
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_laptop
+field_name: field_laptop
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: 'No'
+      label: 'No'
+    -
+      value: 'Yes'
+      label: 'Yes'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
