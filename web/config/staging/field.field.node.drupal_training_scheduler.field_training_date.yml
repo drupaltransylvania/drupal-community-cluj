@@ -1,0 +1,21 @@
+uuid: 349e5041-5520-4103-a80e-768ce9c5aa90
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_training_date
+    - node.type.drupal_training_scheduler
+  module:
+    - datetime_range
+id: node.drupal_training_scheduler.field_training_date
+field_name: field_training_date
+entity_type: node
+bundle: drupal_training_scheduler
+label: 'Training date'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: daterange

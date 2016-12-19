@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d01c77e47e697144a4a4d805ce986c0c",
-    "content-hash": "44b94c1def10363e0d8d9c366dfac63e",
+    "hash": "003460eed6522b215dcf6f2830337f6b",
+    "content-hash": "bba64d9c04758799f3bb8a11fb25ff90",
     "packages": [
         {
             "name": "alchemy/zippy",
@@ -1075,7 +1075,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/businessgroup_zymphonies_theme-8.x-1.0.zip",
-                "reference": null,
+                "reference": "8.x-1.0",
                 "shasum": "e129de5e76c1dc952a9c9c164fb6c2985507b113"
             },
             "require": {
@@ -1579,6 +1579,57 @@
                 "source": "http://cgit.drupalcode.org/devel",
                 "issues": "http://drupal.org/project/devel",
                 "irc": "irc://irc.freenode.org/drupal-contribute"
+            }
+        },
+        {
+            "name": "drupal/google_map_field",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/google_map_field",
+                "reference": "8.x-1.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/google_map_field-8.x-1.2.zip",
+                "reference": null,
+                "shasum": "e7086a79aa1ff571675f501b47f6d530766248f7"
+            },
+            "require": {
+                "drupal/core": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.2",
+                    "datestamp": "1481127184"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "VVVi",
+                    "homepage": "https://www.drupal.org/user/355825"
+                },
+                {
+                    "name": "pauloamgomes",
+                    "homepage": "https://www.drupal.org/user/828638"
+                },
+                {
+                    "name": "scot.hubbard",
+                    "homepage": "https://www.drupal.org/user/868214"
+                }
+            ],
+            "description": "Defines a field type for Google Maps.",
+            "homepage": "https://www.drupal.org/project/google_map_field",
+            "support": {
+                "source": "http://cgit.drupalcode.org/google_map_field"
             }
         },
         {
