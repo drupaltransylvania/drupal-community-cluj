@@ -1,0 +1,21 @@
+uuid: 37715bc2-75ba-4a14-97ef-c56628209483
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_preferred_language
+    - node.type.global_training_day_registration
+  module:
+    - options
+id: node.global_training_day_registration.field_preferred_language
+field_name: field_preferred_language
+entity_type: node
+bundle: global_training_day_registration
+label: 'Preferred language'
+description: 'Please complete with your preferred language for presentations'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

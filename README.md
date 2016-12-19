@@ -9,7 +9,7 @@ This project is made in order to create a website usefull for Drupal Community f
 
 For this website we will use a custom theme which is derivated from the free theme: [BusinessGroup Zymphonies Group](https://www.drupal.org/project/businessgroup_zymphonies_theme).
 
-For managing site dependencies we use [Composer] (https://github.com/drupal-composer/drupal-project).
+For managing site dependencies we use:  [Composer] (https://github.com/drupal-composer/drupal-project).
 
 In order to take this project you need to follow this steps:
 

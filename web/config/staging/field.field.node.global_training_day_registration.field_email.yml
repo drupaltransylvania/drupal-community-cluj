@@ -1,0 +1,19 @@
+uuid: b2197566-ffd8-4533-8540-fa55f5461023
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_email
+    - node.type.global_training_day_registration
+id: node.global_training_day_registration.field_email
+field_name: field_email
+entity_type: node
+bundle: global_training_day_registration
+label: 'Email address'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: email

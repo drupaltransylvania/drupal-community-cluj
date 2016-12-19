@@ -1,0 +1,19 @@
+uuid: 10d5b221-6bc1-4aea-84cd-7f0542f4c538
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.global_training_day_registration.field_first_name
+    - node.type.global_training_day_registration
+  module:
+    - user
+id: node.global_training_day_registration.teaser
+targetEntityType: node
+bundle: global_training_day_registration
+mode: teaser
+content:
+  links:
+    weight: 100
+hidden:
+  field_first_name: true

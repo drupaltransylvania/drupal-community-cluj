@@ -1,0 +1,27 @@
+uuid: d7eb324e-6e7c-4d66-b208-a8dfe655c334
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_attend_day
+field_name: field_attend_day
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: Friday
+      label: Friday
+    -
+      value: Saturday
+      label: Saturday
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

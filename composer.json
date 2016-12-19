@@ -24,7 +24,9 @@
         "drupal/console": "~1.0",
         "drupal/devel": "~1.0",
         "drupal/businessgroup_zymphonies_theme": "1.0.0",
-        "drupal/google_map_field": "1.2"
+        "drupal/google_map_field": "1.2",
+        "drupal/country": "1.0.0-beta3"
+
     },
     "require-dev": {
         "behat/mink": "~1.7",
