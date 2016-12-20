@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Defines simple country field type.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function country_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.country':
+      $output = '';
+      $output .= '<h3>' . t('Country') . '</h3>';
+      $output .= '<p>' . t('The Country module defines a simple country field type for the Field module. It provides 2 widgets - select options and autocomplete textfield - for this purpose.  See the <a href=":field">Field module help page</a> for more information about fields.', array(':field' => \Drupal::url('help.page', array('name' => 'field')))) . '</p>';
+      return $output;
+  }
+}
