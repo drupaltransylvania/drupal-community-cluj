@@ -1,0 +1,22 @@
+{
+  "name": "drupal/country",
+  "description": "A simple country field for Drupal 8",
+  "type": "drupal-module",
+  "homepage": "http://drupal.org/project/country",
+  "authors": [
+    {
+      "name": "Deji Akala",
+      "email": "dejiakala@gmail.com",
+      "homepage": "https://github.com/dakala",
+      "role": "Maintainer"
+    }
+  ],
+  "support": {
+    "issues": "http://drupal.org/project/issues/country",
+    "source": "http://cgit.drupalcode.org/country"
+  },
+  "license": "GPL-2.0+",
+  "require": {
+    "drupal/core": "~8.1"
+  }
+}

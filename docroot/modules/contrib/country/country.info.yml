@@ -1,0 +1,14 @@
+name: Country
+type: module
+description: Defines a simple country field type.
+package: Field types
+# version: VERSION
+# core: 8.x
+dependencies:
+  - field
+
+# Information added by Drupal.org packaging script on 2016-06-29
+version: '8.x-1.0-beta3'
+core: '8.x'
+project: 'country'
+datestamp: 1467193143
