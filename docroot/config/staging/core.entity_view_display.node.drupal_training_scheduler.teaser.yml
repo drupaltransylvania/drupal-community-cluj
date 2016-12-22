@@ -23,4 +23,10 @@ content:
     third_party_settings: {  }
   links:
     weight: 100
-hidden: {  }
+hidden:
+  field_friday_schedule: true
+  field_location: true
+  field_number_of_members: true
+  field_registration_period: true
+  field_saturday_schedule: true
+  field_training_date: true

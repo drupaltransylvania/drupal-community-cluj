@@ -1,0 +1,7 @@
+dcc_gtd_registration.form:
+  path: '/global-training/registration'
+  defaults:
+    _form: '\Drupal\dcc_gtd_registration\Form\GlobalTrainingRegistrationForm'
+    _title: 'Global Training Registration'
+  requirements:
+    _permission: 'register to global training days'
