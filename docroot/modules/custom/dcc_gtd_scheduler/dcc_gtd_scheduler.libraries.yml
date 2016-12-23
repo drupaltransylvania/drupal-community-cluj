@@ -1,0 +1,6 @@
+dcc-gtd-scheduler-google-map:
+  js:
+    js/dcc-gtd-scheduler-google-map.js: {}
+  dependencies:
+      - core/jquery
+      - core/drupal

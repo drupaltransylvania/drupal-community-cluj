@@ -1,0 +1,5 @@
+name: Global Training scheduler
+description: Create a custom page which allows users to add new schedulers for the training days.
+type: module
+core: 8.x
+package: Custom
