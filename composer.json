@@ -70,6 +70,11 @@
             "docroot/profiles/contrib/{$name}": ["type:drupal-profile"],
             "docroot/themes/contrib/{$name}": ["type:drupal-theme"],
             "drush/contrib/{$name}": ["type:drupal-drush"]
+        },
+        "patches": {
+            "drupal/businessgroup_zymphonies_theme": {
+                "https://www.drupal.org/node/2840589": "https://www.drupal.org/files/issues/businessgroup_zymphonies_theme-icons_location-2840589-2-8.patch"
+            }
         }
     }
 }
