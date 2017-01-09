@@ -9,7 +9,7 @@ use Drupal\Core\Entity\Entity;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Locale\CountryManager;
+use Drupal\Core\Locale\CountryManagerInterface;
 use Drupal\Core\Render\Element\StatusMessages;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -21,14 +21,16 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class GlobalTrainingRegistrationForm extends FormBase {
 
   /**
+   * The entity type manager.
+   *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   *  The entity type manager.
    */
   protected $entityTypeManager;
 
   /**
+   * The country manager.
+   *
    * @var \Drupal\dcc_gtd_registration\Form\CountryManager
-   *  The country manager.
    */
   protected $countryManager;
 
@@ -36,11 +38,11 @@ class GlobalTrainingRegistrationForm extends FormBase {
    * GlobalTrainingRegistrationForm constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *  The entity type manager.
+   *   The entity type manager.
    * @param \Drupal\Core\Locale\CountryManager $countryManager
-   *  The country manager.
+   *   The country manager.
    */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, CountryManager $countryManager) {
+  public function __construct(EntityTypeManagerInterface $entityTypeManager, CountryManagerInterface $countryManager) {
     $this->entityTypeManager = $entityTypeManager;
     $this->countryManager = $countryManager;
   }
@@ -48,9 +50,10 @@ class GlobalTrainingRegistrationForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $containerInterface) {
+  public static function create(ContainerInterface $container) {
     return new static(
-      $containerInterface->get('entity_type.manager'), $containerInterface->get('country_manager')
+      $container->get('entity_type.manager'),
+      $container->get('country_manager')
     );
   }
 
@@ -58,7 +61,7 @@ class GlobalTrainingRegistrationForm extends FormBase {
    * Returns the form Id.
    *
    * @return string
-   *  The form id.
+   *   The form id.
    */
   public function getFormId() {
     return 'dcc_gtd_registration';
@@ -68,12 +71,12 @@ class GlobalTrainingRegistrationForm extends FormBase {
    * Creates the form elements regarding the step.
    *
    * @param array $form
-   *  The form elements.
+   *   The form elements.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *  The form state.
+   *   The form state.
    *
    * @return array
-   *  Return the $form with all the fields created according step.
+   *   Returns the $form with all the fields created according step.
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $step = $form_state->get("step");
@@ -81,7 +84,8 @@ class GlobalTrainingRegistrationForm extends FormBase {
       $form_state->set('step', 1);
       $step = $form_state->get("step");
     }
-    //If next button is pushed, save the values and increments the step.
+
+    //If next button is pushed, saves the values and increments the step.
     if ($form_state->getTriggeringElement()['#value'] == 'Next') {
       if ($step == 1) {
         $form_state->set("first_name", $form_state->getValue("first_name"));
@@ -144,7 +148,7 @@ class GlobalTrainingRegistrationForm extends FormBase {
         '#type' => 'button',
         '#value' => 'Next',
         '#ajax' => array(
-          'callback' => 'Drupal\dcc_gtd_registration\Form\GlobalTrainingRegistrationForm::ajax',
+          'callback' => array($this, 'ajax'),
           'event' => 'click',
           'progress' => array(
             'type' => 'throbber',
@@ -164,7 +168,7 @@ class GlobalTrainingRegistrationForm extends FormBase {
         '#type' => 'button',
         '#value' => 'Back',
         '#ajax' => array(
-          'callback' => 'Drupal\dcc_gtd_registration\Form\GlobalTrainingRegistrationForm::ajax',
+          'callback' => array($this, 'ajax'),
           'event' => 'click',
           'progress' => array(
             'type' => 'throbber',
@@ -173,6 +177,7 @@ class GlobalTrainingRegistrationForm extends FormBase {
         ),
       );
     }
+
     return $form;
   }
 
@@ -180,11 +185,11 @@ class GlobalTrainingRegistrationForm extends FormBase {
    * Creates the form elements for the first step.
    *
    * @param array $form
-   *  The form elements.
+   *   The form elements.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *  The form state.
+   *   The form state.
    */
-  private function stepOneElements(array $form, FormStateInterface $form_state){
+  private function stepOneElements(array &$form, FormStateInterface &$form_state){
     $form['container']['title'] = array(
       '#title' => $this->t("Personal Informations"),
       '#type' => 'item',
@@ -255,11 +260,11 @@ class GlobalTrainingRegistrationForm extends FormBase {
    * Creates the form elements for the second step.
    *
    * @param array $form
-   *  The form elements.
+   *   The form elements.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *  The form state.
+   *   The form state.
    */
-  private function stepTwoElements(array $form,FormStateInterface $form_state){
+  private function stepTwoElements(array &$form,FormStateInterface &$form_state){
     $countries=$this->countryManager->getList();
 
     $form['container']['title'] = array(
@@ -292,11 +297,11 @@ class GlobalTrainingRegistrationForm extends FormBase {
    * Creates the form elements for the third step.
    *
    * @param array $form
-   *  The form elements.
+   *   The form elements.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *  The form state.
+   *   The form state.
    */
-  private function stepThreeElements(array $form,FormStateInterface $form_state){
+  private function stepThreeElements(array &$form,FormStateInterface &$form_state){
     $form['container']['title'] = array(
       '#title' => $this->t("Professional details"),
       '#type' => 'item',
@@ -330,11 +335,11 @@ class GlobalTrainingRegistrationForm extends FormBase {
    * Creates the form elements for the fourth step.
    *
    * @param array $form
-   *  The form elements.
+   *   The form elements.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *  The form state.
+   *   The form state.
    */
-  private function stepFourElements(array $form,FormStateInterface $form_state){
+  private function stepFourElements(array &$form,FormStateInterface &$form_state){
     $form['container']['title'] = array(
       '#title' => $this->t( "Training details"),
       '#type' => 'item',
@@ -385,23 +390,23 @@ class GlobalTrainingRegistrationForm extends FormBase {
   }
 
   /**
-   *Ajax callback method used for replacing the container with the form elements stored in $form['container'].
+   * Ajax callback used for replacing the container with the form elements.
    *
    * @param array $form
-   *  The form elements.
+   *   The form elements.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *  The form state.
+   *   The form state.
    *
    * @return \Drupal\Core\Ajax\AjaxResponse
+   *   The ajax response.
    */
   public function ajax(array &$form, FormStateInterface $form_state) {
     $response = new AjaxResponse();
     $response->addCommand(new ReplaceCommand('#ajaxcontainer', $form['container']));
     $response->addCommand(new PrependCommand('#ajaxcontainer', StatusMessages::renderMessages(NULL)));
-
     $form_state->setRebuild();
-    return $response;
 
+    return $response;
   }
 
   /**
@@ -461,12 +466,12 @@ class GlobalTrainingRegistrationForm extends FormBase {
   }
 
   /**
-   * Save the node created in the validateForm function and return a result message.
+   * Saves the node created in the validateForm function and return a result message.
    *
    * @param array $form
-   *  The form elements.
+   *   The form elements.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *  The form state.
+   *   The form state.
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $node = $form_state->get("node");
