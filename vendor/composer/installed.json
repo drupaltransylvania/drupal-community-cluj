@@ -2180,50 +2180,6 @@
         "description": "Drupal is an open source content management platform powering millions of websites and applications."
     },
     {
-        "name": "drupal/businessgroup_zymphonies_theme",
-        "version": "1.0.0",
-        "version_normalized": "1.0.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://git.drupal.org/project/businessgroup_zymphonies_theme",
-            "reference": "8.x-1.0"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/businessgroup_zymphonies_theme-8.x-1.0.zip",
-            "reference": "8.x-1.0",
-            "shasum": "e129de5e76c1dc952a9c9c164fb6c2985507b113"
-        },
-        "require": {
-            "drupal/core": "~8.0"
-        },
-        "type": "drupal-theme",
-        "extra": {
-            "branch-alias": {
-                "dev-1.x": "1.x-dev"
-            },
-            "drupal": {
-                "version": "8.x-1.0",
-                "datestamp": "1454606639"
-            }
-        },
-        "installation-source": "dist",
-        "notification-url": "https://packages.drupal.org/8/downloads",
-        "license": [
-            "GPL-2.0+"
-        ],
-        "authors": [
-            {
-                "name": "zymphonies.com",
-                "homepage": "https://www.drupal.org/user/2280310"
-            }
-        ],
-        "homepage": "https://www.drupal.org/project/businessgroup_zymphonies_theme",
-        "support": {
-            "source": "http://cgit.drupalcode.org/businessgroup_zymphonies_theme"
-        }
-    },
-    {
         "name": "gabordemooij/redbean",
         "version": "v4.3.3",
         "version_normalized": "4.3.3.0",
@@ -6400,5 +6356,52 @@
         ],
         "description": "Symfony BrowserKit Component",
         "homepage": "https://symfony.com"
+    },
+    {
+        "name": "drupal/businessgroup_zymphonies_theme",
+        "version": "1.0.0",
+        "version_normalized": "1.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://git.drupal.org/project/businessgroup_zymphonies_theme",
+            "reference": "8.x-1.0"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://ftp.drupal.org/files/projects/businessgroup_zymphonies_theme-8.x-1.0.zip",
+            "reference": "8.x-1.0",
+            "shasum": "e129de5e76c1dc952a9c9c164fb6c2985507b113"
+        },
+        "require": {
+            "drupal/core": "~8.0"
+        },
+        "type": "drupal-theme",
+        "extra": {
+            "branch-alias": {
+                "dev-1.x": "1.x-dev"
+            },
+            "drupal": {
+                "version": "8.x-1.0",
+                "datestamp": "1454606639"
+            },
+            "patches_applied": {
+                "https://www.drupal.org/node/2840589": "https://www.drupal.org/files/issues/businessgroup_zymphonies_theme-icons_location-2840589-2-8.patch"
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packages.drupal.org/8/downloads",
+        "license": [
+            "GPL-2.0+"
+        ],
+        "authors": [
+            {
+                "name": "zymphonies.com",
+                "homepage": "https://www.drupal.org/user/2280310"
+            }
+        ],
+        "homepage": "https://www.drupal.org/project/businessgroup_zymphonies_theme",
+        "support": {
+            "source": "http://cgit.drupalcode.org/businessgroup_zymphonies_theme"
+        }
     }
 ]
