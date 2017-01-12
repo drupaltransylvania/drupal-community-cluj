@@ -1,4 +1,3 @@
 register to global training days:
   title: 'Register to global training days.'
   description: 'Gives permissions for the registration to global training days.'
-  restrict access: FALSE
