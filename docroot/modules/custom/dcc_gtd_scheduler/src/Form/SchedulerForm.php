@@ -8,6 +8,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\Datetime\DateFormatter;
 
 /**
  * Created a form similar to 'Drupal Training Scheduler' one.
@@ -28,6 +29,12 @@ class SchedulerForm extends FormBase {
    * @var \Drupal\Core\Session\AccountProxyInterface
    */
   protected $user;
+  /**
+   * Date formatter service.
+   *
+   * @var \Drupal\Core\Datetime\DateFormatter;
+   */
+  protected $date_formatter;
 
   /**
    * SchedulerForm constructor.
@@ -39,10 +46,12 @@ class SchedulerForm extends FormBase {
    */
   public function __construct(
     EntityTypeManagerInterface $entity,
-    AccountProxyInterface $user
+    AccountProxyInterface $user,
+    DateFormatter $date_formatter
   ) {
     $this->entity = $entity;
     $this->user = $user;
+    $this->date_formatter = $date_formatter;
   }
 
   /**
@@ -51,7 +60,8 @@ class SchedulerForm extends FormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('entity_type.manager'),
-      $container->get('current_user')
+      $container->get('current_user'),
+      $container->get('date.formatter')
     );
   }
 
@@ -66,30 +76,23 @@ class SchedulerForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form['title'] = array(
-      '#type' => 'textfield',
-      '#title' => $this->t('Title'),
-      '#required' => TRUE,
-    );
-
-    $form['number_of_members'] = array(
-      '#type' => 'number',
-      '#title' => $this->t('Number of members'),
-    );
 
     $form['training'] = array(
       '#type' => 'fieldset',
       '#title' => $this->t('Training date'),
     );
 
+    // @todo: add date formatter for all the datetime fields.
     $form['training']['training_start_date'] = array(
       '#type' => 'datetime',
       '#title' => $this->t('Start Date'),
+      '#required' => TRUE,
     );
 
     $form['training']['training_end_date'] = array(
       '#type' => 'datetime',
       '#title' => $this->t('End Date'),
+      '#required' => TRUE,
     );
 
     $form['registration'] = array(
@@ -100,20 +103,27 @@ class SchedulerForm extends FormBase {
     $form['registration']['registration_start_date'] = array(
       '#type' => 'datetime',
       '#title' => $this->t('Start Date'),
+      '#required' => TRUE,
     );
 
     $form['registration']['registration_end_date'] = array(
       '#type' => 'datetime',
       '#title' => $this->t('End Date'),
+      '#required' => TRUE,
+    );
+
+    $form['number_of_members'] = array(
+      '#type' => 'number',
+      '#title' => $this->t('Number of members'),
     );
 
     $form['friday_scheduler'] = array(
-      '#type' => 'textarea',
+      '#type' => 'text_format',
       '#title' => $this->t('Friday Scheduler'),
     );
 
     $form['saturday_scheduler'] = array(
-      '#type' => 'textarea',
+      '#type' => 'text_format',
       '#title' => $this->t('Saturday Scheduler'),
     );
 
@@ -146,6 +156,11 @@ class SchedulerForm extends FormBase {
 
     );
 
+    $form['location']['address'] = array(
+      '#type' => 'textfield',
+      '#title' => $this->t('Address'),
+    );
+
     $form['submit'] = array(
       '#type' => 'submit',
       '#value' => $this->t('Submit'),
@@ -162,13 +177,16 @@ class SchedulerForm extends FormBase {
     $tra_processed = Datetime::processDatetime($form['training'], $form_state, $form);
     $reg_processed = Datetime::processDatetime($form['registration'], $form_state, $form);
 
+    $title = $tra_processed['training_start_date']['date']['#value'] . ' - ' . $tra_processed['training_start_date']['date']['#value'];
+
     $this->entity->getStorage('node')->create(array(
       'type' => 'drupal_training_scheduler',
-      'title' => $form_state->getValue('title'),
+      'title' => $title,
       'uid' => $this->user->id(),
       'status' => 1,
       'field_friday_schedule' => $form_state->getValue('friday_scheduler'),
       'field_location' => array(
+        'name' => $form_state->getValue('address'),
         'lat' => $form_state->getValue('lat'),
         'lon' => $form_state->getValue('lng'),
         'zoom' => 10,
