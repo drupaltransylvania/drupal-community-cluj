@@ -1,0 +1,42 @@
+uuid: af557d80-601f-4432-a3e1-57ce3df66a72
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.slide_show
+    - field.field.node.item.field_description
+    - field.field.node.item.field_picture
+    - field.field.node.item.field_title
+    - image.style.slider
+    - node.type.item
+  module:
+    - image
+    - user
+id: node.item.slide_show
+targetEntityType: node
+bundle: item
+mode: slide_show
+content:
+  field_description:
+    weight: 3
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+  field_picture:
+    type: image
+    weight: 2
+    label: hidden
+    settings:
+      image_style: slider
+      image_link: ''
+    third_party_settings: {  }
+  field_title:
+    type: string
+    weight: 1
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+hidden:
+  links: true

@@ -25,7 +25,8 @@
         "drupal/devel": "~1.0",
         "drupal/businessgroup_zymphonies_theme": "1.0.0",
         "drupal/google_map_field": "1.2",
-        "drupal/country": "1.0.0-beta3"
+        "drupal/country": "1.0.0-beta3",
+        "drupal/entityqueue": "1.alpha6"
 
     },
     "require-dev": {

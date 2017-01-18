@@ -1,0 +1,26 @@
+uuid: e9cd3c25-8600-4134-9a82-b17e90c9d175
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: slideshowwithcontenttype
+label: SlideShowWithContentType
+handler: simple
+handler_configuration: {  }
+entity_settings:
+  target_type: node
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      item: item
+    sort:
+      field: type
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+queue_settings:
+  min_size: 0
+  max_size: 0
+  act_as_queue: false
+  reverse_in_admin: false

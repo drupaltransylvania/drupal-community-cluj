@@ -1,0 +1,10 @@
+uuid: a5d8ccfd-1a03-4ffe-b729-b6f1bb7f0037
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.slide_show
+label: 'Slide Show'
+targetEntityType: node
+cache: true
