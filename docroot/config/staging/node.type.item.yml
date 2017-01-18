@@ -1,0 +1,18 @@
+uuid: a3a0f561-28d5-4c24-ab61-170b18153304
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus:
+      - main
+    parent: 'main:'
+name: 'Slide Show Item'
+type: item
+description: 'This is the item that will be displayed in in slide show.'
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: true
