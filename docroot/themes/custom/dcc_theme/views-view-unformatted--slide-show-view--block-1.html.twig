@@ -1,12 +1,7 @@
-<div class="carousel slide" data-ride="carousel" id="myCarousel">
+<div class="carousel slide" data-ride="carousel" id="myCarousel-{{ view.dom_id }}">
     <ol class="carousel-indicators">
         {% for i in 0..rows|length-1 %}
-            {% if i == 0 %}
-                <li class="active" data-slide-to="0" data-target="#myCarousel">
-                    &nbsp;</li>
-            {% else %}
-                <li data-slide-to="i" data-target="#myCarousel">&nbsp;</li>
-            {% endif %}
+            <li {{ (i == 0) ? 'class="active"' : '' }} data-slide-to="{{ i }}" data-target="#myCarousel-{{ view.dom_id }}">&nbsp;</li>
         {% endfor %}
     </ol>
     <div class="carousel-inner" role="listbox">
