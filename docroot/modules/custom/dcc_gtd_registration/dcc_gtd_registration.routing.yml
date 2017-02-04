@@ -5,3 +5,4 @@ dcc_gtd_registration.form:
     _title: 'Global Training Registration'
   requirements:
     _permission: 'register to global training days'
+    _custom_access: '\Drupal\dcc_gtd_registration\RegistrationAccess::access'

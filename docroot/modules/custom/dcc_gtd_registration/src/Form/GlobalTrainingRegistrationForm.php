@@ -10,6 +10,8 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Locale\CountryManagerInterface;
 use Drupal\Core\Render\Element\StatusMessages;
+use Drupal\dcc_gtd_registration\RegistrationAccess;
+use Drupal\node\Entity\Node;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -477,9 +479,12 @@ class GlobalTrainingRegistrationForm extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $node = $form_state->get("node");
+    $session = $this->entityTypeManager->getStorage('node')->load(RegistrationAccess::getCurrentSessionNid());
+    if ($session instanceof Node) {
+      $node->set('field_training_session', $session->id());
+    }
     if ($node->save()) {
       drupal_set_message("Your registration have been submited with success!");
-
     }
     else {
       drupal_set_message("Something went wrong, please try again!");
