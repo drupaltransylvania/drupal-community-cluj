@@ -5,7 +5,7 @@ dependencies:
   config:
     - field.field.node.item.field_description
     - field.field.node.item.field_picture
-    - image.style.slider
+    - image.style.homepage_slider
     - node.type.item
   module:
     - image
@@ -26,7 +26,7 @@ content:
     weight: 0
     label: above
     settings:
-      image_style: slider
+      image_style: homepage_slider
       image_link: ''
     third_party_settings: {  }
 hidden:
