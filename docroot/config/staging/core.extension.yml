@@ -15,6 +15,7 @@ module:
   dblog: 0
   dcc_gtd_registration: 0
   dcc_gtd_scheduler: 0
+  dcc_multistep: 0
   dynamic_page_cache: 0
   editor: 0
   entityqueue: 0
