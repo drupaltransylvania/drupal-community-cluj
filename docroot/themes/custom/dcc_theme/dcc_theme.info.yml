@@ -1,7 +1,7 @@
 name: Drupal Community Theme
 type: theme
 description: This is a sub theme with the theme base BusinessGroup Zymphonies Theme
-core: 8.2.3
+core: 8.x
 base theme: businessgroup_zymphonies_theme
 libraries:
   - dcc_theme/global-styling
