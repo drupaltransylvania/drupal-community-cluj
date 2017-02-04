@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "56d36baabb234101b2d916730f7ce785",
-    "content-hash": "d6cce93a99ecf42c75245505de8b3db2",
+    "hash": "c074e890c56f9e3c843896ccb2107dc1",
+    "content-hash": "a24a1aea475f9e67c50fa45f83a53be6",
     "packages": [
         {
             "name": "alchemy/zippy",
@@ -1729,6 +1729,65 @@
             "homepage": "https://www.drupal.org/project/google_map_field",
             "support": {
                 "source": "http://cgit.drupalcode.org/google_map_field"
+            }
+        },
+        {
+            "name": "drupal/mailsystem",
+            "version": "4.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/mailsystem",
+                "reference": "8.x-4.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/mailsystem-8.x-4.1.zip",
+                "reference": null,
+                "shasum": "318b87f1fdf96e6db30b04a98108af02a0fc3dcc"
+            },
+            "require": {
+                "drupal/core": "^8.0.5"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-4.x": "4.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-4.1",
+                    "datestamp": "1467993646"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Berdir",
+                    "homepage": "https://www.drupal.org/user/214652"
+                },
+                {
+                    "name": "Les Lim",
+                    "homepage": "https://www.drupal.org/user/84263"
+                },
+                {
+                    "name": "Nafes",
+                    "homepage": "https://www.drupal.org/user/2489926"
+                },
+                {
+                    "name": "miro_dietiker",
+                    "homepage": "https://www.drupal.org/user/227761"
+                },
+                {
+                    "name": "pillarsdotnet",
+                    "homepage": "https://www.drupal.org/user/36148"
+                }
+            ],
+            "description": "Mail System",
+            "homepage": "https://www.drupal.org/project/mailsystem",
+            "support": {
+                "source": "http://cgit.drupalcode.org/mailsystem"
             }
         },
         {
