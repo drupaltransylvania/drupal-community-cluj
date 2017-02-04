@@ -1,0 +1,8 @@
+global-styling:
+  version: 1.x
+  css:
+    theme:
+      css/base.css: {}
+  dependencies:
+    - businessgroup_zymphonies_theme/bootstrap
+    - businessgroup_zymphonies_theme/global-components

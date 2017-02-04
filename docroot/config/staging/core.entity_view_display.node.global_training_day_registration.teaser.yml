@@ -16,4 +16,20 @@ content:
   links:
     weight: 100
 hidden:
+  field_address: true
+  field_age: true
+  field_attend_day: true
+  field_city: true
+  field_country: true
+  field_drupal_user: true
+  field_email: true
   field_first_name: true
+  field_gender: true
+  field_industry_experience: true
+  field_key_expectations: true
+  field_laptop: true
+  field_last_name: true
+  field_occupation: true
+  field_organization: true
+  field_phone: true
+  field_preferred_language: true
