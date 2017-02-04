@@ -17,6 +17,7 @@ module:
   dcc_gtd_scheduler: 0
   dcc_multistep: 0
   dynamic_page_cache: 0
+  easy_breadcrumb: 0
   editor: 0
   entityqueue: 0
   field: 0
@@ -27,6 +28,7 @@ module:
   help: 0
   history: 0
   image: 0
+  kint: 0
   link: 0
   mailsystem: 0
   menu_ui: 0

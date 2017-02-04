@@ -1,0 +1,20 @@
+uuid: 2e1e710a-8c97-48ac-b2c0-18d315f6219b
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - dcc_theme
+id: breadcrumbs
+theme: dcc_theme
+region: breadcrumb
+weight: 0
+provider: null
+plugin: system_breadcrumb_block
+settings:
+  id: system_breadcrumb_block
+  label: Breadcrumbs
+  provider: system
+  label_display: '0'
+visibility: {  }
