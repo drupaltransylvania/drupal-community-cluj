@@ -3,6 +3,7 @@
 namespace Drupal\dcc_multistep;
 
 use Drupal\Component\Plugin\PluginBase;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
@@ -21,5 +22,10 @@ abstract class StepPluginBase extends PluginBase implements StepPluginInspection
   public function getName() {
     return $this->pluginDefinition['name'];
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validate(FormStateInterface $formState) {}
 
 }

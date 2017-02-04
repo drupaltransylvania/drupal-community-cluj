@@ -55,4 +55,15 @@ class TrainingDateStep extends StepPluginBase {
 
     return $fields;
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validate(FormStateInterface $formState) {
+    if (!empty($formState->getValue('training_end_date')) &&
+      strtotime($formState->getValue('training_start_date')) > strtotime($formState->getValue('training_end_date'))) {
+      $formState->setErrorByName('training_end_date', t('End date bigger than start date.'));
+    }
+  }
+
 }
