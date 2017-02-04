@@ -1,0 +1,13 @@
+<+>UTF-8
+===================================================================
+--- docroot/modules/contrib/easy_breadcrumb/src/EasyBreadcrumbBuilder.php	(date 1486214709000)
++++ docroot/modules/contrib/easy_breadcrumb/src/EasyBreadcrumbBuilder.php	(revision )
+@@ -191,7 +191,7 @@
+           }
+ 
+           // Add a linked breadcrumb unless it's the current page.
+-          if ($i == 0 && $this->config->get(EasyBreadcrumbConstants::INCLUDE_TITLE_SEGMENT)) {
++          if ($i == 0 && $this->config->get(EasyBreadcrumbConstants::INCLUDE_TITLE_SEGMENT) && !$this->config->get(EasyBreadcrumbConstants::TITLE_SEGMENT_AS_LINK)) {
+               $links[] = Link::createFromRoute($title, '<none>');
+           }
+           else {
