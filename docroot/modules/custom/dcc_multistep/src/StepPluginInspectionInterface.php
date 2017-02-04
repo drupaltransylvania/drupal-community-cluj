@@ -3,6 +3,7 @@
 namespace Drupal\dcc_multistep;
 
 use Drupal\Component\Plugin\PluginInspectionInterface;
+use Drupal\Core\Form\FormInterface;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -24,6 +25,6 @@ interface StepPluginInspectionInterface extends PluginInspectionInterface {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    * @return array
    */
-  public function buildStep(FormStateInterface $form_state);
+  public function buildStep(FormStateInterface $form_state, FormInterface $form);
 
 }

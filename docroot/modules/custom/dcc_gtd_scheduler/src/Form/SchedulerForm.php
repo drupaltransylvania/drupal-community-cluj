@@ -8,6 +8,7 @@ use Drupal\Core\Ajax\PrependCommand;
 use Drupal\Core\Render\Element\StatusMessages;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\dcc_multistep\StepPluginManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
@@ -42,6 +43,20 @@ class SchedulerForm extends FormBase {
   protected $dateFormatter;
 
   /**
+   * Step plugin manager service.
+   *
+   * @var \Drupal\dcc_multistep\StepPluginManagerInterface
+   */
+  protected $stepPluginManager;
+
+  /**
+   * An array of step plugin instances.
+   *
+   * @var \ArrayObject
+   */
+  protected $steps;
+
+  /**
    * SchedulerForm constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity
@@ -50,11 +65,19 @@ class SchedulerForm extends FormBase {
    *   Current user.
    * @param \Drupal\Core\Datetime\DateFormatter $dateFormatter
    *   The date formatter.
+   * @param \Drupal\dcc_multistep\StepPluginManagerInterface $stepPluginManager
    */
-  public function __construct(EntityTypeManagerInterface $entity, AccountProxyInterface $user, DateFormatter $dateFormatter) {
+  public function __construct(
+    EntityTypeManagerInterface $entity,
+    AccountProxyInterface $user,
+    DateFormatter $dateFormatter,
+    StepPluginManagerInterface $stepPluginManager
+  ) {
     $this->entity = $entity;
     $this->user = $user;
     $this->dateFormatter = $dateFormatter;
+    $this->stepPluginManager = $stepPluginManager;
+    $this->steps = $this->stepPluginManager->getSteps($this->getFormId());
   }
 
   /**
@@ -64,7 +87,8 @@ class SchedulerForm extends FormBase {
     return new static(
       $container->get('entity_type.manager'),
       $container->get('current_user'),
-      $container->get('date.formatter')
+      $container->get('date.formatter'),
+      $container->get('plugin.manager.dcc_multistep.steps')
     );
   }
 
@@ -126,128 +150,10 @@ class SchedulerForm extends FormBase {
    *   The form array.
    */
   protected function getStepFields($step, FormStateInterface $form_state) {
-    $fields = [];
-    switch ($step) {
-      case 1:
-        // @todo: add date formatter for all the datetime fields.
-        $fields['training'] = array(
-          '#type' => 'fieldset',
-          '#title' => $this->t('Training date'),
-        );
-        $fields['training']['training_start_date'] = array(
-          '#type' => 'datetime',
-          '#title' => $this->t('Start Date'),
-          '#required' => TRUE,
-          '#default_value' => $form_state->getValue('training_start_date') ?: NULL,
-        );
-        $fields['training']['training_end_date'] = array(
-          '#type' => 'datetime',
-          '#title' => $this->t('End Date'),
-          '#required' => TRUE,
-          '#default_value' => $form_state->getValue('training_end_date') ?: NULL,
-        );
-        break;
+    $stepPlugin = $this->steps->offsetGet($step);
 
-      case 2:
-        $fields['registration'] = array(
-          '#type' => 'fieldset',
-          '#title' => $this->t('Registration date'),
-        );
-        $fields['registration']['registration_start_date'] = array(
-          '#type' => 'datetime',
-          '#title' => $this->t('Start Date'),
-          '#required' => TRUE,
-          '#default_value' => $form_state->getValue('registration_start_date') ?: NULL,
-        );
-        $fields['registration']['registration_end_date'] = array(
-          '#type' => 'datetime',
-          '#title' => $this->t('End Date'),
-          '#required' => TRUE,
-          '#default_value' => $form_state->getValue('registration_end_date') ?: NULL,
-        );
-        break;
+    $fields = $stepPlugin->buildStep($form_state, $this);
 
-      case 3:
-        $fields['members'] = array(
-          '#type' => 'fieldset',
-          '#title' => $this->t('Members'),
-        );
-        $fields['members']['number_of_members'] = array(
-          '#type' => 'number',
-          '#title' => $this->t('Number of members'),
-          '#default_value' => $form_state->getValue('number_of_members') ?: NULL,
-        );
-        break;
-
-      case 4:
-        $friday = $form_state->getValue('friday_scheduler');
-        $fields['friday_scheduler'] = array(
-          '#type' => 'text_format',
-          '#title' => $this->t('Friday Scheduler'),
-          '#default_value' => $friday['value'] ?: NULL,
-          '#format' => $friday['format'] ?: 'basic_html',
-        );
-        break;
-
-      case 5:
-        $saturday = $form_state->getValue('saturday_scheduler');
-        $fields['saturday_scheduler'] = array(
-          '#type' => 'text_format',
-          '#title' => $this->t('Saturday Scheduler'),
-          '#default_value' => $saturday['value'] ?: NULL,
-          '#format' => $saturday['format'] ?: 'basic_html',
-        );
-        break;
-
-      case 6:
-        $entity = $this->entity->getStorage('node')->create(array(
-          'type' => 'drupal_training_scheduler',
-        ));
-        $entity_form_display = $this->entity->getStorage('entity_form_display')
-          ->load('node.drupal_training_scheduler.default');
-        $widget = $entity_form_display->getRenderer('field_location');
-        $items = $entity->get('field_location');
-        $items->setValue($form_state->getValue('field_location') ?: []);
-        $form['#parents'] = [];
-        $fields['field_location'] = $widget->form($items, $form, $form_state);
-        $fields['field_location']['#access'] = $items->access('edit');
-        break;
-    }
-    if ($step != 6) {
-      $fields['next'] = array(
-        '#type' => 'button',
-        '#value' => 'Next',
-        '#ajax' => array(
-          'callback' => array($this, 'ajax'),
-          'event' => 'click',
-          'progress' => array(
-            'type' => 'throbber',
-            'message' => NULL,
-          ),
-        ),
-      );
-    }
-    if ($step == 6) {
-      $fields['submit'] = array(
-        '#type' => 'submit',
-        '#value' => 'Save',
-      );
-    }
-    if ($step != 1) {
-      $fields['back'] = array(
-        '#type' => 'button',
-        '#value' => 'Back',
-        '#ajax' => array(
-          'callback' => array($this, 'ajax'),
-          'event' => 'click',
-          'progress' => array(
-            'type' => 'throbber',
-            'message' => NULL,
-          ),
-        ),
-        '#attributes' => ['style' => ['float: left; margin-right: 4px;']],
-      );
-    }
     return $fields;
   }
 

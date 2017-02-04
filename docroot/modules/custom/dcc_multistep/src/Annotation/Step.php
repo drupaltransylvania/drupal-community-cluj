@@ -37,4 +37,11 @@ class Step extends Plugin {
    */
   public $form_id;
 
+  /**
+   * The number of the step.
+   *
+   * @var
+   */
+  public $step_number;
+
 }

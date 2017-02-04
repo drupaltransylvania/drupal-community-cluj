@@ -34,8 +34,8 @@ class StepPluginManager extends DefaultPluginManager implements StepPluginManage
   public function getSteps($form_id) {
     $instances = [];
     $steps = $this->getDefinitionsForElement($form_id);
-    foreach ($steps as $step) {
-      $instances[] = $this->createInstance($step['id']);
+    foreach ($steps as $key => $step) {
+      $instances[$key] = $this->createInstance($step['id']);
 
     }
     return new \ArrayObject($instances);
@@ -54,7 +54,7 @@ class StepPluginManager extends DefaultPluginManager implements StepPluginManage
     $steps = [];
     foreach ($stepDefinitions as $definition) {
       if (array_key_exists('form_id', $definition) && $definition['form_id'] == $form_id) {
-        $steps[$definition['id']] = $definition;
+        $steps[$definition['step_number']] = $definition;
       }
     }
     return $steps;
