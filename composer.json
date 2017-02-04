@@ -27,7 +27,8 @@
         "drupal/google_map_field": "1.2",
         "drupal/country": "1.0.0-beta3",
         "drupal/entityqueue": "1.alpha6",
-        "drupal/mailsystem": "4.1"
+        "drupal/mailsystem": "4.1",
+        "drupal/swiftmailer": "1.0-alpha2"
 
     },
     "require-dev": {
