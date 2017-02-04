@@ -11,6 +11,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Locale\CountryManagerInterface;
 use Drupal\Core\Render\Element\StatusMessages;
 use Drupal\dcc_gtd_registration\RegistrationAccess;
+use Drupal\dcc_multistep\StepPluginManagerInterface;
 use Drupal\node\Entity\Node;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -36,16 +37,38 @@ class GlobalTrainingRegistrationForm extends FormBase {
   protected $countryManager;
 
   /**
+   * Step plugin manager service.
+   *
+   * @var \Drupal\dcc_multistep\StepPluginManagerInterface
+   */
+  protected $stepPluginManager;
+
+  /**
+   * An array of step plugin instances.
+   *
+   * @var \ArrayObject
+   */
+  protected $steps;
+
+  /**
    * GlobalTrainingRegistrationForm constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
    * @param \Drupal\Core\Locale\CountryManagerInterface $countryManager
    *   The country manager.
+   * @param \Drupal\dcc_multistep\StepPluginManagerInterface $stepPluginManager
+   *   Steps plugin manager.
    */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, CountryManagerInterface $countryManager) {
+  public function __construct(
+    EntityTypeManagerInterface $entityTypeManager,
+    CountryManagerInterface $countryManager,
+    StepPluginManagerInterface $stepPluginManager
+  ) {
     $this->entityTypeManager = $entityTypeManager;
     $this->countryManager = $countryManager;
+    $this->stepPluginManager = $stepPluginManager;
+    $this->steps = $this->stepPluginManager->getSteps($this->getFormId());
   }
 
   /**
@@ -54,7 +77,8 @@ class GlobalTrainingRegistrationForm extends FormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('entity_type.manager'),
-      $container->get('country_manager')
+      $container->get('country_manager'),
+      $container->get('plugin.manager.dcc_multistep.steps')
     );
   }
 
@@ -86,28 +110,12 @@ class GlobalTrainingRegistrationForm extends FormBase {
       $step = $form_state->get("step");
     }
 
-    // If next button is pushed, saves the values and increments the step.
-    if ($form_state->getTriggeringElement()['#value'] == 'Next') {
-      if ($step == 1) {
-        $form_state->set("first_name", $form_state->getValue("first_name"));
-        $form_state->set("last_name", $form_state->getValue("last_name"));
-        $form_state->set("email", $form_state->getValue("email"));
-        $form_state->set("drupal_user", $form_state->getValue("drupal_user"));
-        $form_state->set("phone", $form_state->getValue("phone"));
-        $form_state->set("age", $form_state->getValue("age"));
-        $form_state->set("gender", $form_state->getValue("gender"));
-      }
-      if ($step == 2) {
-        $form_state->set("country", $form_state->getValue("country"));
-        $form_state->set("city", $form_state->getValue("city"));
-        $form_state->set("address", $form_state->getValue("address"));
-      }
-      if ($step == 3) {
-        $form_state->set("occupation", $form_state->getValue("occupation"));
-        $form_state->set("organization", $form_state->getValue("organization"));
-        $form_state->set("industry_experience", $form_state->getValue("industry_experience"));
-      }
+    // Sets the value of the current step.
+    $stepPlugin = $this->steps->offsetGet($step);
+    $stepPlugin->setCurrentValues($form_state);
 
+    // If next button is pushed, increments the step.
+    if ($form_state->getTriggeringElement()['#value'] == 'Next') {
       $form_state->set('step', $form_state->get('step') + 1);
     }
     // If back button is pushed, decrements the step.
@@ -122,275 +130,20 @@ class GlobalTrainingRegistrationForm extends FormBase {
       ),
     );
 
+    // This is where the form elements are being added. Each step plugin
+    // provides a form builder for this task.
     $step = $form_state->get('step');
-    switch ($step) {
-      case 1:
-        $this->stepOneElements($form, $form_state);
-        break;
+    $stepPlugin = $this->steps->offsetGet($step);
 
-      case 2:
-        $this->stepTwoElements($form, $form_state);
-        break;
+    $fields = $stepPlugin->buildStep($form_state, $this);
 
-      case 3:
-        $this->stepThreeElements($form, $form_state);
-        break;
+    $form['container'] = $form['container'] + $fields;
 
-      case 4:
-        $this->stepFourElements($form, $form_state);
-        break;
-
-      default:
-        break;
-
-    }
-    if ($step == 1 || $step == 2 || $step == 3) {
-      $form['container']['next'] = array(
-        '#type' => 'button',
-        '#value' => 'Next',
-        '#ajax' => array(
-          'callback' => array($this, 'ajax'),
-          'event' => 'click',
-          'progress' => array(
-            'type' => 'throbber',
-            'message' => NULL,
-          ),
-        ),
-      );
-    }
-    if ($step == 4) {
-      $form['container']['register'] = array(
-        '#type' => 'submit',
-        '#value' => 'Register',
-      );
-    }
-    if ($step == 2 || $step == 3 || $step == 4) {
-      $form['container']['back'] = array(
-        '#type' => 'button',
-        '#value' => 'Back',
-        '#ajax' => array(
-          'callback' => array($this, 'ajax'),
-          'event' => 'click',
-          'progress' => array(
-            'type' => 'throbber',
-            'message' => NULL,
-          ),
-        ),
-        '#attributes' => ['style' => ['float: left; margin-right: 4px;']],
-      );
-    }
     $form['#attributes']['class'][] = 'contact-message-feedback-form';
     $form['#attributes']['class'][] = 'contact-message-form';
     $form['#attributes']['class'][] = 'contact-form';
+
     return $form;
-  }
-
-  /**
-   * Creates the form elements for the first step.
-   *
-   * @param array $form
-   *   The form elements.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The form state.
-   */
-  private function stepOneElements(array &$form, FormStateInterface &$form_state) {
-    $form['container']['title'] = array(
-      '#title' => $this->t("Personal Informations"),
-      '#type' => 'item',
-    );
-    $first_name = $form_state->get("first_name");
-    $form['container']['first_name'] = array(
-      '#type' => 'textfield',
-      '#title' => $this->t('First name'),
-      '#required' => TRUE,
-      '#default_value' => isset($first_name) ? $form_state->get("first_name") : NULL,
-    );
-    $last_name = $form_state->get("last_name");
-    $form['container']['last_name'] = array(
-      '#type' => 'textfield',
-      '#title' => $this->t('Last name'),
-      '#required' => TRUE,
-      '#default_value' => isset($last_name) ? $form_state->get("last_name") : NULL,
-    );
-    $email = $form_state->get("email");
-    $form['container']['email'] = array(
-      '#type' => 'email',
-      '#title' => $this->t('Email address'),
-      '#required' => TRUE,
-      '#default_value' => isset($email) ? $form_state->get("email") : NULL,
-    );
-    $drupal_user = $form_state->get("drupal_user");
-    $form['container']['drupal_user'] = array(
-      '#type' => 'textfield',
-      '#title' => $this->t('Drupal user'),
-      '#description' => "If you are registered on Drupal.org please provide us your Drupal username",
-      '#default_value' => isset($drupal_user) ? $form_state->get("drupal_user") : NULL,
-    );
-    $phone = $form_state->get("phone");
-    $form['container']['phone'] = array(
-      '#type' => 'tel',
-      '#title' => $this->t('Phone'),
-      '#required' => TRUE,
-      '#default_value' => isset($phone) ? $form_state->get("phone") : NULL,
-    );
-    $age = $form_state->get("age");
-    $form['container']['age'] = array(
-      '#type' => 'number',
-      '#title' => $this->t('Age'),
-      '#required' => TRUE,
-      '#min' => 0,
-      '#max' => 99,
-      '#field_suffix' => 'years',
-      '#default_value' => isset($age) ? $form_state->get("age") : NULL,
-    );
-    $active = array(
-      'not_share' => t('Prefer to not share'),
-      'male' => t('male'),
-      'female' => t('female'),
-      'transgender' => t('transgender'),
-      'other' => t('other'),
-    );
-    $gender = $form_state->get("gender");
-    $form['container']['gender'] = array(
-      '#type' => 'select',
-      '#title' => $this->t('Gender'),
-      '#options' => $active,
-      '#required' => TRUE,
-      '#default_value' => isset($gender) ? $form_state->get("gender") : NULL,
-    );
-  }
-
-  /**
-   * Creates the form elements for the second step.
-   *
-   * @param array $form
-   *   The form elements.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The form state.
-   */
-  private function stepTwoElements(array &$form, FormStateInterface &$form_state) {
-    $countries = $this->countryManager->getList();
-
-    $form['container']['title'] = array(
-      '#title' => $this->t("Address"),
-      '#type' => 'item',
-    );
-    $country = $form_state->get("country");
-    $form['container']['country'] = array(
-      '#title' => $this->t("Country"),
-      '#type' => 'select',
-      '#options' => $countries,
-      '#default_value' => isset($country) ? $form_state->get("country") : NULL,
-    );
-    $city = $form_state->get("city");
-    $form['container']['city'] = array(
-      '#title' => $this->t('City'),
-      '#type' => 'textfield',
-      '#required' => TRUE,
-      '#default_value' => isset($city) ? $form_state->get("city") : NULL,
-    );
-    $address = $form_state->get("address");
-    $form['container']['address'] = array(
-      '#title' => $this->t('Address'),
-      '#type' => 'textarea',
-      '#default_value' => isset($address) ? $form_state->get("address") : NULL,
-    );
-  }
-
-  /**
-   * Creates the form elements for the third step.
-   *
-   * @param array $form
-   *   The form elements.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The form state.
-   */
-  private function stepThreeElements(array &$form, FormStateInterface &$form_state) {
-    $form['container']['title'] = array(
-      '#title' => $this->t("Professional details"),
-      '#type' => 'item',
-    );
-    $occupation = $form_state->get("occupation");
-    $form['container']['occupation'] = array(
-      '#title' => $this->t("Occupation"),
-      '#type' => 'textfield',
-      '#description' => 'In which domain are you activating right now?(e.g. Student,IT,Banking,Manufactoring etc.)',
-      '#required' => TRUE,
-      '#default_value' => isset($occupation) ? $form_state->get("occupation") : NULL,
-    );
-    $organization = $form_state->get("organization");
-    $form['container']['organization'] = array(
-      '#title' => $this->t('Organization'),
-      '#type' => 'textfield',
-      '#default_value' => isset($organization) ? $form_state->get("organization") : NULL,
-    );
-    $industry_experience = $form_state->get("industry_experience");
-    $form['container']['industry_experience'] = array(
-      '#title' => $this->t('Industry experience'),
-      '#type' => 'number',
-      '#min' => 0,
-      '#max' => 99,
-      '#field_suffix' => 'years',
-      '#default_value' => isset($industry_experience) ? $form_state->get("industry_experience") : NULL,
-    );
-  }
-
-  /**
-   * Creates the form elements for the fourth step.
-   *
-   * @param array $form
-   *   The form elements.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The form state.
-   */
-  private function stepFourElements(array &$form, FormStateInterface &$form_state) {
-    $form['container']['title'] = array(
-      '#title' => $this->t("Training details"),
-      '#type' => 'item',
-    );
-    $attend_day = $form_state->get("attend_day");
-    $form['container']['attend_day'] = array(
-      '#title' => $this->t('On which days will you attend the training ?'),
-      '#description' => 'See the schedule!',
-      '#type' => 'checkboxes',
-      '#options' => array(
-        'Friday' => $this->t('Friday'),
-        'Saturday' => $this->t('Saturday'),
-      ),
-      '#required' => TRUE,
-      '#default_value' => isset($attend_day) ? $form_state->get("attend_day") : NULL,
-    );
-    $options = array(0 => t('No'), 1 => t('Yes'));
-    $laptop = $form_state->get("laptop");
-    $form['container']['laptop'] = array(
-      '#title' => $this->t('Will you carry a laptop ?'),
-      '#description' => 'To know how many working stations will we need we should know if will you come with your own laptop. In case you will, please pre-configure your environment to be able to install Drupal 8 on it(if you need help check Drupa.org). Note: You will need your laptop for development only on Saturday',
-      '#type' => 'radios',
-      '#options' => $options,
-      '#required' => TRUE,
-      '#default_value' => isset($laptop) ? $form_state->get("laptop") : NULL,
-    );
-    $options2 = array(
-      'en' => t('English'),
-      'ro' => t('Romanian'),
-      'nr' => t('Not relevant'),
-    );
-    $language = $form_state->get("language");
-    $form['container']['language'] = array(
-      '#title' => $this->t('Preferred langauge'),
-      '#description' => 'Please complete with your preferred language for presentations',
-      '#required' => TRUE,
-      '#type' => 'radios',
-      '#options' => $options2,
-      '#default_value' => isset($language) ? $form_state->get("language") : NULL,
-    );
-    $key_expectations = $form_state->get("key_expectations");
-    $form['container']['key_expectations'] = array(
-      '#title' => $this->t('Key expectations'),
-      '#type' => 'textarea',
-      '#description' => 'Please tell us about your expectations for the Global Training. Why are you enrolling?',
-      '#default_value' => isset($key_expectations) ? $form_state->get("key_expectations") : NULL,
-    );
   }
 
   /**
@@ -418,64 +171,9 @@ class GlobalTrainingRegistrationForm extends FormBase {
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     $step = $form_state->get("step");
-    switch ($step) {
-      case 1:
-        if (!is_numeric($form_state->getValue("phone"))) {
-          $form_state->setErrorByName('phone', $this->t("Phone field should contain only numbers! Please modify it!"));
-        }
-        break;
-
-      case 3:
-        if ($form_state->getValue("industry_experience") >= $form_state->get("age")) {
-          $form_state->setErrorByName('industry_experience', $this->t("The experience should be smaller than your age! Please modify it!"));
-        }
-        break;
-
-      case 4:
-        $form_state->set("attend_day", $form_state->getValue("attend_day"));
-        $form_state->set("laptop", $form_state->getValue("laptop"));
-        $form_state->set("language", $form_state->getValue("language"));
-        $form_state->set("key_expectations", $form_state->getValue("key_expectations"));
-
-        // Checkboxes need special treatment.
-        $attend_day = array();
-        $fs_attend = $form_state->get('attend_day');
-        foreach (array("Friday", "Saturday") as $day) {
-          if (!empty($fs_attend[$day])) {
-            $attend_day[] = $day;
-          }
-        }
-
-        $data = array(
-          'type' => 'global_training_day_registration',
-          'title' => $form_state->get("first_name"),
-          'uid' => 1,
-          'field_first_name' => $form_state->get("first_name"),
-          'field_last_name' => $form_state->get("last_name"),
-          'field_email' => $form_state->get("email"),
-          'field_drupal_user' => $form_state->get("drupal_user"),
-          'field_phone' => $form_state->get("phone"),
-          'field_age' => $form_state->get("age"),
-          'field_gender' => $form_state->get("gender"),
-          'field_country' => $form_state->get("country"),
-          'field_city' => $form_state->get("city"),
-          'field_address' => $form_state->get("address"),
-          'field_occupation' => $form_state->get("occupation"),
-          'field_organization' => $form_state->get("organization"),
-          'field_industry_experience' => $form_state->get("industry_experience"),
-          'field_attend_day' => $attend_day,
-          'field_laptop' => $form_state->get("laptop"),
-          'field_preferred_language' => $form_state->get("language"),
-          'field_key_expectations' => $form_state->get("key_expectations"),
-        );
-        $node = $this->entityTypeManager->getStorage('node')->create($data);
-        $form_state->set("node", $node);
-        break;
-
-      default:
-        break;
-
-    }
+    /* @var \Drupal\dcc_multistep\StepPluginInspectionInterface */
+    $stepPlugin = $this->steps->offsetGet($step);
+    $stepPlugin->validate($form_state);
   }
 
   /**
@@ -487,18 +185,66 @@ class GlobalTrainingRegistrationForm extends FormBase {
    *   The form state.
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $node = $form_state->get("node");
+    try {
+      $this->saveRegistration($form_state);
+      drupal_set_message(t('Your registration have been submited with success!'));
+    }
+    catch (\Exception $exception) {
+      watchdog_exception('Scheduler Creation', $exception);
+      drupal_set_message(t('There was an error with the creation, please check the logs'));
+    }
+  }
+
+  /**
+   * Saves the registration node.
+   *
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current form state.
+   */
+  private function saveRegistration(FormStateInterface $form_state) {
+    /* @var \Drupal\node\NodeInterface $node */
+    $node = $this->entityTypeManager->getStorage('node')->create($this->buildFieldsForRegistration($form_state));
+
     $session = $this->entityTypeManager->getStorage('node')->load(RegistrationAccess::getCurrentSessionNid());
     if ($session instanceof Node) {
       $node->set('field_training_session', $session->id());
     }
-    if ($node->save()) {
-      drupal_set_message("Your registration have been submited with success!");
-    }
-    else {
-      drupal_set_message("Something went wrong, please try again!");
-    }
 
+    $node->save();
+  }
+
+  /**
+   * Builds the data structure with fields, for registration node save.
+   *
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current form state.
+   *
+   * @return array
+   *   An array of fields with form state values.
+   */
+  private function buildFieldsForRegistration(FormStateInterface $form_state) {
+    return array(
+      'type' => 'global_training_day_registration',
+      'title' => $form_state->get("first_name"),
+      'uid' => 1,
+      'field_first_name' => $form_state->get("first_name"),
+      'field_last_name' => $form_state->get("last_name"),
+      'field_email' => $form_state->get("email"),
+      'field_drupal_user' => $form_state->get("drupal_user"),
+      'field_phone' => $form_state->get("phone"),
+      'field_age' => $form_state->get("age"),
+      'field_gender' => $form_state->get("gender"),
+      'field_country' => $form_state->get("country"),
+      'field_city' => $form_state->get("city"),
+      'field_address' => $form_state->get("address"),
+      'field_occupation' => $form_state->get("occupation"),
+      'field_organization' => $form_state->get("organization"),
+      'field_industry_experience' => $form_state->get("industry_experience"),
+      'field_attend_day' => $form_state->getValue('attend_day'),
+      'field_laptop' => $form_state->getValue("laptop"),
+      'field_preferred_language' => $form_state->getValue("language"),
+      'field_key_expectations' => $form_state->getValue("key_expectations"),
+    );
   }
 
 }
