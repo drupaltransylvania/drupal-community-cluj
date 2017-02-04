@@ -32,12 +32,18 @@ class TrainingDateStep extends StepPluginBase {
       '#title' => $this->t('Start Date'),
       '#required' => TRUE,
       '#default_value' => $form_state->getValue('training_start_date') ?: NULL,
+      '#attributes' => [
+        'class' => ['dcc-training-start'],
+      ],
     );
     $fields['training']['training_end_date'] = array(
       '#type' => 'datetime',
       '#title' => $this->t('End Date'),
       '#required' => TRUE,
       '#default_value' => $form_state->getValue('training_end_date') ?: NULL,
+      '#attributes' => [
+        'class' => ['dcc-training-end'],
+      ],
     );
 
     $fields['next'] = array(
