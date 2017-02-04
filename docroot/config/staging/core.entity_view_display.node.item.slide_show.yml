@@ -6,7 +6,7 @@ dependencies:
     - core.entity_view_mode.node.slide_show
     - field.field.node.item.field_description
     - field.field.node.item.field_picture
-    - image.style.slider
+    - image.style.homepage_slider
     - node.type.item
   module:
     - image
@@ -27,7 +27,7 @@ content:
     weight: 2
     label: hidden
     settings:
-      image_style: slider
+      image_style: homepage_slider
       image_link: ''
     third_party_settings: {  }
 hidden:
