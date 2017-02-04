@@ -16,3 +16,8 @@
 .region-header .logo img {
     min-width: 40px;
 }
+
+.js-form-type-radio > label,
+.js-form-type-checkbox > label {
+    display: inline;
+}

@@ -12,13 +12,13 @@ type: list_string
 settings:
   allowed_values:
     -
-      value: English
+      value: en
       label: English
     -
-      value: Romanian
+      value: ro
       label: Romanian
     -
-      value: 'Not relevant'
+      value: nr
       label: 'Not relevant'
   allowed_values_function: ''
 module: options

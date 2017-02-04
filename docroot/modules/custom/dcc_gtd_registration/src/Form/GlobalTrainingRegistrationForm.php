@@ -437,6 +437,15 @@ class GlobalTrainingRegistrationForm extends FormBase {
         $form_state->set("language", $form_state->getValue("language"));
         $form_state->set("key_expectations", $form_state->getValue("key_expectations"));
 
+        // Checkboxes need special treatment.
+        $attend_day = array();
+        $fs_attend = $form_state->get('attend_day');
+        foreach (array("Friday", "Saturday") as $day) {
+          if (!empty($fs_attend[$day])) {
+            $attend_day[] = $day;
+          }
+        }
+
         $data = array(
           'type' => 'global_training_day_registration',
           'title' => $form_state->get("first_name"),
@@ -452,9 +461,9 @@ class GlobalTrainingRegistrationForm extends FormBase {
           'field_city' => $form_state->get("city"),
           'field_address' => $form_state->get("address"),
           'field_occupation' => $form_state->get("occupation"),
-          'field_organizations' => $form_state->get("organization"),
+          'field_organization' => $form_state->get("organization"),
           'field_industry_experience' => $form_state->get("industry_experience"),
-          'field_attend_day' => $form_state->get("attend_day"),
+          'field_attend_day' => $attend_day,
           'field_laptop' => $form_state->get("laptop"),
           'field_preferred_language' => $form_state->get("language"),
           'field_key_expectations' => $form_state->get("key_expectations"),
