@@ -175,9 +175,12 @@ class GlobalTrainingRegistrationForm extends FormBase {
             'message' => NULL,
           ),
         ),
+        '#attributes' => ['style' => ['float: left; margin-right: 4px;']],
       );
     }
-
+    $form['#attributes']['class'][] = 'contact-message-feedback-form';
+    $form['#attributes']['class'][] = 'contact-message-form';
+    $form['#attributes']['class'][] = 'contact-form';
     return $form;
   }
 
@@ -248,7 +251,7 @@ class GlobalTrainingRegistrationForm extends FormBase {
     );
     $gender=$form_state->get("gender");
     $form['container']['gender'] = array(
-      '#type' => 'radios',
+      '#type' => 'select',
       '#title' =>  $this->t('Gender'),
       '#options' => $active,
       '#required' => TRUE,
