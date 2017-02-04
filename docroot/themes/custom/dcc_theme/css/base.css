@@ -6,3 +6,13 @@
         width: 70%;
     }
 }
+
+.region-header .site-name{
+    padding-top: 4px;
+    max-width: 200px;
+    line-height: 140%;
+}
+
+.region-header .logo img {
+    min-width: 40px;
+}
