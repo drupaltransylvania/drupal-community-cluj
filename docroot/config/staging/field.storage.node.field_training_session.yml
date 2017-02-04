@@ -1,0 +1,19 @@
+uuid: 4ba6683d-ffbf-49da-b595-f9f16766d629
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_training_session
+field_name: field_training_session
+entity_type: node
+type: entity_reference
+settings:
+  target_type: node
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

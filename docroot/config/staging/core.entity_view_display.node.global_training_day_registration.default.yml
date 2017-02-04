@@ -20,6 +20,7 @@ dependencies:
     - field.field.node.global_training_day_registration.field_organization
     - field.field.node.global_training_day_registration.field_phone
     - field.field.node.global_training_day_registration.field_preferred_language
+    - field.field.node.global_training_day_registration.field_training_session
     - node.type.global_training_day_registration
   module:
     - country
@@ -142,6 +143,13 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: list_default
+  field_training_session:
+    weight: 127
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
   links:
     weight: 100
 hidden: {  }
