@@ -13,6 +13,7 @@ module:
   datetime: 0
   datetime_range: 0
   dblog: 0
+  dcc_gtd_registration: 0
   dcc_gtd_scheduler: 0
   dynamic_page_cache: 0
   editor: 0
