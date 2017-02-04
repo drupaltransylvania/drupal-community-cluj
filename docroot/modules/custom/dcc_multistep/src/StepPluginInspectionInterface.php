@@ -27,4 +27,12 @@ interface StepPluginInspectionInterface extends PluginInspectionInterface {
    */
   public function buildStep(FormStateInterface $form_state, FormInterface $form);
 
+  /**
+   * Performs step specific validations.
+   *
+   * @param \Drupal\Core\Form\FormStateInterface $formState
+   * @return mixed
+   */
+  public function validate(FormStateInterface $formState);
+
 }

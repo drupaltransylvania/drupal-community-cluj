@@ -69,4 +69,19 @@ class RegistrationStep extends StepPluginBase {
     return $fields;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function validate(FormStateInterface $formState) {
+    if (!empty($formState->getValue('registration_end_date'))) {
+      if (strtotime($formState->getValue('registration_start_date')) > strtotime($formState->getValue('registration_end_date'))) {
+        $formState->setErrorByName('registration_end_date', t('End date bigger than start date.'));
+      }
+      $training_date = $formState->get('values_' . ($formState->get('step') - 1))['training_start_date'];
+      if (strtotime($formState->getValue('registration_end_date')) > strtotime($training_date)) {
+        $formState->setErrorByName('registration_end_date', t('Registration should end before training starts on %date.', ['%date' => $training_date]));
+      }
+    }
+  }
+
 }
