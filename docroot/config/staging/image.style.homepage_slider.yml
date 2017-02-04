@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies: {  }
 name: homepage_slider
-label: 'Homepage Slider'
+label: 'Homepage Slider (1400x500)'
 effects:
   011c60b7-bbf9-4036-974e-c796a1f40a2a:
     uuid: 011c60b7-bbf9-4036-974e-c796a1f40a2a
