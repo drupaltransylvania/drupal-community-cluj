@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.slide_show
-    - entityqueue.entity_queue.slideshowwithcontenttype
+    - entityqueue.entity_queue.homepage_slider
     - node.type.item
   module:
     - entityqueue
@@ -143,12 +143,12 @@ display:
           exposed: false
           expose:
             operator_id: ''
-            label: ''
-            description: ''
+            label: 'Content In Queue'
+            description: null
             use_operator: false
-            operator: ''
-            identifier: ''
-            required: false
+            operator: entityqueue_relationship_op
+            identifier: entityqueue_relationship
+            required: true
             remember: false
             multiple: false
             remember_roles:
@@ -194,7 +194,7 @@ display:
           group_type: group
           admin_label: 'Content queue'
           required: true
-          limit_queue: slideshowwithcontenttype
+          limit_queue: homepage_slider
           entity_type: node
           plugin_id: entity_queue
       arguments: {  }
@@ -207,7 +207,7 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
-        - 'config:entityqueue.entity_queue.slideshowwithcontenttype'
+        - 'config:entityqueue.entity_queue.homepage_slider'
         - entity_field_info
         - views_data
   block_1:
@@ -225,6 +225,6 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
-        - 'config:entityqueue.entity_queue.slideshowwithcontenttype'
+        - 'config:entityqueue.entity_queue.homepage_slider'
         - entity_field_info
         - views_data

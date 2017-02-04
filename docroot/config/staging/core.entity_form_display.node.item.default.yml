@@ -5,7 +5,6 @@ dependencies:
   config:
     - field.field.node.item.field_description
     - field.field.node.item.field_picture
-    - field.field.node.item.field_title
     - node.type.item
   module:
     - image
@@ -34,13 +33,6 @@ content:
       progress_indicator: throbber
     third_party_settings: {  }
     type: image_image
-  field_title:
-    weight: 33
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-    type: string_textfield
   path:
     type: path
     weight: 30
