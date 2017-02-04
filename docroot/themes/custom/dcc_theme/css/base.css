@@ -21,3 +21,10 @@
 .js-form-type-checkbox > label {
     display: inline;
 }
+
+.dcc-training-start .form-item-training-start-date-date,
+.dcc-training-start .form-item-training-start-date-time,
+.dcc-training-end .form-item-training-end-date-date,
+.dcc-training-end .form-item-training-end-date-time {
+    display: inline;
+}
