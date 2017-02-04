@@ -3,6 +3,9 @@ type: theme
 description: This is a sub theme with the theme base BusinessGroup Zymphonies Theme
 core: 8.2.3
 base theme: businessgroup_zymphonies_theme
+libraries:
+  - dcc_theme/global-styling
+
 regions:
   header: 'Header'
   primary_menu: 'Primary Menu'
