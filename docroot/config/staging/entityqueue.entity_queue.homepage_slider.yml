@@ -1,11 +1,11 @@
-uuid: e9cd3c25-8600-4134-9a82-b17e90c9d175
+uuid: 48a0ef80-59c1-46f0-9fcc-94cad3c020cb
 langcode: en
 status: true
 dependencies:
   module:
     - node
-id: slideshowwithcontenttype
-label: SlideShowWithContentType
+id: homepage_slider
+label: 'Homepage Slider'
 handler: simple
 handler_configuration: {  }
 entity_settings:

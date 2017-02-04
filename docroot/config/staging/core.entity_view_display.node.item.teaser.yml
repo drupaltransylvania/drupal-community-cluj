@@ -6,7 +6,6 @@ dependencies:
     - core.entity_view_mode.node.teaser
     - field.field.node.item.field_description
     - field.field.node.item.field_picture
-    - field.field.node.item.field_title
     - node.type.item
   module:
     - user
@@ -20,4 +19,3 @@ content:
 hidden:
   field_description: true
   field_picture: true
-  field_title: true
