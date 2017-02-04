@@ -6,7 +6,6 @@ dependencies:
     - core.entity_view_mode.node.slide_show
     - field.field.node.item.field_description
     - field.field.node.item.field_picture
-    - field.field.node.item.field_title
     - image.style.slider
     - node.type.item
   module:
@@ -30,13 +29,6 @@ content:
     settings:
       image_style: slider
       image_link: ''
-    third_party_settings: {  }
-  field_title:
-    type: string
-    weight: 1
-    label: hidden
-    settings:
-      link_to_entity: false
     third_party_settings: {  }
 hidden:
   links: true

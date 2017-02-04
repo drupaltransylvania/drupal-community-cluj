@@ -1,5 +1,7 @@
 <?php
+
 namespace Drupal\dcc_gtd_scheduler\Form;
+
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Ajax\PrependCommand;
@@ -12,30 +14,35 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Datetime\DateFormatter;
+
 /**
  * Created a form similar to 'Drupal Training Scheduler' one.
  *
  * @package Drupal\dcc_gtd_scheduler\Form
  */
 class SchedulerForm extends FormBase {
+
   /**
    * The entity type manager service.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entity;
+
   /**
    * The current user service.
    *
    * @var \Drupal\Core\Session\AccountProxyInterface
    */
   protected $user;
+
   /**
    * Date formatter service.
    *
    * @var \Drupal\Core\Datetime\DateFormatter;
    */
   protected $date_formatter;
+
   /**
    * SchedulerForm constructor.
    *
@@ -49,6 +56,7 @@ class SchedulerForm extends FormBase {
     $this->user = $user;
     $this->date_formatter = $date_formatter;
   }
+
   /**
    * {@inheritdoc}
    */
@@ -59,12 +67,14 @@ class SchedulerForm extends FormBase {
       $container->get('date.formatter')
     );
   }
+
   /**
    * {@inheritdoc}
    */
   public function getFormId() {
     return 'dcc_gtd_scheduler_form';
   }
+
   /**
    * {@inheritdoc}
    */
@@ -98,8 +108,12 @@ class SchedulerForm extends FormBase {
     $form['container'] = $form['container'] + $this->getStepFields($step, $form_state);
     $form['#after_build'] = ['::hideTextFormat'];
     $form['#attached']['library'][] = 'google_map_field/google-map-apis';
+    $form['#attributes']['class'][] = 'contact-message-feedback-form';
+    $form['#attributes']['class'][] = 'contact-message-form';
+    $form['#attributes']['class'][] = 'contact-form';
     return $form;
   }
+
   protected function getStepFields($step , FormStateInterface $form_state) {
     $fields = [];
     switch ($step) {
@@ -215,10 +229,12 @@ class SchedulerForm extends FormBase {
             'message' => NULL,
           ),
         ),
+        '#attributes' => ['style' => ['float: left; margin-right: 4px;']],
       );
     }
     return $fields;
   }
+
   /**
    * Remove unwanted form values.
    *
@@ -235,6 +251,7 @@ class SchedulerForm extends FormBase {
     unset($values['submit']);
     return $values;
   }
+
   /**
    * Callback for after build.
    */
@@ -253,6 +270,7 @@ class SchedulerForm extends FormBase {
     }
     return $element;
   }
+
   /**
    * Ajax callback used for replacing the container with the form elements.
    *
@@ -271,6 +289,7 @@ class SchedulerForm extends FormBase {
     $form_state->setRebuild();
     return $response;
   }
+
   /**
    * {@inheritdoc}
    */
@@ -293,6 +312,7 @@ class SchedulerForm extends FormBase {
       }
     }
   }
+
   /**
    * {@inheritdoc}
    */
@@ -329,4 +349,5 @@ class SchedulerForm extends FormBase {
     ))->save();
     drupal_set_message(t('Training has been created!'));
   }
+
 }
