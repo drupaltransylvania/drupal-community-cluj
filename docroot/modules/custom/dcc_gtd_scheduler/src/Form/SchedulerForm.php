@@ -5,9 +5,7 @@ namespace Drupal\dcc_gtd_scheduler\Form;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Ajax\PrependCommand;
-use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Render\Element\StatusMessages;
-use Drupal\Core\Datetime\Element\Datetime;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -39,9 +37,9 @@ class SchedulerForm extends FormBase {
   /**
    * Date formatter service.
    *
-   * @var \Drupal\Core\Datetime\DateFormatter;
+   * @var \Drupal\Core\Datetime\DateFormatter
    */
-  protected $date_formatter;
+  protected $dateFormatter;
 
   /**
    * SchedulerForm constructor.
@@ -50,11 +48,13 @@ class SchedulerForm extends FormBase {
    *   The entity type manager.
    * @param \Drupal\Core\Session\AccountProxyInterface $user
    *   Current user.
+   * @param \Drupal\Core\Datetime\DateFormatter $dateFormatter
+   *   The date formatter.
    */
-  public function __construct(EntityTypeManagerInterface $entity, AccountProxyInterface $user, DateFormatter $date_formatter) {
+  public function __construct(EntityTypeManagerInterface $entity, AccountProxyInterface $user, DateFormatter $dateFormatter) {
     $this->entity = $entity;
     $this->user = $user;
-    $this->date_formatter = $date_formatter;
+    $this->dateFormatter = $dateFormatter;
   }
 
   /**
@@ -87,7 +87,7 @@ class SchedulerForm extends FormBase {
       // Save current form_state.
       $values = $this->sanitizeValues($form_state->getValues());
       $form_state->set('values_' . $form_state->get('step'), $values);
-      //If next button is pushed, saves the values and increments the step.
+      // If next button is pushed, saves the values and increments the step.
       if ($form_state->getTriggeringElement()['#value'] == 'Next') {
         $form_state->set('step', $form_state->get('step') + 1);
       }
@@ -114,7 +114,18 @@ class SchedulerForm extends FormBase {
     return $form;
   }
 
-  protected function getStepFields($step , FormStateInterface $form_state) {
+  /**
+   * Provides the fields for the current step.
+   *
+   * @param int $step
+   *   The current step in the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state object.
+   *
+   * @return array
+   *   The form array.
+   */
+  protected function getStepFields($step, FormStateInterface $form_state) {
     $fields = [];
     switch ($step) {
       case 1:
@@ -136,6 +147,7 @@ class SchedulerForm extends FormBase {
           '#default_value' => $form_state->getValue('training_end_date') ?: NULL,
         );
         break;
+
       case 2:
         $fields['registration'] = array(
           '#type' => 'fieldset',
@@ -154,6 +166,7 @@ class SchedulerForm extends FormBase {
           '#default_value' => $form_state->getValue('registration_end_date') ?: NULL,
         );
         break;
+
       case 3:
         $fields['members'] = array(
           '#type' => 'fieldset',
@@ -165,6 +178,7 @@ class SchedulerForm extends FormBase {
           '#default_value' => $form_state->getValue('number_of_members') ?: NULL,
         );
         break;
+
       case 4:
         $friday = $form_state->getValue('friday_scheduler');
         $fields['friday_scheduler'] = array(
@@ -174,6 +188,7 @@ class SchedulerForm extends FormBase {
           '#format' => $friday['format'] ?: 'basic_html',
         );
         break;
+
       case 5:
         $saturday = $form_state->getValue('saturday_scheduler');
         $fields['saturday_scheduler'] = array(
@@ -183,9 +198,10 @@ class SchedulerForm extends FormBase {
           '#format' => $saturday['format'] ?: 'basic_html',
         );
         break;
+
       case 6:
         $entity = $this->entity->getStorage('node')->create(array(
-          'type' => 'drupal_training_scheduler'
+          'type' => 'drupal_training_scheduler',
         ));
         $entity_form_display = $this->entity->getStorage('entity_form_display')
           ->load('node.drupal_training_scheduler.default');
@@ -239,7 +255,10 @@ class SchedulerForm extends FormBase {
    * Remove unwanted form values.
    *
    * @param array $values
+   *   The form values array.
+   *
    * @return array
+   *   The sanitized array.
    */
   protected function sanitizeValues(array $values) {
     unset($values['form_build_id']);
@@ -254,6 +273,14 @@ class SchedulerForm extends FormBase {
 
   /**
    * Callback for after build.
+   *
+   * @param array $element
+   *   The form element.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state object.
+   *
+   * @return array
+   *   The modified form element.
    */
   public function hideTextFormat(array $element, FormStateInterface $form_state) {
     if (!empty($element['container']['friday_scheduler'])) {
@@ -294,11 +321,12 @@ class SchedulerForm extends FormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
-    parent::validateForm($form, $form_state); // TODO: Change the autogenerated stub
+    parent::validateForm($form, $form_state);
+    // TODO: Change the autogenerated stub.
     // Validate date intervals.
     if ($form_state->getTriggeringElement()['#value'] != 'Back') {
       if (!empty($form_state->getValue('training_end_date')) &&
-        strtotime($form_state->getValue('training_start_date')) > strtotime($form_state->getValue('training_end_date'))      ) {
+        strtotime($form_state->getValue('training_start_date')) > strtotime($form_state->getValue('training_end_date'))) {
         $form_state->setErrorByName('training_end_date', t('End date bigger than start date.'));
       }
       if (!empty($form_state->getValue('registration_end_date'))) {
@@ -319,7 +347,7 @@ class SchedulerForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     // Get values.
     $values = [];
-    for($i = 1; $i < 6; $i++) {
+    for ($i = 1; $i < 6; $i++) {
       $values += $form_state->get('values_' . $i);
     }
     $values += $form_state->getValues();
