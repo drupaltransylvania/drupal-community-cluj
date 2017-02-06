@@ -12,7 +12,8 @@ install:
   # Load composer dependencies.
   - composer validate --no-check-all --ansi
   - composer install
+  - git diff --name-only $TRAVIS_COMMIT_RANGE > changed_files.txt
 
 script:
   # Run for each changed file the code sniffer.
-  - git diff --name-only $TRAVIS_COMMIT_RANGE | while read in; do ./vendor/bin/phpcs "$in"; done
+  - ./vendor/bin/phpcs --file-list=changed_files.txt
