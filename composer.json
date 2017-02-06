@@ -79,9 +79,6 @@
         "patches": {
             "drupal/businessgroup_zymphonies_theme": {
                 "https://www.drupal.org/node/2840589": "https://www.drupal.org/files/issues/businessgroup_zymphonies_theme-icons_location-2840589-2-8.patch"
-            },
-            "drupal/easy_breadcrumb": {
-                "https://www.drupal.org/node/2849717": "https://www.drupal.org/files/issues/easy_breadcrumb-title_link-2849717-1.patch"
             }
         }
     }
