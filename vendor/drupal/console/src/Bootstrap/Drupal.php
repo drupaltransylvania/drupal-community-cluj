@@ -3,8 +3,12 @@
 namespace Drupal\Console\Bootstrap;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\HttpFoundation\Request;
-use Drupal\Console\Utils\ArgvInputReader;
+use Drupal\Console\Core\Style\DrupalStyle;
+use Drupal\Console\Core\Utils\ArgvInputReader;
+use Drupal\Console\Core\Bootstrap\DrupalConsoleCore;
 
 class Drupal
 {
@@ -14,6 +18,7 @@ class Drupal
 
     /**
      * Drupal constructor.
+     *
      * @param $autoload
      * @param $root
      * @param $appRoot
@@ -25,55 +30,85 @@ class Drupal
         $this->appRoot = $appRoot;
     }
 
-    public function boot()
+    public function boot($debug)
     {
+        $output = new ConsoleOutput();
+        $input = new ArrayInput([]);
+        $io = new DrupalStyle($input, $output);
+        $argvInputReader = new ArgvInputReader();
+
         if (!class_exists('Drupal\Core\DrupalKernel')) {
+            $io->error('Class Drupal\Core\DrupalKernel do not exists.');
             $drupal = new DrupalConsoleCore($this->root, $this->appRoot);
             return $drupal->boot();
         }
 
         try {
-            // Add support for Acquia Dev Desktop sites on Mac OS X
-            // @TODO: Check if this condition works in Windows
-            $devDesktopSettingsDir = getenv('HOME') . "/.acquia/DevDesktop/DrupalSettings";
-            if (file_exists($devDesktopSettingsDir)) {
-                $_SERVER['DEVDESKTOP_DRUPAL_SETTINGS_DIR'] = $devDesktopSettingsDir;
+            // Add support for Acquia Dev Desktop sites.
+            // Try both Mac and Windows home locations.
+            $home = getenv('HOME');
+            if (empty($home)) {
+                $home = getenv('USERPROFILE');
+            }
+            if (!empty($home)) {
+                $devDesktopSettingsDir = $home . "/.acquia/DevDesktop/DrupalSettings";
+                if (file_exists($devDesktopSettingsDir)) {
+                    $_SERVER['DEVDESKTOP_DRUPAL_SETTINGS_DIR'] = $devDesktopSettingsDir;
+                }
             }
 
             $argvInputReader = new ArgvInputReader();
-            if ($argvInputReader->get('uri')) {
-              $uri = $argvInputReader->get('uri');
-              if (substr($uri, -1) != '/') {
-                $uri .= '/';
-              }
-              $uri .= 'index.php';
-              $request = Request::create($uri, 'GET', array()  , array(), array(), array('SCRIPT_NAME' => $this->appRoot . '/index.php'));
+
+            if ($debug) {
+                $io->writeln('➤ Creating request');
             }
-            else {
-              $request = Request::createFromGlobals();
+            $uri = $argvInputReader->get('uri');
+            if ($uri && $uri != 'http://default') {
+                if (substr($uri, -1) != '/') {
+                    $uri .= '/';
+                }
+                $uri .= 'index.php';
+                $request = Request::create($uri, 'GET', [], [], [], ['SCRIPT_NAME' => $this->appRoot . '/index.php']);
+            } else {
+                $request = Request::createFromGlobals();
             }
 
-            $drupalKernel = DrupalKernel::createFromRequest  (
+            if ($debug) {
+                $io->writeln("\r\033[K\033[1A\r<info>✔</info>");
+               $io->writeln('➤ Creating Drupal kernel');
+            }
+            $drupalKernel = DrupalKernel::createFromRequest(
                 $request,
                 $this->autoload,
                 'prod',
-                false
+                false,
+                $this->appRoot
             );
-
+            if ($debug) {
+                $io->writeln("\r\033[K\033[1A\r<info>✔</info>");
+                $io->writeln('➤ Registering dynamic services');
+            }
             $drupalKernel->addServiceModifier(
                 new DrupalServiceModifier(
                     $this->root,
+                    $this->appRoot,
                     'drupal.command',
                     'drupal.generator'
                 )
             );
-
+            if ($debug) {
+                $io->writeln("\r\033[K\033[1A\r<info>✔</info>");
+                $io->writeln('➤ Rebuilding container');
+            }
             $drupalKernel->invalidateContainer();
             $drupalKernel->rebuildContainer();
             $drupalKernel->boot();
 
-            $container = $drupalKernel->getContainer();
+            if ($debug) {
+                $io->writeln("\r\033[K\033[1A\r<info>✔</info>");
+            }
 
+            $container = $drupalKernel->getContainer();
             $container->set('console.root', $this->root);
 
             AnnotationRegistry::registerLoader([$this->autoload, "loadClass"]);
@@ -98,6 +133,9 @@ class Drupal
 
             return $container;
         } catch (\Exception $e) {
+            if ($argvInputReader->get('command') == 'list') {
+                $io->error($e->getMessage());
+            }
             $drupal = new DrupalConsoleCore($this->root, $this->appRoot);
             $container = $drupal->boot();
             $container->set('class_loader', $this->autoload);

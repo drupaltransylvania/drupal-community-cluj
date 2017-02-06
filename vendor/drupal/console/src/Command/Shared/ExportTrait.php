@@ -8,10 +8,11 @@
 namespace Drupal\Console\Command\Shared;
 
 use Drupal\Component\Serialization\Yaml;
-use Drupal\Console\Style\DrupalStyle;
+use Drupal\Console\Core\Style\DrupalStyle;
 
 /**
  * Class ConfigExportTrait
+ *
  * @package Drupal\Console\Command
  */
 trait ExportTrait
@@ -32,7 +33,7 @@ trait ExportTrait
         
         // Exclude default_config_hash inside _core is site-specific.
         if ($hash) {
-          unset($config['_core']['default_config_hash']);
+            unset($config['_core']['default_config_hash']);
         }
         
         return $config;
@@ -121,7 +122,7 @@ trait ExportTrait
     {
         foreach ($dependencies as $dependency) {
             if (!array_key_exists($dependency, $this->configExport)) {
-                $this->configExport[$dependency] = array('data' => $this->getConfiguration($dependency), 'optional' => $optional);
+                $this->configExport[$dependency] = ['data' => $this->getConfiguration($dependency), 'optional' => $optional];
                 if ($dependencies = $this->fetchDependencies($this->configExport[$dependency], 'config')) {
                     $this->resolveDependencies($dependencies, $optional);
                 }
