@@ -13,9 +13,20 @@ install:
   - composer validate --no-check-all --ansi
   - composer install
   # Prepare a list of files that should be checked for coding standard.
+  # If the branch was force updated the commit range might not be good.
+  # In this case we get the difference between the master and this.
+  - git diff --quiet "$TRAVIS_COMMIT_RANGE" -- ; GIT_DIFF_EXIT_CODE=$?
+  - |
+    if [ "$GIT_DIFF_EXIT_CODE" -gt 1 ] ; then
+      git remote add upstream https://github.com/danielpopdan/drupal-community-cluj
+      git remote set-branches --add upstream master;
+      git fetch upstream;
+      TRAVIS_COMMIT_RANGE=upstream/master...;
+    fi
   - git diff --name-only $TRAVIS_COMMIT_RANGE > changed_files.txt
-  - sed -i '/inc\|info\|install\|module,php\|profile\|test\|theme$/!d' changed_files.txt
+  - sed -i '/inc$\|info$\|install$\|module$\|php$\|profile$\|test$\|theme$/!d' changed_files.txt
+  - echo "-- files that will be sniffed" | cat changed_files.txt | true
 
 script:
   # Run for each changed file the code sniffer.
-  - ./vendor/bin/phpcs --file-list=changed_files.txt
+  - if [ -s changed_files.txt ]; then ./vendor/bin/phpcs --file-list=changed_files.txt; fi
