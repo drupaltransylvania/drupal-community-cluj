@@ -11,6 +11,8 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Locale\CountryManagerInterface;
 use Drupal\Core\Render\Element\StatusMessages;
 use Drupal\dcc_gtd_registration\RegistrationAccess;
+use Drupal\dcc_gtd_scheduler\Controller\ScheduleManager;
+use Drupal\dcc_gtd_scheduler\Controller\ScheduleManagerInterface;
 use Drupal\dcc_multistep\StepPluginManagerInterface;
 use Drupal\node\Entity\Node;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -37,6 +39,13 @@ class GlobalTrainingRegistrationForm extends FormBase {
   protected $countryManager;
 
   /**
+   * The entity type manager.
+   *
+   * @var \Drupal\dcc_gtd_scheduler\Controller\ScheduleManagerInterface
+   */
+  protected $scheduleManager;
+
+  /**
    * Step plugin manager service.
    *
    * @var \Drupal\dcc_multistep\StepPluginManagerInterface
@@ -59,16 +68,20 @@ class GlobalTrainingRegistrationForm extends FormBase {
    *   The country manager.
    * @param \Drupal\dcc_multistep\StepPluginManagerInterface $stepPluginManager
    *   Steps plugin manager.
+   * @param \Drupal\dcc_gtd_scheduler\Controller\ScheduleManagerInterface $scheduleManager
+   *   The schedule manager.
    */
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
     CountryManagerInterface $countryManager,
-    StepPluginManagerInterface $stepPluginManager
+    StepPluginManagerInterface $stepPluginManager,
+    ScheduleManagerInterface $scheduleManager
   ) {
     $this->entityTypeManager = $entityTypeManager;
     $this->countryManager = $countryManager;
     $this->stepPluginManager = $stepPluginManager;
     $this->steps = $this->stepPluginManager->getSteps($this->getFormId());
+    $this->scheduleManager = $scheduleManager;
   }
 
   /**
@@ -78,7 +91,8 @@ class GlobalTrainingRegistrationForm extends FormBase {
     return new static(
       $container->get('entity_type.manager'),
       $container->get('country_manager'),
-      $container->get('plugin.manager.dcc_multistep.steps')
+      $container->get('plugin.manager.dcc_multistep.steps'),
+      $container->get('dcc_schedule.manager')
     );
   }
 
@@ -202,12 +216,24 @@ class GlobalTrainingRegistrationForm extends FormBase {
    *   The current form state.
    */
   private function saveRegistration(FormStateInterface $form_state) {
+
+    // Set the registration status.
+    $active_schedule_id = $this->scheduleManager->getActiveSchedulerId();
+    $places = $this->scheduleManager->getRemainingPlaces($active_schedule_id);
+    if ($places > 0) {
+      $registration_status = ScheduleManager::WAITING_FOR_CONFIRMATION;
+    }
+    else {
+      $registration_status = ScheduleManager::ON_WAITING_LIST;
+    }
+
     /* @var \Drupal\node\NodeInterface $node */
     $node = $this->entityTypeManager->getStorage('node')->create($this->buildFieldsForRegistration($form_state));
 
     $session = $this->entityTypeManager->getStorage('node')->load(RegistrationAccess::getCurrentSessionNid());
     if ($session instanceof Node) {
       $node->set('field_training_session', $session->id());
+      $node->set('field_registration_status', $registration_status);
     }
 
     $node->save();

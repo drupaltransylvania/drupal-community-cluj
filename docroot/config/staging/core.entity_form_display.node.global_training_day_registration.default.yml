@@ -20,6 +20,7 @@ dependencies:
     - field.field.node.global_training_day_registration.field_organization
     - field.field.node.global_training_day_registration.field_phone
     - field.field.node.global_training_day_registration.field_preferred_language
+    - field.field.node.global_training_day_registration.field_registration_status
     - field.field.node.global_training_day_registration.field_training_session
     - node.type.global_training_day_registration
   module:
@@ -136,6 +137,12 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: options_buttons
+  field_registration_status:
+    weight: 26
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
 hidden:
   created: true
   field_training_session: true
