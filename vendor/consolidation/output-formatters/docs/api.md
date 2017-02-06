@@ -24,8 +24,12 @@
 - [\Consolidation\OutputFormatters\Options\OverrideOptionsInterface (interface)](#interface-consolidationoutputformattersoptionsoverrideoptionsinterface)
 - [\Consolidation\OutputFormatters\StructuredData\AbstractStructuredList (abstract)](#class-consolidationoutputformattersstructureddataabstractstructuredlist-abstract)
 - [\Consolidation\OutputFormatters\StructuredData\AssociativeList](#class-consolidationoutputformattersstructureddataassociativelist)
+- [\Consolidation\OutputFormatters\StructuredData\CallableRenderer](#class-consolidationoutputformattersstructureddatacallablerenderer)
+- [\Consolidation\OutputFormatters\StructuredData\HelpDocument](#class-consolidationoutputformattersstructureddatahelpdocument)
 - [\Consolidation\OutputFormatters\StructuredData\ListDataInterface (interface)](#interface-consolidationoutputformattersstructureddatalistdatainterface)
 - [\Consolidation\OutputFormatters\StructuredData\OriginalDataInterface (interface)](#interface-consolidationoutputformattersstructureddataoriginaldatainterface)
+- [\Consolidation\OutputFormatters\StructuredData\PropertyList](#class-consolidationoutputformattersstructureddatapropertylist)
+- [\Consolidation\OutputFormatters\StructuredData\RenderCellCollectionInterface (interface)](#interface-consolidationoutputformattersstructureddatarendercellcollectioninterface)
 - [\Consolidation\OutputFormatters\StructuredData\RenderCellInterface (interface)](#interface-consolidationoutputformattersstructureddatarendercellinterface)
 - [\Consolidation\OutputFormatters\StructuredData\RestructureInterface (interface)](#interface-consolidationoutputformattersstructureddatarestructureinterface)
 - [\Consolidation\OutputFormatters\StructuredData\RowsOfFields](#class-consolidationoutputformattersstructureddatarowsoffields)
@@ -33,13 +37,14 @@
 - [\Consolidation\OutputFormatters\StructuredData\Xml\DomDataInterface (interface)](#interface-consolidationoutputformattersstructureddataxmldomdatainterface)
 - [\Consolidation\OutputFormatters\StructuredData\Xml\XmlSchema](#class-consolidationoutputformattersstructureddataxmlxmlschema)
 - [\Consolidation\OutputFormatters\StructuredData\Xml\XmlSchemaInterface (interface)](#interface-consolidationoutputformattersstructureddataxmlxmlschemainterface)
-- [\Consolidation\OutputFormatters\Transformations\AssociativeListTableTransformation](#class-consolidationoutputformatterstransformationsassociativelisttabletransformation)
 - [\Consolidation\OutputFormatters\Transformations\DomToArraySimplifier](#class-consolidationoutputformatterstransformationsdomtoarraysimplifier)
 - [\Consolidation\OutputFormatters\Transformations\OverrideRestructureInterface (interface)](#interface-consolidationoutputformatterstransformationsoverriderestructureinterface)
+- [\Consolidation\OutputFormatters\Transformations\PropertyListTableTransformation](#class-consolidationoutputformatterstransformationspropertylisttabletransformation)
 - [\Consolidation\OutputFormatters\Transformations\PropertyParser](#class-consolidationoutputformatterstransformationspropertyparser)
 - [\Consolidation\OutputFormatters\Transformations\ReorderFields](#class-consolidationoutputformatterstransformationsreorderfields)
 - [\Consolidation\OutputFormatters\Transformations\SimplifyToArrayInterface (interface)](#interface-consolidationoutputformatterstransformationssimplifytoarrayinterface)
 - [\Consolidation\OutputFormatters\Transformations\TableTransformation](#class-consolidationoutputformatterstransformationstabletransformation)
+- [\Consolidation\OutputFormatters\Transformations\WordWrapper](#class-consolidationoutputformatterstransformationswordwrapper)
 - [\Consolidation\OutputFormatters\Validate\ValidationInterface (interface)](#interface-consolidationoutputformattersvalidatevalidationinterface)
 - [\Consolidation\OutputFormatters\Validate\ValidDataTypesInterface (interface)](#interface-consolidationoutputformattersvalidatevaliddatatypesinterface)
 
@@ -142,7 +147,7 @@
 <hr /> 
 ### Class: \Consolidation\OutputFormatters\Formatters\CsvFormatter
 
-> Comma-separated value formatters Display the provided structured data in a comma-separated list. If there are multiple records provided, then they will be printed one per line.  The primary data types accepted are RowsOfFields and AssociativeList. The later behaves exactly like the former, save for the fact that it contains but a single row. This formmatter can also accept a PHP array; this is also interpreted as a single-row of data with no header.
+> Comma-separated value formatters Display the provided structured data in a comma-separated list. If there are multiple records provided, then they will be printed one per line.  The primary data types accepted are RowsOfFields and PropertyList. The later behaves exactly like the former, save for the fact that it contains but a single row. This formmatter can also accept a PHP array; this is also interpreted as a single-row of data with no header.
 
 | Visibility | Function |
 |:-----------|:---------|
@@ -179,7 +184,7 @@
 <hr /> 
 ### Class: \Consolidation\OutputFormatters\Formatters\ListFormatter
 
-> Display the data in a simple list. This formatter prints a plain, unadorned list of data, with each data item appearing on a separate line.  If you wish your list to contain headers, then use the table formatter, and wrap your data in an AssociativeList.
+> Display the data in a simple list. This formatter prints a plain, unadorned list of data, with each data item appearing on a separate line.  If you wish your list to contain headers, then use the table formatter, and wrap your data in an PropertyList.
 
 | Visibility | Function |
 |:-----------|:---------|
@@ -253,7 +258,7 @@
 <hr /> 
 ### Class: \Consolidation\OutputFormatters\Formatters\TableFormatter
 
-> Display a table of data with the Symfony Table class. This formatter takes data of either the RowsOfFields or AssociativeList data type.  Tables can be rendered with the rows running either vertically (the normal orientation) or horizontally.  By default, associative lists will be displayed as two columns, with the key in the first column and the value in the second column.
+> Display a table of data with the Symfony Table class. This formatter takes data of either the RowsOfFields or PropertyList data type.  Tables can be rendered with the rows running either vertically (the normal orientation) or horizontally.  By default, associative lists will be displayed as two columns, with the key in the first column and the value in the second column.
 
 | Visibility | Function |
 |:-----------|:---------|
@@ -263,7 +268,9 @@
 | public | <strong>validDataTypes()</strong> : <em>void</em> |
 | public | <strong>validate(</strong><em>mixed</em> <strong>$structuredData</strong>)</strong> : <em>mixed</em><br /><em>Throw an IncompatibleDataException if the provided data cannot be processed by this formatter.  Return the source data if it is valid. The data may be encapsulated or converted if necessary.</em> |
 | public | <strong>write(</strong><em>\Symfony\Component\Console\Output\OutputInterface</em> <strong>$output</strong>, <em>mixed</em> <strong>$data</strong>, <em>[\Consolidation\OutputFormatters\Options\FormatterOptions](#class-consolidationoutputformattersoptionsformatteroptions)</em> <strong>$options</strong>)</strong> : <em>string</em><br /><em>Given structured data, apply appropriate formatting, and return a printable string.</em> |
+| protected static | <strong>addCustomTableStyles(</strong><em>mixed</em> <strong>$table</strong>)</strong> : <em>void</em><br /><em>Add our custom table style(s) to the table.</em> |
 | protected | <strong>renderEachCell(</strong><em>mixed</em> <strong>$originalData</strong>, <em>mixed</em> <strong>$restructuredData</strong>, <em>[\Consolidation\OutputFormatters\Options\FormatterOptions](#class-consolidationoutputformattersoptionsformatteroptions)</em> <strong>$options</strong>)</strong> : <em>void</em> |
+| protected | <strong>wrap(</strong><em>mixed</em> <strong>$headers</strong>, <em>array</em> <strong>$data</strong>, <em>\Symfony\Component\Console\Helper\TableStyle</em> <strong>$tableStyle</strong>, <em>[\Consolidation\OutputFormatters\Options\FormatterOptions](#class-consolidationoutputformattersoptionsformatteroptions)</em> <strong>$options</strong>)</strong> : <em>array</em><br /><em>Wrap the table data</em> |
 
 *This class implements [\Consolidation\OutputFormatters\Formatters\FormatterInterface](#interface-consolidationoutputformattersformattersformatterinterface), [\Consolidation\OutputFormatters\Validate\ValidDataTypesInterface](#interface-consolidationoutputformattersvalidatevaliddatatypesinterface), [\Consolidation\OutputFormatters\Validate\ValidationInterface](#interface-consolidationoutputformattersvalidatevalidationinterface), [\Consolidation\OutputFormatters\Formatters\RenderDataInterface](#interface-consolidationoutputformattersformattersrenderdatainterface)*
 
@@ -298,7 +305,7 @@
 <hr /> 
 ### Class: \Consolidation\OutputFormatters\Formatters\XmlFormatter
 
-> Display a table of data with the Symfony Table class. This formatter takes data of either the RowsOfFields or AssociativeList data type.  Tables can be rendered with the rows running either vertically (the normal orientation) or horizontally.  By default, associative lists will be displayed as two columns, with the key in the first column and the value in the second column.
+> Display a table of data with the Symfony Table class. This formatter takes data of either the RowsOfFields or PropertyList data type.  Tables can be rendered with the rows running either vertically (the normal orientation) or horizontally.  By default, associative lists will be displayed as two columns, with the key in the first column and the value in the second column.
 
 | Visibility | Function |
 |:-----------|:---------|
@@ -328,24 +335,36 @@
 
 | Visibility | Function |
 |:-----------|:---------|
-| public | <strong>__construct(</strong><em>array</em> <strong>$configurationData=array()</strong>, <em>array</em> <strong>$options=array()</strong>)</strong> : <em>void</em> |
+| public | <strong>__construct(</strong><em>array</em> <strong>$configurationData=array()</strong>, <em>array</em> <strong>$options=array()</strong>)</strong> : <em>void</em><br /><em>Create a new FormatterOptions with the configuration data and the user-specified options for this request.</em> |
 | public | <strong>get(</strong><em>string</em> <strong>$key</strong>, <em>array</em> <strong>$defaults=array()</strong>, <em>bool/mixed</em> <strong>$default=false</strong>)</strong> : <em>mixed</em><br /><em>Get a formatter option</em> |
-| public | <strong>getConfigurationData()</strong> : <em>mixed</em> |
-| public | <strong>getFormat(</strong><em>array</em> <strong>$defaults=array()</strong>)</strong> : <em>mixed</em> |
-| public | <strong>getInputOptions(</strong><em>mixed</em> <strong>$defaults</strong>)</strong> : <em>mixed</em> |
-| public | <strong>getOptions()</strong> : <em>mixed</em> |
-| public | <strong>getXmlSchema()</strong> : <em>mixed</em> |
-| public | <strong>override(</strong><em>mixed</em> <strong>$configurationData</strong>)</strong> : <em>void</em> |
-| public | <strong>parsePropertyList(</strong><em>mixed</em> <strong>$value</strong>)</strong> : <em>void</em> |
-| public | <strong>setConfigurationData(</strong><em>mixed</em> <strong>$configurationData</strong>)</strong> : <em>void</em> |
-| public | <strong>setConfigurationDefault(</strong><em>mixed</em> <strong>$key</strong>, <em>mixed</em> <strong>$value</strong>)</strong> : <em>void</em> |
-| public | <strong>setInput(</strong><em>\Symfony\Component\Console\Input\InputInterface</em> <strong>$input</strong>)</strong> : <em>void</em> |
-| public | <strong>setOption(</strong><em>mixed</em> <strong>$key</strong>, <em>mixed</em> <strong>$value</strong>)</strong> : <em>void</em> |
-| public | <strong>setOptions(</strong><em>mixed</em> <strong>$options</strong>)</strong> : <em>void</em> |
-| protected | <strong>fetch(</strong><em>mixed</em> <strong>$key</strong>, <em>array</em> <strong>$defaults=array()</strong>, <em>bool</em> <strong>$default=false</strong>)</strong> : <em>mixed</em> |
-| protected | <strong>getOptionFormat(</strong><em>mixed</em> <strong>$key</strong>)</strong> : <em>mixed</em> |
-| protected | <strong>parse(</strong><em>mixed</em> <strong>$key</strong>, <em>mixed</em> <strong>$value</strong>)</strong> : <em>void</em> |
-| protected | <strong>setConfigurationValue(</strong><em>mixed</em> <strong>$key</strong>, <em>mixed</em> <strong>$value</strong>)</strong> : <em>void</em> |
+| public | <strong>getConfigurationData()</strong> : <em>array</em><br /><em>Return a reference to the configuration data for this object.</em> |
+| public | <strong>getFormat(</strong><em>array</em> <strong>$defaults=array()</strong>)</strong> : <em>string</em><br /><em>Determine the format that was requested by the caller.</em> |
+| public | <strong>getInputOptions(</strong><em>array</em> <strong>$defaults</strong>)</strong> : <em>array</em><br /><em>Return all of the options from the provided $defaults array that exist in our InputInterface object.</em> |
+| public | <strong>getOptions()</strong> : <em>array</em><br /><em>Return a reference to the user-specified options for this request.</em> |
+| public | <strong>getXmlSchema()</strong> : <em>[\Consolidation\OutputFormatters\StructuredData\Xml\XmlSchema](#class-consolidationoutputformattersstructureddataxmlxmlschema)</em><br /><em>Return the XmlSchema to use with --format=xml for data types that support that.  This is used when an array needs to be converted into xml.</em> |
+| public | <strong>override(</strong><em>array</em> <strong>$configurationData</strong>)</strong> : <em>[\Consolidation\OutputFormatters\Options\FormatterOptions](#class-consolidationoutputformattersoptionsformatteroptions)</em><br /><em>Create a new FormatterOptions object with new configuration data (provided), and the same options data as this instance.</em> |
+| public | <strong>parsePropertyList(</strong><em>string</em> <strong>$value</strong>)</strong> : <em>array</em><br /><em>Convert from a textual list to an array</em> |
+| public | <strong>setConfigurationData(</strong><em>array</em> <strong>$configurationData</strong>)</strong> : <em>[\Consolidation\OutputFormatters\Options\FormatterOptions](#class-consolidationoutputformattersoptionsformatteroptions)</em><br /><em>Change the configuration data for this formatter options object.</em> |
+| public | <strong>setConfigurationDefault(</strong><em>string</em> <strong>$key</strong>, <em>mixed</em> <strong>$value</strong>)</strong> : <em>\Consolidation\OutputFormatters\Options\FormetterOptions</em><br /><em>Change one configuration value for this formatter option, but only if it does not already have a value set.</em> |
+| public | <strong>setDefaultFields(</strong><em>mixed</em> <strong>$fields</strong>)</strong> : <em>void</em> |
+| public | <strong>setDefaultStringField(</strong><em>mixed</em> <strong>$defaultStringField</strong>)</strong> : <em>void</em> |
+| public | <strong>setDelimiter(</strong><em>mixed</em> <strong>$delimiter</strong>)</strong> : <em>void</em> |
+| public | <strong>setFieldLabels(</strong><em>mixed</em> <strong>$fieldLabels</strong>)</strong> : <em>void</em> |
+| public | <strong>setIncludeFieldLables(</strong><em>mixed</em> <strong>$includFieldLables</strong>)</strong> : <em>void</em> |
+| public | <strong>setInput(</strong><em>\Symfony\Component\Console\Input\InputInterface</em> <strong>$input</strong>)</strong> : <em>\Consolidation\OutputFormatters\Options\type</em><br /><em>Provide a Symfony Console InputInterface containing the user-specified options for this request.</em> |
+| public | <strong>setListDelimiter(</strong><em>mixed</em> <strong>$listDelimiter</strong>)</strong> : <em>void</em> |
+| public | <strong>setListOrientation(</strong><em>mixed</em> <strong>$listOrientation</strong>)</strong> : <em>void</em> |
+| public | <strong>setOption(</strong><em>string</em> <strong>$key</strong>, <em>mixed</em> <strong>$value</strong>)</strong> : <em>[\Consolidation\OutputFormatters\Options\FormatterOptions](#class-consolidationoutputformattersoptionsformatteroptions)</em><br /><em>Change one option value specified by the user for this request.</em> |
+| public | <strong>setOptions(</strong><em>array</em> <strong>$options</strong>)</strong> : <em>[\Consolidation\OutputFormatters\Options\FormatterOptions](#class-consolidationoutputformattersoptionsformatteroptions)</em><br /><em>Set all of the options that were specified by the user for this request.</em> |
+| public | <strong>setRowLabels(</strong><em>mixed</em> <strong>$rowLabels</strong>)</strong> : <em>void</em> |
+| public | <strong>setTableStyle(</strong><em>mixed</em> <strong>$style</strong>)</strong> : <em>void</em> |
+| public | <strong>setWidth(</strong><em>mixed</em> <strong>$width</strong>)</strong> : <em>void</em> |
+| protected | <strong>defaultsForKey(</strong><em>string</em> <strong>$key</strong>, <em>array</em> <strong>$defaults</strong>, <em>bool</em> <strong>$default=false</strong>)</strong> : <em>array</em><br /><em>Reduce provided defaults to the single item identified by '$key', if it exists, or an empty array otherwise.</em> |
+| protected | <strong>fetch(</strong><em>string</em> <strong>$key</strong>, <em>array</em> <strong>$defaults=array()</strong>, <em>bool/mixed</em> <strong>$default=false</strong>)</strong> : <em>mixed</em><br /><em>Look up a key, and return its raw value.</em> |
+| protected | <strong>fetchRawValues(</strong><em>array</em> <strong>$defaults=array()</strong>)</strong> : <em>array</em><br /><em>Look up all of the items associated with the provided defaults.</em> |
+| protected | <strong>getOptionFormat(</strong><em>string</em> <strong>$key</strong>)</strong> : <em>string</em><br /><em>Given a specific key, return the class method name of the parsing method for data stored under this key.</em> |
+| protected | <strong>parse(</strong><em>string</em> <strong>$key</strong>, <em>mixed</em> <strong>$value</strong>)</strong> : <em>mixed</em><br /><em>Given the raw value for a specific key, do any type conversion (e.g. from a textual list to an array) needed for the data.</em> |
+| protected | <strong>setConfigurationValue(</strong><em>string</em> <strong>$key</strong>, <em>mixed</em> <strong>$value</strong>)</strong> : <em>\Consolidation\OutputFormatters\Options\FormetterOptions</em><br /><em>Change one configuration value for this formatter option.</em> |
 
 <hr /> 
 ### Interface: \Consolidation\OutputFormatters\Options\OverrideOptionsInterface
@@ -362,7 +381,10 @@
 | Visibility | Function |
 |:-----------|:---------|
 | public | <strong>__construct(</strong><em>mixed</em> <strong>$data</strong>)</strong> : <em>void</em> |
+| public | <strong>addRenderer(</strong><em>[\Consolidation\OutputFormatters\StructuredData\RenderCellInterface](#interface-consolidationoutputformattersstructureddatarendercellinterface)</em> <strong>$renderer</strong>, <em>string</em> <strong>$priority=`'normal'`</strong>)</strong> : <em>\Consolidation\OutputFormatters\StructuredData\$this</em><br /><em>Add a renderer</em> |
+| public | <strong>addRendererFunction(</strong><em>\callable</em> <strong>$rendererFn</strong>, <em>string</em> <strong>$priority=`'normal'`</strong>)</strong> : <em>\Consolidation\OutputFormatters\StructuredData\$this</em><br /><em>Add a callable as a renderer</em> |
 | public | <strong>abstract getListData(</strong><em>[\Consolidation\OutputFormatters\Options\FormatterOptions](#class-consolidationoutputformattersoptionsformatteroptions)</em> <strong>$options</strong>)</strong> : <em>mixed</em> |
+| public | <strong>renderCell(</strong><em>mixed</em> <strong>$key</strong>, <em>mixed</em> <strong>$cellData</strong>, <em>[\Consolidation\OutputFormatters\Options\FormatterOptions](#class-consolidationoutputformattersoptionsformatteroptions)</em> <strong>$options</strong>, <em>mixed</em> <strong>$rowData</strong>)</strong> : <em>void</em> |
 | public | <strong>abstract restructure(</strong><em>[\Consolidation\OutputFormatters\Options\FormatterOptions](#class-consolidationoutputformattersoptionsformatteroptions)</em> <strong>$options</strong>)</strong> : <em>void</em> |
 | protected | <strong>createTableTransformation(</strong><em>mixed</em> <strong>$data</strong>, <em>mixed</em> <strong>$options</strong>)</strong> : <em>mixed</em> |
 | protected | <strong>defaultOptions()</strong> : <em>array</em><br /><em>A structured list may provide its own set of default options. These will be used in place of the command's default options (from the annotations) in instances where the user does not provide the options explicitly (on the commandline) or implicitly (via a configuration file).</em> |
@@ -372,23 +394,38 @@
 
 *This class extends \ArrayObject*
 
-*This class implements \Countable, \Serializable, \ArrayAccess, \Traversable, \IteratorAggregate, [\Consolidation\OutputFormatters\StructuredData\RestructureInterface](#interface-consolidationoutputformattersstructureddatarestructureinterface), [\Consolidation\OutputFormatters\StructuredData\ListDataInterface](#interface-consolidationoutputformattersstructureddatalistdatainterface)*
+*This class implements \Countable, \Serializable, \ArrayAccess, \Traversable, \IteratorAggregate, [\Consolidation\OutputFormatters\StructuredData\RestructureInterface](#interface-consolidationoutputformattersstructureddatarestructureinterface), [\Consolidation\OutputFormatters\StructuredData\ListDataInterface](#interface-consolidationoutputformattersstructureddatalistdatainterface), [\Consolidation\OutputFormatters\StructuredData\RenderCellCollectionInterface](#interface-consolidationoutputformattersstructureddatarendercellcollectioninterface), [\Consolidation\OutputFormatters\StructuredData\RenderCellInterface](#interface-consolidationoutputformattersstructureddatarendercellinterface)*
 
 <hr /> 
 ### Class: \Consolidation\OutputFormatters\StructuredData\AssociativeList
 
-> Holds an array where each element of the array is one key : value pair.  The keys must be unique, as is typically the case for associative arrays.
+> Old name for PropertyList class.
 
 | Visibility | Function |
 |:-----------|:---------|
-| public | <strong>getListData(</strong><em>[\Consolidation\OutputFormatters\Options\FormatterOptions](#class-consolidationoutputformattersoptionsformatteroptions)</em> <strong>$options</strong>)</strong> : <em>mixed</em> |
-| public | <strong>restructure(</strong><em>[\Consolidation\OutputFormatters\Options\FormatterOptions](#class-consolidationoutputformattersoptionsformatteroptions)</em> <strong>$options</strong>)</strong> : <em>\Consolidation\OutputFormatters\StructuredData\Consolidation\OutputFormatters\Transformations\TableTransformation</em><br /><em>Restructure this data for output by converting it into a table transformation object.</em> |
-| protected | <strong>defaultOptions()</strong> : <em>void</em> |
-| protected | <strong>instantiateTableTransformation(</strong><em>mixed</em> <strong>$data</strong>, <em>mixed</em> <strong>$fieldLabels</strong>, <em>mixed</em> <strong>$rowLabels</strong>)</strong> : <em>void</em> |
 
-*This class extends [\Consolidation\OutputFormatters\StructuredData\AbstractStructuredList](#class-consolidationoutputformattersstructureddataabstractstructuredlist-abstract)*
+*This class extends [\Consolidation\OutputFormatters\StructuredData\PropertyList](#class-consolidationoutputformattersstructureddatapropertylist)*
 
-*This class implements [\Consolidation\OutputFormatters\StructuredData\ListDataInterface](#interface-consolidationoutputformattersstructureddatalistdatainterface), [\Consolidation\OutputFormatters\StructuredData\RestructureInterface](#interface-consolidationoutputformattersstructureddatarestructureinterface), \IteratorAggregate, \Traversable, \ArrayAccess, \Serializable, \Countable*
+*This class implements \Countable, \Serializable, \ArrayAccess, \Traversable, \IteratorAggregate, [\Consolidation\OutputFormatters\StructuredData\RestructureInterface](#interface-consolidationoutputformattersstructureddatarestructureinterface), [\Consolidation\OutputFormatters\StructuredData\ListDataInterface](#interface-consolidationoutputformattersstructureddatalistdatainterface), [\Consolidation\OutputFormatters\StructuredData\RenderCellCollectionInterface](#interface-consolidationoutputformattersstructureddatarendercellcollectioninterface), [\Consolidation\OutputFormatters\StructuredData\RenderCellInterface](#interface-consolidationoutputformattersstructureddatarendercellinterface)*
+
+<hr /> 
+### Class: \Consolidation\OutputFormatters\StructuredData\CallableRenderer
+
+| Visibility | Function |
+|:-----------|:---------|
+| public | <strong>__construct(</strong><em>\callable</em> <strong>$renderFunction</strong>)</strong> : <em>void</em> |
+| public | <strong>renderCell(</strong><em>mixed</em> <strong>$key</strong>, <em>mixed</em> <strong>$cellData</strong>, <em>[\Consolidation\OutputFormatters\Options\FormatterOptions](#class-consolidationoutputformattersoptionsformatteroptions)</em> <strong>$options</strong>, <em>mixed</em> <strong>$rowData</strong>)</strong> : <em>void</em> |
+
+*This class implements [\Consolidation\OutputFormatters\StructuredData\RenderCellInterface](#interface-consolidationoutputformattersstructureddatarendercellinterface)*
+
+<hr /> 
+### Class: \Consolidation\OutputFormatters\StructuredData\HelpDocument
+
+| Visibility | Function |
+|:-----------|:---------|
+| public | <strong>getDomData()</strong> : <em>[\DomDocument](http://php.net/manual/en/class.domdocument.php)</em><br /><em>Convert data into a \DomDocument.</em> |
+
+*This class implements [\Consolidation\OutputFormatters\StructuredData\Xml\DomDataInterface](#interface-consolidationoutputformattersstructureddataxmldomdatainterface)*
 
 <hr /> 
 ### Interface: \Consolidation\OutputFormatters\StructuredData\ListDataInterface
@@ -405,11 +442,36 @@
 | public | <strong>getOriginalData()</strong> : <em>mixed</em><br /><em>Return the original data for this table.  Used by any formatter that expects an array.</em> |
 
 <hr /> 
+### Class: \Consolidation\OutputFormatters\StructuredData\PropertyList
+
+> Holds an array where each element of the array is one key : value pair.  The keys must be unique, as is typically the case for associative arrays.
+
+| Visibility | Function |
+|:-----------|:---------|
+| public | <strong>getListData(</strong><em>[\Consolidation\OutputFormatters\Options\FormatterOptions](#class-consolidationoutputformattersoptionsformatteroptions)</em> <strong>$options</strong>)</strong> : <em>mixed</em> |
+| public | <strong>restructure(</strong><em>[\Consolidation\OutputFormatters\Options\FormatterOptions](#class-consolidationoutputformattersoptionsformatteroptions)</em> <strong>$options</strong>)</strong> : <em>\Consolidation\OutputFormatters\StructuredData\Consolidation\OutputFormatters\Transformations\TableTransformation</em><br /><em>Restructure this data for output by converting it into a table transformation object.</em> |
+| protected | <strong>defaultOptions()</strong> : <em>void</em> |
+| protected | <strong>instantiateTableTransformation(</strong><em>mixed</em> <strong>$data</strong>, <em>mixed</em> <strong>$fieldLabels</strong>, <em>mixed</em> <strong>$rowLabels</strong>)</strong> : <em>void</em> |
+
+*This class extends [\Consolidation\OutputFormatters\StructuredData\AbstractStructuredList](#class-consolidationoutputformattersstructureddataabstractstructuredlist-abstract)*
+
+*This class implements [\Consolidation\OutputFormatters\StructuredData\RenderCellInterface](#interface-consolidationoutputformattersstructureddatarendercellinterface), [\Consolidation\OutputFormatters\StructuredData\RenderCellCollectionInterface](#interface-consolidationoutputformattersstructureddatarendercellcollectioninterface), [\Consolidation\OutputFormatters\StructuredData\ListDataInterface](#interface-consolidationoutputformattersstructureddatalistdatainterface), [\Consolidation\OutputFormatters\StructuredData\RestructureInterface](#interface-consolidationoutputformattersstructureddatarestructureinterface), \IteratorAggregate, \Traversable, \ArrayAccess, \Serializable, \Countable*
+
+<hr /> 
+### Interface: \Consolidation\OutputFormatters\StructuredData\RenderCellCollectionInterface
+
+| Visibility | Function |
+|:-----------|:---------|
+| public | <strong>addRenderer(</strong><em>[\Consolidation\OutputFormatters\StructuredData\RenderCellInterface](#interface-consolidationoutputformattersstructureddatarendercellinterface)</em> <strong>$renderer</strong>)</strong> : <em>\Consolidation\OutputFormatters\StructuredData\$this</em><br /><em>Add a renderer</em> |
+
+*This class implements [\Consolidation\OutputFormatters\StructuredData\RenderCellInterface](#interface-consolidationoutputformattersstructureddatarendercellinterface)*
+
+<hr /> 
 ### Interface: \Consolidation\OutputFormatters\StructuredData\RenderCellInterface
 
 | Visibility | Function |
 |:-----------|:---------|
-| public | <strong>renderCell(</strong><em>string</em> <strong>$key</strong>, <em>mixed</em> <strong>$cellData</strong>, <em>[\Consolidation\OutputFormatters\Options\FormatterOptions](#class-consolidationoutputformattersoptionsformatteroptions)</em> <strong>$options</strong>)</strong> : <em>string</em><br /><em>Convert the contents of one table cell into a string, so that it may be placed in the table.</em> |
+| public | <strong>renderCell(</strong><em>string</em> <strong>$key</strong>, <em>mixed</em> <strong>$cellData</strong>, <em>[\Consolidation\OutputFormatters\Options\FormatterOptions](#class-consolidationoutputformattersoptionsformatteroptions)</em> <strong>$options</strong>, <em>array</em> <strong>$rowData</strong>)</strong> : <em>mixed</em><br /><em>Convert the contents of one table cell into a string, so that it may be placed in the table.  Renderer should return the $cellData passed to it if it does not wish to process it.</em> |
 
 <hr /> 
 ### Interface: \Consolidation\OutputFormatters\StructuredData\RestructureInterface
@@ -431,7 +493,7 @@
 
 *This class extends [\Consolidation\OutputFormatters\StructuredData\AbstractStructuredList](#class-consolidationoutputformattersstructureddataabstractstructuredlist-abstract)*
 
-*This class implements [\Consolidation\OutputFormatters\StructuredData\ListDataInterface](#interface-consolidationoutputformattersstructureddatalistdatainterface), [\Consolidation\OutputFormatters\StructuredData\RestructureInterface](#interface-consolidationoutputformattersstructureddatarestructureinterface), \IteratorAggregate, \Traversable, \ArrayAccess, \Serializable, \Countable*
+*This class implements [\Consolidation\OutputFormatters\StructuredData\RenderCellInterface](#interface-consolidationoutputformattersstructureddatarendercellinterface), [\Consolidation\OutputFormatters\StructuredData\RenderCellCollectionInterface](#interface-consolidationoutputformattersstructureddatarendercellcollectioninterface), [\Consolidation\OutputFormatters\StructuredData\ListDataInterface](#interface-consolidationoutputformattersstructureddatalistdatainterface), [\Consolidation\OutputFormatters\StructuredData\RestructureInterface](#interface-consolidationoutputformattersstructureddatarestructureinterface), \IteratorAggregate, \Traversable, \ArrayAccess, \Serializable, \Countable*
 
 <hr /> 
 ### Interface: \Consolidation\OutputFormatters\StructuredData\TableDataInterface
@@ -458,6 +520,7 @@
 | protected | <strong>addXmlChildren(</strong><em>[\DOMDocument](http://php.net/manual/en/class.domdocument.php)</em> <strong>$dom</strong>, <em>mixed</em> <strong>$xmlParent</strong>, <em>mixed</em> <strong>$elementName</strong>, <em>mixed</em> <strong>$structuredData</strong>)</strong> : <em>void</em> |
 | protected | <strong>addXmlData(</strong><em>[\DOMDocument](http://php.net/manual/en/class.domdocument.php)</em> <strong>$dom</strong>, <em>mixed</em> <strong>$xmlParent</strong>, <em>mixed</em> <strong>$elementName</strong>, <em>mixed</em> <strong>$structuredData</strong>)</strong> : <em>void</em> |
 | protected | <strong>addXmlDataOrAttribute(</strong><em>[\DOMDocument](http://php.net/manual/en/class.domdocument.php)</em> <strong>$dom</strong>, <em>mixed</em> <strong>$xmlParent</strong>, <em>mixed</em> <strong>$elementName</strong>, <em>mixed</em> <strong>$key</strong>, <em>mixed</em> <strong>$value</strong>)</strong> : <em>void</em> |
+| protected | <strong>determineElementName(</strong><em>mixed</em> <strong>$key</strong>, <em>mixed</em> <strong>$childElementName</strong>, <em>mixed</em> <strong>$value</strong>)</strong> : <em>void</em> |
 | protected | <strong>getDefaultElementName(</strong><em>mixed</em> <strong>$parentElementName</strong>)</strong> : <em>mixed</em> |
 | protected | <strong>getTopLevelElementName(</strong><em>mixed</em> <strong>$structuredData</strong>)</strong> : <em>mixed</em> |
 | protected | <strong>inElementList(</strong><em>mixed</em> <strong>$parentElementName</strong>, <em>mixed</em> <strong>$elementName</strong>)</strong> : <em>void</em> |
@@ -477,17 +540,6 @@
 | public | <strong>arrayToXml(</strong><em>mixed</em> <strong>$structuredData</strong>)</strong> : <em>[\DOMDocument](http://php.net/manual/en/class.domdocument.php)</em><br /><em>Convert data to a format suitable for use in a list. By default, the array values will be used.  Implement ListDataInterface to use some other criteria (e.g. array keys).</em> |
 
 <hr /> 
-### Class: \Consolidation\OutputFormatters\Transformations\AssociativeListTableTransformation
-
-| Visibility | Function |
-|:-----------|:---------|
-| public | <strong>getOriginalData()</strong> : <em>mixed</em> |
-
-*This class extends [\Consolidation\OutputFormatters\Transformations\TableTransformation](#class-consolidationoutputformatterstransformationstabletransformation)*
-
-*This class implements [\Consolidation\OutputFormatters\StructuredData\OriginalDataInterface](#interface-consolidationoutputformattersstructureddataoriginaldatainterface), [\Consolidation\OutputFormatters\StructuredData\TableDataInterface](#interface-consolidationoutputformattersstructureddatatabledatainterface), \IteratorAggregate, \Traversable, \ArrayAccess, \Serializable, \Countable*
-
-<hr /> 
 ### Class: \Consolidation\OutputFormatters\Transformations\DomToArraySimplifier
 
 > Simplify a DOMDocument to an array.
@@ -498,6 +550,7 @@
 | public | <strong>canSimplify(</strong><em>[\ReflectionClass](http://php.net/manual/en/class.reflectionclass.php)</em> <strong>$dataType</strong>)</strong> : <em>bool</em> |
 | public | <strong>simplifyToArray(</strong><em>mixed</em> <strong>$structuredData</strong>, <em>[\Consolidation\OutputFormatters\Options\FormatterOptions](#class-consolidationoutputformattersoptionsformatteroptions)</em> <strong>$options</strong>)</strong> : <em>void</em> |
 | protected | <strong>elementToArray(</strong><em>[\DOMNode](http://php.net/manual/en/class.domnode.php)</em> <strong>$element</strong>)</strong> : <em>array</em><br /><em>Recursively convert the provided DOM element into a php array.</em> |
+| protected | <strong>getIdOfValue(</strong><em>mixed</em> <strong>$value</strong>)</strong> : <em>string</em><br /><em>If the object has an 'id' or 'name' element, then use that as the array key when storing this value in its parent.</em> |
 | protected | <strong>getNodeAttributes(</strong><em>[\DOMNode](http://php.net/manual/en/class.domnode.php)</em> <strong>$element</strong>)</strong> : <em>array</em><br /><em>Get all of the attributes of the provided element.</em> |
 | protected | <strong>getNodeChildren(</strong><em>[\DOMNode](http://php.net/manual/en/class.domnode.php)</em> <strong>$element</strong>)</strong> : <em>array</em><br /><em>Get all of the children of the provided element, with simplification.</em> |
 | protected | <strong>getNodeChildrenData(</strong><em>[\DOMNode](http://php.net/manual/en/class.domnode.php)</em> <strong>$element</strong>)</strong> : <em>array</em><br /><em>Get the data from the children of the provided node in preliminary form.</em> |
@@ -514,6 +567,17 @@
 | Visibility | Function |
 |:-----------|:---------|
 | public | <strong>overrideRestructure(</strong><em>mixed</em> <strong>$structuredOutput</strong>, <em>[\Consolidation\OutputFormatters\Options\FormatterOptions](#class-consolidationoutputformattersoptionsformatteroptions)</em> <strong>$options</strong>)</strong> : <em>mixed</em><br /><em>Select data to use directly from the structured output, before the restructure operation has been executed.</em> |
+
+<hr /> 
+### Class: \Consolidation\OutputFormatters\Transformations\PropertyListTableTransformation
+
+| Visibility | Function |
+|:-----------|:---------|
+| public | <strong>getOriginalData()</strong> : <em>mixed</em> |
+
+*This class extends [\Consolidation\OutputFormatters\Transformations\TableTransformation](#class-consolidationoutputformatterstransformationstabletransformation)*
+
+*This class implements [\Consolidation\OutputFormatters\StructuredData\OriginalDataInterface](#interface-consolidationoutputformattersstructureddataoriginaldatainterface), [\Consolidation\OutputFormatters\StructuredData\TableDataInterface](#interface-consolidationoutputformattersstructureddatatabledatainterface), \IteratorAggregate, \Traversable, \ArrayAccess, \Serializable, \Countable*
 
 <hr /> 
 ### Class: \Consolidation\OutputFormatters\Transformations\PropertyParser
@@ -569,6 +633,21 @@
 *This class extends \ArrayObject*
 
 *This class implements \Countable, \Serializable, \ArrayAccess, \Traversable, \IteratorAggregate, [\Consolidation\OutputFormatters\StructuredData\TableDataInterface](#interface-consolidationoutputformattersstructureddatatabledatainterface), [\Consolidation\OutputFormatters\StructuredData\OriginalDataInterface](#interface-consolidationoutputformattersstructureddataoriginaldatainterface)*
+
+<hr /> 
+### Class: \Consolidation\OutputFormatters\Transformations\WordWrapper
+
+| Visibility | Function |
+|:-----------|:---------|
+| public | <strong>__construct(</strong><em>mixed</em> <strong>$width</strong>)</strong> : <em>void</em> |
+| public | <strong>setMinimumWidths(</strong><em>array</em> <strong>$minimumWidths</strong>)</strong> : <em>void</em><br /><em>If columns have minimum widths, then set them here.</em> |
+| public | <strong>setPaddingFromStyle(</strong><em>\Symfony\Component\Console\Helper\TableStyle</em> <strong>$style</strong>)</strong> : <em>void</em><br /><em>Calculate our padding widths from the specified table style.</em> |
+| public | <strong>wrap(</strong><em>array</em> <strong>$rows</strong>, <em>array</em> <strong>$widths=array()</strong>)</strong> : <em>array</em><br /><em>Wrap the cells in each part of the provided data table</em> |
+| protected | <strong>columnAutowidth(</strong><em>array</em> <strong>$rows</strong>, <em>array</em> <strong>$widths</strong>)</strong> : <em>void</em><br /><em>Determine the best fit for column widths. Ported from Drush. (in characters) - these will be left as is.</em> |
+| protected static | <strong>longestWordLength(</strong><em>string</em> <strong>$str</strong>)</strong> : <em>int</em><br /><em>Return the length of the longest word in the string.</em> |
+| protected | <strong>selectColumnToReduce(</strong><em>mixed</em> <strong>$col_dist</strong>, <em>mixed</em> <strong>$auto_widths</strong>, <em>mixed</em> <strong>$max_word_lens</strong>)</strong> : <em>void</em> |
+| protected | <strong>shouldSelectThisColumn(</strong><em>mixed</em> <strong>$count</strong>, <em>mixed</em> <strong>$counts</strong>, <em>mixed</em> <strong>$width</strong>)</strong> : <em>bool</em> |
+| protected | <strong>wrapCell(</strong><em>mixed</em> <strong>$cell</strong>, <em>string</em> <strong>$cellWidth</strong>)</strong> : <em>mixed</em><br /><em>Wrap one cell.  Guard against modifying non-strings and then call through to wordwrap().</em> |
 
 <hr /> 
 ### Interface: \Consolidation\OutputFormatters\Validate\ValidationInterface

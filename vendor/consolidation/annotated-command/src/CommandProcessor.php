@@ -9,6 +9,7 @@ use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Consolidation\OutputFormatters\FormatterManager;
 use Consolidation\OutputFormatters\Options\FormatterOptions;
 use Consolidation\AnnotatedCommand\Hooks\HookManager;
+use Consolidation\AnnotatedCommand\Options\PrepareFormatter;
 
 /**
  * Process a command, including hooks and other callbacks.
@@ -24,6 +25,8 @@ class CommandProcessor
     protected $formatterManager;
     /** var callable */
     protected $displayErrorFunction;
+    /** var PrepareFormatterOptions[] */
+    protected $prepareOptionsList = [];
 
     public function __construct(HookManager $hookManager)
     {
@@ -37,6 +40,11 @@ class CommandProcessor
     public function hookManager()
     {
         return $this->hookManager;
+    }
+
+    public function addPrepareFormatter(PrepareFormatter $preparer)
+    {
+        $this->prepareOptionsList[] = $preparer;
     }
 
     public function setFormatterManager(FormatterManager $formatterManager)
@@ -192,30 +200,21 @@ class CommandProcessor
      *
      * @return string
      */
-    protected function getFormat($options)
+    protected function getFormat(FormatterOptions $options)
     {
         // In Symfony Console, there is no way for us to differentiate
         // between the user specifying '--format=table', and the user
         // not specifying --format when the default value is 'table'.
         // Therefore, we must make --field always override --format; it
         // cannot become the default value for --format.
-        if (!empty($options['field'])) {
+        if ($options->get('field')) {
             return 'string';
         }
-        $options += [
-            'default-format' => false,
-            'pipe' => false,
-        ];
-        $options += [
-            'format' => $options['default-format'],
-            'format-pipe' => $options['default-format'],
-        ];
-
-        $format = $options['format'];
-        if ($options['pipe']) {
-            $format = $options['format-pipe'];
+        $defaults = [];
+        if ($options->get('pipe')) {
+            return $options->get('pipe-format', [], 'tsv');
         }
-        return $format;
+        return $options->getFormat($defaults);
     }
 
     /**
@@ -236,9 +235,8 @@ class CommandProcessor
      */
     protected function writeUsingFormatter(OutputInterface $output, $structuredOutput, CommandData $commandData)
     {
-        $options = $commandData->input()->getOptions();
-        $format = $this->getFormat($options);
-        $formatterOptions = new FormatterOptions($commandData->annotationData()->getArrayCopy(), $options);
+        $formatterOptions = $this->createFormatterOptions($commandData);
+        $format = $this->getFormat($formatterOptions);
         $this->formatterManager->write(
             $output,
             $format,
@@ -246,6 +244,21 @@ class CommandProcessor
             $formatterOptions
         );
         return 0;
+    }
+
+    /**
+     * Create a FormatterOptions object for use in writing the formatted output.
+     * @param CommandData $commandData
+     * @return FormatterOptions
+     */
+    protected function createFormatterOptions($commandData)
+    {
+        $options = $commandData->input()->getOptions();
+        $formatterOptions = new FormatterOptions($commandData->annotationData()->getArrayCopy(), $options);
+        foreach ($this->prepareOptionsList as $preparer) {
+            $preparer->prepare($commandData, $formatterOptions);
+        }
+        return $formatterOptions;
     }
 
     /**

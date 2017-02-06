@@ -12,9 +12,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\ProcessBuilder;
 use Symfony\Component\Console\Command\Command;
-use Drupal\Console\Command\Shared\CommandTrait;
+use Drupal\Console\Core\Command\Shared\CommandTrait;
 use Drupal\Console\Command\Shared\ConnectTrait;
-use Drupal\Console\Style\DrupalStyle;
+use Drupal\Console\Core\Style\DrupalStyle;
 
 class ClientCommand extends Command
 {
@@ -50,15 +50,15 @@ class ClientCommand extends Command
 
         $databaseConnection = $this->resolveConnection($io, $database);
 
-				$connection = sprintf(
-						'%s -A --database=%s --user=%s --password=%s --host=%s --port=%s',
-						$databaseConnection['driver'],
-						$databaseConnection['database'],
-						$databaseConnection['username'],
-						$databaseConnection['password'],
-						$databaseConnection['host'],
-						$databaseConnection['port']
-				);
+        $connection = sprintf(
+            '%s -A --database=%s --user=%s --password=%s --host=%s --port=%s',
+            $databaseConnection['driver'],
+            $databaseConnection['database'],
+            $databaseConnection['username'],
+            $databaseConnection['password'],
+            $databaseConnection['host'],
+            $databaseConnection['port']
+        );
 
         if ($learning) {
             $io->commentBlock(

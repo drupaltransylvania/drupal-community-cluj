@@ -86,6 +86,31 @@ class AnnotatedCommandFactoryTests extends \PHPUnit_Framework_TestCase
         $this->assertRunCommandViaApplicationEquals($command, $input, 'alphabet');
     }
 
+    function testJoinCommandHelp()
+    {
+        $this->commandFileInstance = new \Consolidation\TestUtils\ExampleCommandFile;
+        $this->commandFactory = new AnnotatedCommandFactory();
+        $commandInfo = $this->commandFactory->createCommandInfo($this->commandFileInstance, 'myJoin');
+
+        $command = $this->commandFactory->createCommand($commandInfo, $this->commandFileInstance);
+
+        $this->assertInstanceOf('\Symfony\Component\Console\Command\Command', $command);
+        $this->assertEquals('my:join', $command->getName());
+        $this->assertEquals('This is the my:join command', $command->getDescription());
+        $this->assertEquals("This command will join its parameters together. It can also reverse and repeat its arguments.", $command->getHelp());
+        $this->assertEquals('my:join [--flip] [--repeat [REPEAT]] [--] [<args>]...', $command->getSynopsis());
+
+        // Bug in parser: @usage with no parameters or options not passed to us correctly.
+        $actualUsages = implode(',', $command->getUsages());
+        if ($actualUsages == 'my:join a b,my:join Example with no parameters or options') {
+            $this->markTestSkipped();
+        }
+        $this->assertEquals('my:join a b,my:join', $actualUsages);
+
+        $input = new StringInput('my:join bet alpha --flip --repeat=2');
+        $this->assertRunCommandViaApplicationEquals($command, $input, 'alphabetalphabet');
+    }
+
     function testDefaultsCommand()
     {
         $this->commandFileInstance = new \Consolidation\TestUtils\ExampleCommandFile;
@@ -126,6 +151,16 @@ class AnnotatedCommandFactoryTests extends \PHPUnit_Framework_TestCase
 
         $input = new StringInput('command:with-no-options something');
         $this->assertRunCommandViaApplicationEquals($command, $input, 'somethingdefault');
+
+        $input = new StringInput('help command:with-no-options something');
+        $this->assertRunCommandViaApplicationContains(
+            $command,
+            $input,
+            [
+                'The first parameter.',
+                'The other parameter.',
+            ]
+        );
     }
 
     function testCommandWithNoArguments()
@@ -404,7 +439,7 @@ class AnnotatedCommandFactoryTests extends \PHPUnit_Framework_TestCase
         $annotationData = $commandInfo->getRawAnnotations();
         $this->assertEquals('addmycommandname', implode(',', $annotationData->keys()));
         $annotationData = $commandInfo->getAnnotations();
-        $this->assertEquals('addmycommandname,command', implode(',', $annotationData->keys()));
+        $this->assertEquals('addmycommandname,command,_path', implode(',', $annotationData->keys()));
 
         $command = $this->commandFactory->createCommand($commandInfo, $this->commandFileInstance);
 
@@ -612,7 +647,25 @@ class AnnotatedCommandFactoryTests extends \PHPUnit_Framework_TestCase
         return $r->invokeArgs($object, $args);
     }
 
+    function assertRunCommandViaApplicationContains($command, $input, $containsList, $expectedStatusCode = 0)
+    {
+        list($statusCode, $commandOutput) = $this->runCommandViaApplication($command, $input);
+
+        foreach ($containsList as $contains) {
+            $this->assertContains($contains, $commandOutput);
+        }
+        $this->assertEquals($expectedStatusCode, $statusCode);
+    }
+
     function assertRunCommandViaApplicationEquals($command, $input, $expectedOutput, $expectedStatusCode = 0)
+    {
+        list($statusCode, $commandOutput) = $this->runCommandViaApplication($command, $input);
+
+        $this->assertEquals($expectedOutput, $commandOutput);
+        $this->assertEquals($expectedStatusCode, $statusCode);
+    }
+
+    function runCommandViaApplication($command, $input)
     {
         $output = new BufferedOutput();
         if ($this->commandFileInstance && method_exists($this->commandFileInstance, 'setOutput')) {
@@ -633,7 +686,6 @@ class AnnotatedCommandFactoryTests extends \PHPUnit_Framework_TestCase
         $statusCode = $application->run($input, $output);
         $commandOutput = trim($output->fetch());
 
-        $this->assertEquals($expectedOutput, $commandOutput);
-        $this->assertEquals($expectedStatusCode, $statusCode);
+        return [$statusCode, $commandOutput];
     }
 }

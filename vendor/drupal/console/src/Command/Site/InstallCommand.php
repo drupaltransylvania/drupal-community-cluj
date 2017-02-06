@@ -9,6 +9,7 @@ namespace Drupal\Console\Command\Site;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,11 +17,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Command\Command;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Installer\Exception\AlreadyInstalledException;
-use Drupal\Console\Command\Shared\ContainerAwareCommandTrait;
+use Drupal\Console\Core\Command\Shared\ContainerAwareCommandTrait;
 use Drupal\Console\Command\Shared\DatabaseTrait;
-use Drupal\Console\Utils\ConfigurationManager;
+use Drupal\Console\Core\Utils\ConfigurationManager;
 use Drupal\Console\Extension\Manager;
-use Drupal\Console\Style\DrupalStyle;
+use Drupal\Console\Core\Style\DrupalStyle;
 use Drupal\Console\Bootstrap\Drupal;
 use Drupal\Console\Utils\Site;
 use DrupalFinder\DrupalFinder;
@@ -52,6 +53,7 @@ class InstallCommand extends Command
 
     /**
      * InstallCommand constructor.
+     *
      * @param Manager              $extensionManager
      * @param Site                 $site
      * @param ConfigurationManager $configurationManager
@@ -370,6 +372,20 @@ class InstallCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new DrupalStyle($input, $output);
+        $uri =  parse_url($input->getParameterOption(['--uri', '-l'], 'default'), PHP_URL_HOST);
+
+        if ($this->site->multisiteMode($uri)) {
+            if (!$this->site->validMultisite($uri)) {
+                $io->error(
+                    sprintf($this->trans('commands.site.install.messages.invalid-multisite'), $uri, $uri)
+                );
+                exit(1);
+            }
+
+            // Modify $_SERVER environment information to enable
+            // the Drupal installer to use the multi-site configuration.
+            $_SERVER['HTTP_HOST'] = $uri;
+        }
 
         // Database options
         $dbType = $input->getOption('db-type')?:'mysql';
@@ -377,7 +393,7 @@ class InstallCommand extends Command
         $dbHost = $input->getOption('db-host')?:'127.0.0.1';
         $dbName = $input->getOption('db-name')?:'drupal_'.time();
         $dbUser = $input->getOption('db-user')?:'root';
-        $dbPass = $input->getOption('db-pass')?:'root';
+        $dbPass = $input->getOption('db-pass');
         $dbPrefix = $input->getOption('db-prefix');
         $dbPort = $input->getOption('db-port')?:'3306';
         $force = $input->getOption('force');
@@ -417,20 +433,18 @@ class InstallCommand extends Command
             }
         }
 
-        $this->backupSitesFile($io);
-
         try {
-            $this->runInstaller($io, $input, $database);
-
             $drupalFinder = new DrupalFinder();
             $drupalFinder->locateRoot(getcwd());
             $composerRoot = $drupalFinder->getComposerRoot();
             $drupalRoot = $drupalFinder->getDrupalRoot();
+
+            $this->runInstaller($io, $input, $database, $uri);
+
             $autoload = $this->container->get('class_loader');
             $drupal = new Drupal($autoload, $composerRoot, $drupalRoot);
             $container = $drupal->boot();
             $this->getApplication()->setContainer($container);
-
         } catch (Exception $e) {
             $io->error($e->getMessage());
             return;
@@ -478,15 +492,17 @@ class InstallCommand extends Command
     protected function runInstaller(
         DrupalStyle $io,
         InputInterface $input,
-        $database
+        $database,
+        $uri
     ) {
         $this->site->loadLegacyFile('/core/includes/install.core.inc');
 
-        $driver = (string) $database['driver'];
+        $driver = (string)$database['driver'];
+
         $settings = [
             'parameters' => [
-                'profile' => $input->getArgument('profile')?:'standard',
-                'langcode' => $input->getOption('langcode')?:'en',
+                'profile' => $input->getArgument('profile') ?: 'standard',
+                'langcode' => $input->getOption('langcode') ?: 'en',
             ],
             'forms' => [
                 'install_settings_form' => [
@@ -495,25 +511,29 @@ class InstallCommand extends Command
                     'op' => 'Save and continue',
                 ],
                 'install_configure_form' => [
-                    'site_name' => $input->getOption('site-name')?:'Drupal 8',
-                    'site_mail' => $input->getOption('site-mail')?:'admin@example.org',
+                    'site_name' => $input->getOption('site-name') ?: 'Drupal 8',
+                    'site_mail' => $input->getOption('site-mail') ?: 'admin@example.org',
                     'account' => [
-                        'name' => $input->getOption('account-name')?:'admin',
-                        'mail' => $input->getOption('account-mail')?:'admin@example.org',
+                        'name' => $input->getOption('account-name') ?: 'admin',
+                        'mail' => $input->getOption('account-mail') ?: 'admin@example.org',
                         'pass' => [
-                            'pass1' => $input->getOption('account-pass')?:'admin',
-                            'pass2' => $input->getOption('account-pass')?:'admin'
+                            'pass1' => $input->getOption('account-pass') ?: 'admin',
+                            'pass2' => $input->getOption('account-pass') ?: 'admin'
                         ],
                     ],
                     'update_status_module' => [
                         1 => true,
                         2 => true,
                     ],
-                    'clean_url' =>  true,
+                    'clean_url' => true,
                     'op' => 'Save and continue',
                 ],
             ]
         ];
+
+        if (!$this->site->multisiteMode($uri)) {
+            $this->backupSitesFile($io);
+        }
 
         $io->newLine();
         $io->info($this->trans('commands.site.install.messages.installing'));
@@ -527,6 +547,10 @@ class InstallCommand extends Command
         } catch (\Exception $e) {
             $io->error($e->getMessage());
             return;
+        }
+
+        if (!$this->site->multisiteMode($uri)) {
+            $this->restoreSitesFile($io);
         }
 
         $io->success($this->trans('commands.site.install.messages.installed'));
