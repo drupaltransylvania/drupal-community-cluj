@@ -50,6 +50,7 @@ class HookManager implements EventSubscriberInterface
     const POST_ALTER_RESULT = 'post-alter';
     const STATUS_DETERMINER = 'status';
     const EXTRACT_OUTPUT = 'extract';
+    const ON_EVENT = 'on-event';
 
     public function __construct()
     {
@@ -288,7 +289,7 @@ class HookManager implements EventSubscriberInterface
     ) {
         $providers = $this->getInitializeHooks($names, $annotationData);
         foreach ($providers as $provider) {
-            $this->callInjectConfigurationHook($provider, $input, $annotationData);
+            $this->callInitializeHook($provider, $input, $annotationData);
         }
     }
 
@@ -583,7 +584,7 @@ class HookManager implements EventSubscriberInterface
      *
      * @return callable[]
      */
-    protected function getHook($name, $hook)
+    public function getHook($name, $hook)
     {
         if (isset($this->hooks[$name][$hook])) {
             return $this->hooks[$name][$hook];
@@ -591,10 +592,10 @@ class HookManager implements EventSubscriberInterface
         return [];
     }
 
-    protected function callInjectConfigurationHook($provider, $input, AnnotationData $annotationData)
+    protected function callInitializeHook($provider, $input, AnnotationData $annotationData)
     {
         if ($provider instanceof InitializeHookInterface) {
-            return $provider->applyConfiguration($input, $annotationData);
+            return $provider->initialize($input, $annotationData);
         }
         if (is_callable($provider)) {
             return $provider($input, $annotationData);
