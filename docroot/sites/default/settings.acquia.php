@@ -37,3 +37,5 @@ else {
     exit;
   }
 }
+// Enable acquia connector.
+$config['acquia_connector.settings.yml']['subscription_data']['active'] = 'true';

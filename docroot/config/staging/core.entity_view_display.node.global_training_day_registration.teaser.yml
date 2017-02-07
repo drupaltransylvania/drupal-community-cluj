@@ -33,3 +33,4 @@ hidden:
   field_organization: true
   field_phone: true
   field_preferred_language: true
+  field_training_session: true
