@@ -29,7 +29,8 @@
         "drupal/entityqueue": "1.alpha6",
         "drupal/mailsystem": "4.1",
         "drupal/swiftmailer": "1.0-alpha2",
-        "drupal/easy_breadcrumb": "1.5"
+        "drupal/easy_breadcrumb": "1.5",
+        "drupal/acquia_connector": "1.7"
 
     },
     "require-dev": {

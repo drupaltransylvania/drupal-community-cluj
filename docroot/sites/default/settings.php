@@ -753,10 +753,31 @@ if (file_exists(__DIR__ . '/settings.local.php')) {
   include __DIR__ . '/settings.local.php';
 }
 
-# Set the installation profile, this must be done to eliminate configuration
-# conflicts with other modules.
+// Set the installation profile, this must be done to eliminate configuration
+// conflicts with other modules.
 $settings['install_profile'] = 'dcc';
-# Set the config staging directory.
+// Set the config staging directory.
 $config_directories['sync'] = 'config/staging';
 // The site uuid.
 $settings['site_uuid'] = 'a32f9d1b-cc01-4fee-8dc2-870dd0251941';
+
+// On Acquia Cloud, this include file configures Drupal to use the correct
+// database in each site environment (Dev, Stage, or Prod). To use this
+// settings.php for development on your local workstation, set $db_url
+// (Drupal 5 or 6) or $databases (Drupal 7 or 8) as described in comments above.
+if (file_exists('/var/www/site-php')) {
+  require '/var/www/site-php/drupalcluj/drupalcluj-settings.inc';
+}
+
+// Make sure drush keeps working.
+// Modified from function drush_verify_cli()
+$cli = (php_sapi_name() == 'cli');
+// PASSWORD-PROTECT for Acquia Cloud environment.
+$restrict = (isset($_ENV['AH_SITE_ENVIRONMENT']) && $_ENV['AH_SITE_ENVIRONMENT']);
+// Make the check.
+if (!$cli && $restrict && file_exists(__DIR__ . '/settings.acquia.php')) {
+  include __DIR__ . '/settings.acquia.php';
+}
+elseif (file_exists(__DIR__ . '/settings.local.php')) {
+  include __DIR__ . '/settings.local.php';
+}
