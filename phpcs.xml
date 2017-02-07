@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ruleset name="drupal_custom">
   <description>Drupal coding standard.</description>
-  <arg value="-extensions=inc,info,install,module,php,profile,test,theme"/>
 
   <arg name="warning-severity" value="15"/>
   <rule ref="./vendor/drupal/coder/coder_sniffer/Drupal/"/>
