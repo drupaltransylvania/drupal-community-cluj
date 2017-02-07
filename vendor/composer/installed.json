@@ -6099,7 +6099,7 @@
         "dist": {
             "type": "zip",
             "url": "https://ftp.drupal.org/files/projects/devel-8.x-1.0-rc1.zip",
-            "reference": null,
+            "reference": "8.x-1.0-rc1",
             "shasum": "04a01f50d508eca70e065b7eba38cd6c83a436c0"
         },
         "require": {
@@ -6653,7 +6653,7 @@
         "dist": {
             "type": "zip",
             "url": "https://ftp.drupal.org/files/projects/easy_breadcrumb-8.x-1.5.zip",
-            "reference": null,
+            "reference": "8.x-1.5",
             "shasum": "b7f12392ea4d8325f6da080a79308cc424f614a1"
         },
         "require": {
@@ -6695,6 +6695,94 @@
         "homepage": "https://www.drupal.org/project/easy_breadcrumb",
         "support": {
             "source": "http://cgit.drupalcode.org/easy_breadcrumb"
+        }
+    },
+    {
+        "name": "drupal/acquia_connector",
+        "version": "1.7.0",
+        "version_normalized": "1.7.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://git.drupal.org/project/acquia_connector",
+            "reference": "8.x-1.7"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://ftp.drupal.org/files/projects/acquia_connector-8.x-1.7.zip",
+            "reference": null,
+            "shasum": "42d059bdc7efe11691113040cd80be3ebcf19b35"
+        },
+        "require": {
+            "drupal/core": "~8.0"
+        },
+        "require-dev": {
+            "drupal/search_api_solr": "*"
+        },
+        "type": "drupal-module",
+        "extra": {
+            "branch-alias": {
+                "dev-1.x": "1.x-dev"
+            },
+            "drupal": {
+                "version": "8.x-1.7",
+                "datestamp": "1480953783"
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packages.drupal.org/8/downloads",
+        "license": [
+            "GPL-2.0+"
+        ],
+        "authors": [
+            {
+                "name": "Dries",
+                "homepage": "https://www.drupal.org/user/1"
+            },
+            {
+                "name": "Gábor Hojtsy",
+                "homepage": "https://www.drupal.org/user/4166"
+            },
+            {
+                "name": "Nick_vh",
+                "homepage": "https://www.drupal.org/user/122682"
+            },
+            {
+                "name": "Stanislav Mixnovich",
+                "homepage": "https://www.drupal.org/user/2859977"
+            },
+            {
+                "name": "bjaspan",
+                "homepage": "https://www.drupal.org/user/46413"
+            },
+            {
+                "name": "dmitrii",
+                "homepage": "https://www.drupal.org/user/411965"
+            },
+            {
+                "name": "irek02",
+                "homepage": "https://www.drupal.org/user/736644"
+            },
+            {
+                "name": "janusman",
+                "homepage": "https://www.drupal.org/user/153120"
+            },
+            {
+                "name": "kolafson",
+                "homepage": "https://www.drupal.org/user/822402"
+            },
+            {
+                "name": "mundanity",
+                "homepage": "https://www.drupal.org/user/373605"
+            },
+            {
+                "name": "paul.lovvik",
+                "homepage": "https://www.drupal.org/user/289213"
+            }
+        ],
+        "description": "Allows Drupal to securely communicate with the Acquia Subscription, and checks for updates to Acquia Drupal.",
+        "homepage": "https://www.drupal.org/project/acquia_connector",
+        "support": {
+            "source": "http://cgit.drupalcode.org/acquia_connector"
         }
     }
 ]
