@@ -1,30 +1,35 @@
 @media (min-width: 992px) {
-    .col-md-3 {
-        width: 30%;
-    }
-    .col-md-9 {
-        width: 70%;
-    }
+  .col-md-3 {
+    width: 30%;
+  }
+
+  .col-md-9 {
+    width: 70%;
+  }
 }
 
-.region-header .site-name{
-    padding-top: 4px;
-    max-width: 200px;
-    line-height: 140%;
+.region-header .site-name {
+  padding-top: 4px;
+  max-width: 200px;
+  line-height: 140%;
 }
 
 .region-header .logo img {
-    min-width: 40px;
+  min-width: 40px;
 }
 
 .js-form-type-radio > label,
 .js-form-type-checkbox > label {
-    display: inline;
+  display: inline;
 }
 
 .dcc-training-start .form-item-training-start-date-date,
 .dcc-training-start .form-item-training-start-date-time,
 .dcc-training-end .form-item-training-end-date-date,
 .dcc-training-end .form-item-training-end-date-time {
-    display: inline;
+  display: inline;
+}
+
+.main-header nav {
+  z-index: 500;
 }
