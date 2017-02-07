@@ -23,7 +23,12 @@ interface StepPluginInspectionInterface extends PluginInspectionInterface {
    * Builds the form elements for the step.
    *
    * @param \Drupal\Core\Form\FormStateInterface $form_state
-   * @return array
+   *   The current form state.
+   * @param \Drupal\Core\Form\FormInterface $form
+   *   The form object.
+   *
+   * @return mixed
+   *   A render array.
    */
   public function buildStep(FormStateInterface $form_state, FormInterface $form);
 
@@ -31,8 +36,16 @@ interface StepPluginInspectionInterface extends PluginInspectionInterface {
    * Performs step specific validations.
    *
    * @param \Drupal\Core\Form\FormStateInterface $formState
-   * @return mixed
+   *   The form state.
    */
   public function validate(FormStateInterface $formState);
+
+  /**
+   * Sets the submitted values of the current step.
+   *
+   * @param \Drupal\Core\Form\FormStateInterface $formState
+   *   The form state.
+   */
+  public function setCurrentValues(FormStateInterface $formState);
 
 }

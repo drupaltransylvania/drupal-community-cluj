@@ -7,7 +7,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
- * Class StepPluginBase
+ * Class StepPluginBase.
  *
  * Provides common functionality for Step plugins.
  *
@@ -27,5 +27,10 @@ abstract class StepPluginBase extends PluginBase implements StepPluginInspection
    * {@inheritdoc}
    */
   public function validate(FormStateInterface $formState) {}
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setCurrentValues(FormStateInterface $formState) {}
 
 }

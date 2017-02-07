@@ -1,0 +1,105 @@
+<?php
+
+namespace Drupal\dcc_gtd_registration\Plugin\Step;
+
+use Drupal\Core\Form\FormInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\dcc_multistep\StepPluginBase;
+
+/**
+ * Provides Training Details Step.
+ *
+ * @Step(
+ *   id = "training_details_step",
+ *   name = @Translation("Training Details Step"),
+ *   form_id= "dcc_gtd_registration",
+ *   step_number = 4,
+ * )
+ */
+class TrainingDetailsStep extends StepPluginBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setCurrentValues(FormStateInterface $formState) {
+    $formState->set("attend_day", $formState->getValue("attend_day"));
+    $formState->set("laptop", $formState->getValue("laptop"));
+    $formState->set("language", $formState->getValue("language"));
+    $formState->set("key_expectations", $formState->getValue("key_expectations"));
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildStep(FormStateInterface $form_state, FormInterface $form) {
+    $fields['title'] = array(
+      '#title' => $this->t("Training details"),
+      '#type' => 'item',
+    );
+    $attend_day = $form_state->get("attend_day");
+    $fields['attend_day'] = array(
+      '#title' => $this->t('On which days will you attend the training ?'),
+      '#description' => 'See the schedule!',
+      '#type' => 'checkboxes',
+      '#options' => array(
+        'Friday' => $this->t('Friday'),
+        'Saturday' => $this->t('Saturday'),
+      ),
+      '#required' => TRUE,
+      '#default_value' => isset($attend_day) ? $form_state->get("attend_day") : NULL,
+    );
+    $options = array(0 => t('No'), 1 => t('Yes'));
+    $laptop = $form_state->get("laptop");
+    $fields['laptop'] = array(
+      '#title' => $this->t('Will you carry a laptop ?'),
+      '#description' => 'To know how many working stations will we need we should know if will you come with your own laptop. In case you will, please pre-configure your environment to be able to install Drupal 8 on it(if you need help check Drupa.org). Note: You will need your laptop for development only on Saturday',
+      '#type' => 'radios',
+      '#options' => $options,
+      '#required' => TRUE,
+      '#default_value' => isset($laptop) ? $form_state->get("laptop") : NULL,
+    );
+    $options2 = array(
+      'en' => t('English'),
+      'ro' => t('Romanian'),
+      'nr' => t('Not relevant'),
+    );
+    $language = $form_state->get("language");
+    $fields['language'] = array(
+      '#title' => $this->t('Preferred langauge'),
+      '#description' => 'Please complete with your preferred language for presentations',
+      '#required' => TRUE,
+      '#type' => 'radios',
+      '#options' => $options2,
+      '#default_value' => isset($language) ? $form_state->get("language") : NULL,
+    );
+    $key_expectations = $form_state->get("key_expectations");
+    $fields['key_expectations'] = array(
+      '#title' => $this->t('Key expectations'),
+      '#type' => 'textarea',
+      '#description' => 'Please tell us about your expectations for the Global Training. Why are you enrolling?',
+      '#default_value' => isset($key_expectations) ? $form_state->get("key_expectations") : NULL,
+    );
+
+    $fields['back'] = array(
+      '#type' => 'button',
+      '#value' => 'Back',
+      '#ajax' => array(
+        'callback' => array($form, 'ajax'),
+        'event' => 'click',
+        'progress' => array(
+          'type' => 'throbber',
+          'message' => NULL,
+        ),
+      ),
+      '#attributes' => ['style' => ['float: left; margin-right: 4px;']],
+    );
+
+    $fields['register'] = array(
+      '#type' => 'submit',
+      '#value' => 'Register',
+    );
+
+    return $fields;
+  }
+
+}
