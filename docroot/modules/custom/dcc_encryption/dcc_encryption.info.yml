@@ -1,0 +1,5 @@
+name: Drupal Community Encryption
+type: module
+description: Handles the encryption.
+package: Custom
+core: 8.x

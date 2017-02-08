@@ -9,8 +9,11 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Locale\CountryManagerInterface;
+use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\Render\Element\StatusMessages;
 use Drupal\dcc_gtd_registration\RegistrationAccess;
+use Drupal\dcc_gtd_registration\RegistrationPostSaveRule\RegistrationPostSaveRule;
+use Drupal\dcc_gtd_registration\RegistrationPostSaveRule\RuleFactory;
 use Drupal\dcc_gtd_scheduler\Controller\ScheduleManager;
 use Drupal\dcc_gtd_scheduler\Controller\ScheduleManagerInterface;
 use Drupal\dcc_multistep\StepPluginManagerInterface;
@@ -23,6 +26,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @package Drupal\dcc_gtd_registration\Form
  */
 class GlobalTrainingRegistrationForm extends FormBase {
+
+  const GLOBAL_TRAINING_REGISTRATION_EMAIL_KEY = 'global_training_registration';
+  const REGISTRATION_NID_FIELD = 'registration_nid';
+  const REGISTRATION_SAVED_FIELD = 'registration_saved';
 
   /**
    * The entity type manager.
@@ -60,6 +67,22 @@ class GlobalTrainingRegistrationForm extends FormBase {
   protected $steps;
 
   /**
+   * The mail manager service.
+   *
+   * @var MailManagerInterface
+   */
+  protected $mailManager;
+
+  /**
+   * An array of registration rules that is applied in postSave().
+   *
+   * @var \ArrayObject
+   *
+   * @see GlobalTrainingRegistrationForm::postSave()
+   */
+  protected $registrationRules;
+
+  /**
    * GlobalTrainingRegistrationForm constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
@@ -70,18 +93,23 @@ class GlobalTrainingRegistrationForm extends FormBase {
    *   Steps plugin manager.
    * @param \Drupal\dcc_gtd_scheduler\Controller\ScheduleManagerInterface $scheduleManager
    *   The schedule manager.
+   * @param \Drupal\Core\Mail\MailManagerInterface $mailManager
+   *   The mail manager service.
    */
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
     CountryManagerInterface $countryManager,
     StepPluginManagerInterface $stepPluginManager,
-    ScheduleManagerInterface $scheduleManager
+    ScheduleManagerInterface $scheduleManager,
+    MailManagerInterface $mailManager
   ) {
     $this->entityTypeManager = $entityTypeManager;
     $this->countryManager = $countryManager;
     $this->stepPluginManager = $stepPluginManager;
     $this->steps = $this->stepPluginManager->getSteps($this->getFormId());
     $this->scheduleManager = $scheduleManager;
+    $this->mailManager = $mailManager;
+    $this->registrationRules = RuleFactory::buildRules();
   }
 
   /**
@@ -92,7 +120,8 @@ class GlobalTrainingRegistrationForm extends FormBase {
       $container->get('entity_type.manager'),
       $container->get('country_manager'),
       $container->get('plugin.manager.dcc_multistep.steps'),
-      $container->get('dcc_schedule.manager')
+      $container->get('dcc_schedule.manager'),
+      $container->get('plugin.manager.mail')
     );
   }
 
@@ -200,12 +229,12 @@ class GlobalTrainingRegistrationForm extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     try {
-      $this->saveRegistration($form_state);
-      drupal_set_message(t('Your registration have been submited with success!'));
+      $saved = $this->saveRegistration($form_state);
+      $this->postSave($form_state);
     }
     catch (\Exception $exception) {
-      watchdog_exception('Scheduler Creation', $exception);
-      drupal_set_message(t('There was an error with the creation, please check the logs'));
+      watchdog_exception('Registration Creation', $exception);
+      drupal_set_message(t('There was an error with the creation, please contact the administrators.'));
     }
   }
 
@@ -214,6 +243,9 @@ class GlobalTrainingRegistrationForm extends FormBase {
    *
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current form state.
+   *
+   * @return bool|int
+   *   Either SAVED_NEW or SAVED_UPDATED, depending on the operation performed.
    */
   private function saveRegistration(FormStateInterface $form_state) {
 
@@ -236,7 +268,31 @@ class GlobalTrainingRegistrationForm extends FormBase {
       $node->set('field_registration_status', $registration_status);
     }
 
-    $node->save();
+    $saved = $node->save();
+    $form_state->set(self::REGISTRATION_NID_FIELD, $node->id());
+    $form_state->set(self::REGISTRATION_SAVED_FIELD, $saved);
+
+    return $saved;
+  }
+
+  /**
+   * Performs operations after saving the registration node.
+   *
+   * @param \Drupal\Core\Form\FormStateInterface $formState
+   *   The current form state.
+   */
+  private function postSave(FormStateInterface $formState) {
+    $iterator = $this->registrationRules->getIterator();
+
+    while ($iterator->valid()) {
+      /* @var RegistrationPostSaveRule $element */
+      $element = $iterator->current();
+
+      if ($element->applies($formState)) {
+        $element->operation($formState);
+      }
+      $iterator->next();
+    }
   }
 
   /**

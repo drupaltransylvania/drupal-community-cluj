@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * Contains hook implementations.
+ */
+
+define('ACTIVATION_STATUS_PAGE', 'dcc_gtd_registration_activation_status_page');
+
+/**
+ * Implements hook_theme().
+ *
+ * {@inheritdoc}
+ */
+function dcc_gtd_registration_theme($existing, $type, $theme, $path) {
+  return [
+    ACTIVATION_STATUS_PAGE => [
+      'variables' => [
+        'first_name' => NULL,
+        'last_name' => NULL,
+        'message' => NULL,
+      ],
+      'template' => 'registration-activation-page',
+    ],
+  ];
+}
