@@ -1,0 +1,6 @@
+services:
+  dcc_schedule.manager:
+    class: Drupal\dcc_gtd_scheduler\Controller\ScheduleManager
+    arguments: ['@entity_type.manager']
+    tags:
+      - { name: dcc_schedule.manager }

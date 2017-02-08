@@ -1,0 +1,23 @@
+uuid: 16df19fc-3ee1-4ec7-a117-0813cb2f4549
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_registration_status
+    - node.type.global_training_day_registration
+id: node.global_training_day_registration.field_registration_status
+field_name: field_registration_status
+entity_type: node
+bundle: global_training_day_registration
+label: 'Registration Status'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer
