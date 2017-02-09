@@ -1,0 +1,4 @@
+services:
+  dcc_gtd_registration.captcha:
+    class: \Drupal\dcc_gtd_registration\Service\CaptchaManager
+    arguments: ['@current_user']

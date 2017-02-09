@@ -2,8 +2,12 @@
 
 namespace Drupal\dcc_gtd_registration\Plugin\Step;
 
+use Drupal\captcha\Entity\CaptchaPoint;
 use Drupal\Core\Form\FormInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Template\Attribute;
+use Drupal\Core\Url;
+use Drupal\dcc_gtd_registration\Service\CaptchaManager;
 use Drupal\dcc_multistep\StepPluginBase;
 
 /**
@@ -78,7 +82,13 @@ class TrainingDetailsStep extends StepPluginBase {
       '#type' => 'textarea',
       '#description' => 'Please tell us about your expectations for the Global Training. Why are you enrolling?',
       '#default_value' => isset($key_expectations) ? $form_state->get("key_expectations") : NULL,
+      '#suffix' => '<div id="recaptcha1"></div>'
     );
+
+    // Adds the captcha to the form.
+    // We can't use the intended functionality of the contrib captcha module,
+    // because that adds the captcha to the form when it is loaded first.
+    $fields += $this->addCaptcha();
 
     $fields['back'] = array(
       '#type' => 'button',
@@ -99,7 +109,35 @@ class TrainingDetailsStep extends StepPluginBase {
       '#value' => 'Register',
     );
 
+    // We need to add recaptcha js when the form is rebuilt on the last step,
+    // because it's an asynchronous and deferred javascript.
+    // This means that the javascript will asynchronously, after the DOM is
+    // ready. This means that we can't use the contrib module as intended,
+    // because the module loads javascript in the head, on the first page load.
+    // So at the last step the recaptcha javascript will have already run,
+    // therefore the recaptcha is not rendered.
+    // Because we attach the javascript with a library, we can't load the js by
+    // language here. That is resolved in the implementation of hook_js_alter.
+    $fields['#attached'] = [
+      'library' => [
+        'dcc_gtd_registration/dcc_gtd_registration.render_captcha'
+      ],
+    ];
+
     return $fields;
+  }
+
+  /**
+   * Adds captcha to the form.
+   *
+   * @return array
+   *   Returns the form element.
+   */
+  private function addCaptcha() {
+    /** @var CaptchaManager $captchaManager */
+    $captchaManager = \Drupal::service('dcc_gtd_registration.captcha');
+
+    return $captchaManager->createCaptcha();
   }
 
 }

@@ -1,0 +1,3 @@
+dcc_gtd_registration.render_captcha:
+  js:
+    https://www.google.com/recaptcha/api.js: {type: external, attributes: { defer: true, async: true } }
