@@ -118,6 +118,7 @@ class PersonalInformationStep extends StepPluginBase {
           'message' => NULL,
         ),
       ),
+      '#attributes' => ['class' => ['next-btn']],
     );
 
     return $fields;
