@@ -62,20 +62,6 @@ class ProfessionalDetailsStep extends StepPluginBase {
       '#default_value' => isset($industry_experience) ? $industry_experience : NULL,
     );
 
-    $fields['back'] = array(
-      '#type' => 'button',
-      '#value' => 'Back',
-      '#ajax' => array(
-        'callback' => array($form, 'ajax'),
-        'event' => 'click',
-        'progress' => array(
-          'type' => 'throbber',
-          'message' => NULL,
-        ),
-      ),
-      '#attributes' => ['style' => ['float: left; margin-right: 4px;']],
-    );
-
     $fields['next'] = array(
       '#type' => 'button',
       '#value' => 'Next',
@@ -87,6 +73,21 @@ class ProfessionalDetailsStep extends StepPluginBase {
           'message' => NULL,
         ),
       ),
+      '#attributes' => ['class' => ['next-btn']],
+    );
+
+    $fields['back'] = array(
+      '#type' => 'button',
+      '#value' => 'Back',
+      '#ajax' => array(
+        'callback' => array($form, 'ajax'),
+        'event' => 'click',
+        'progress' => array(
+          'type' => 'throbber',
+          'message' => NULL,
+        ),
+      ),
+      '#attributes' => ['class' => ['back-btn']],
     );
 
     return $fields;

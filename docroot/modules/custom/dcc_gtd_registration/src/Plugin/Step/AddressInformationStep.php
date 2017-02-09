@@ -58,20 +58,6 @@ class AddressInformationStep extends StepPluginBase {
       '#default_value' => isset($address) ? $form_state->get("address") : NULL,
     );
 
-    $fields['back'] = array(
-      '#type' => 'button',
-      '#value' => 'Back',
-      '#ajax' => array(
-        'callback' => array($form, 'ajax'),
-        'event' => 'click',
-        'progress' => array(
-          'type' => 'throbber',
-          'message' => NULL,
-        ),
-      ),
-      '#attributes' => ['style' => ['float: left; margin-right: 4px;']],
-    );
-
     $fields['next'] = array(
       '#type' => 'button',
       '#value' => 'Next',
@@ -83,6 +69,21 @@ class AddressInformationStep extends StepPluginBase {
           'message' => NULL,
         ),
       ),
+      '#attributes' => ['class' => ['next-btn']],
+    );
+
+    $fields['back'] = array(
+      '#type' => 'button',
+      '#value' => 'Back',
+      '#ajax' => array(
+        'callback' => array($form, 'ajax'),
+        'event' => 'click',
+        'progress' => array(
+          'type' => 'throbber',
+          'message' => NULL,
+        ),
+      ),
+      '#attributes' => ['class' => ['back-btn']],
     );
 
     return $fields;
