@@ -5,6 +5,8 @@
  * Contains hook implementations.
  */
 
+use Drupal\Core\Asset\AttachedAssetsInterface;
+
 define('ACTIVATION_STATUS_PAGE', 'dcc_gtd_registration_activation_status_page');
 
 /**
@@ -23,4 +25,19 @@ function dcc_gtd_registration_theme($existing, $type, $theme, $path) {
       'template' => 'registration-activation-page',
     ],
   ];
+}
+
+/**
+ * Implements hook_js_alter().
+ *
+ * {@inheritdoc}
+ */
+function dcc_gtd_registration_js_alter(&$javascript, AttachedAssetsInterface $assets) {
+  $key = 'https://www.google.com/recaptcha/api.js';
+
+  if (array_key_exists($key, $javascript)) {
+    // Loads a language specific version of the recaptcha.
+    $langCode = \Drupal::service('language_manager')->getCurrentLanguage()->getId();
+    $javascript[$key]['data'] .= '?hl=' . $langCode;
+  }
 }
