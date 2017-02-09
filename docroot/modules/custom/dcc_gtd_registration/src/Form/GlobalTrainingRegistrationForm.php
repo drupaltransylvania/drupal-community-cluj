@@ -170,6 +170,7 @@ class GlobalTrainingRegistrationForm extends FormBase {
       '#type' => 'container',
       '#attributes' => array(
         'id' => 'ajaxcontainer',
+        'class' => ['clearfix'],
       ),
     );
 

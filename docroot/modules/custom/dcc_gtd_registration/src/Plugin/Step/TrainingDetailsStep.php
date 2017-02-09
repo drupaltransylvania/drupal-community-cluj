@@ -90,6 +90,12 @@ class TrainingDetailsStep extends StepPluginBase {
     // because that adds the captcha to the form when it is loaded first.
     $fields += $this->addCaptcha();
 
+    $fields['register'] = array(
+      '#type' => 'submit',
+      '#value' => 'Register',
+      '#attributes' => ['class' => ['next-btn']],
+    );
+
     $fields['back'] = array(
       '#type' => 'button',
       '#value' => 'Back',
@@ -101,12 +107,7 @@ class TrainingDetailsStep extends StepPluginBase {
           'message' => NULL,
         ),
       ),
-      '#attributes' => ['style' => ['float: left; margin-right: 4px;']],
-    );
-
-    $fields['register'] = array(
-      '#type' => 'submit',
-      '#value' => 'Register',
+      '#attributes' => ['class' => ['back-btn']],
     );
 
     // We need to add recaptcha js when the form is rebuilt on the last step,
