@@ -1,0 +1,5 @@
+name: Drupal Community Cluj Email
+type: module
+description: Handles the email sending
+package: Custom
+core: 8.x

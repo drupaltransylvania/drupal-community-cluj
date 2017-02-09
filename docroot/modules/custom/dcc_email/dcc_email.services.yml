@@ -1,0 +1,3 @@
+services:
+  dcc_email.email_formatter:
+    class: Drupal\dcc_email\EmailFormatter

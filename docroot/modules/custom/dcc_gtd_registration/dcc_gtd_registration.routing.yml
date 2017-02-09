@@ -6,3 +6,19 @@ dcc_gtd_registration.form:
   requirements:
     _permission: 'register to global training days'
     _custom_access: '\Drupal\dcc_gtd_registration\RegistrationAccess::access'
+
+dcc_gtd_registration.activation_link:
+  path: '/activate/{encryption}'
+  defaults:
+    _controller: '\Drupal\dcc_gtd_registration\Controller\RegistrationStatusController::activate'
+    _title: 'Global Training Registration'
+  requirements:
+    _permission: 'access content'
+
+dcc_gtd_registration.cancel_link:
+  path: '/cancel/{encryption}'
+  defaults:
+    _controller: '\Drupal\dcc_gtd_registration\Controller\RegistrationStatusController::cancel'
+    _title: 'Global Training Registration'
+  requirements:
+    _permission: 'access content'

@@ -3,3 +3,7 @@ type: module
 description: Defines a multistep form for registering to global training days.
 package: Custom
 core: 8.x
+
+dependencies:
+  - dcc_email
+  - dcc_encryption
