@@ -33,3 +33,12 @@
 .main-header nav {
   z-index: 500;
 }
+
+.next-btn {
+  float: right;
+}
+
+.back-btn {
+  float: right;
+  margin-right: 4px;
+}

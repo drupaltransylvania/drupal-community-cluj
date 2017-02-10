@@ -7,5 +7,5 @@ _core:
 include_invalid_paths: 0
 excluded_paths: ''
 segments_separator: null
-title_segment_as_link: 1
+title_segment_as_link: 0
 title_from_page_when_available: 1
