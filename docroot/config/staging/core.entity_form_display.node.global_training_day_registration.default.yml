@@ -14,7 +14,6 @@ dependencies:
     - field.field.node.global_training_day_registration.field_gender
     - field.field.node.global_training_day_registration.field_industry_experience
     - field.field.node.global_training_day_registration.field_key_expectations
-    - field.field.node.global_training_day_registration.field_laptop
     - field.field.node.global_training_day_registration.field_last_name
     - field.field.node.global_training_day_registration.field_occupation
     - field.field.node.global_training_day_registration.field_organization
@@ -100,11 +99,6 @@ content:
       placeholder: ''
     third_party_settings: {  }
     type: string_textarea
-  field_laptop:
-    weight: 15
-    settings: {  }
-    third_party_settings: {  }
-    type: options_buttons
   field_last_name:
     weight: 1
     settings:

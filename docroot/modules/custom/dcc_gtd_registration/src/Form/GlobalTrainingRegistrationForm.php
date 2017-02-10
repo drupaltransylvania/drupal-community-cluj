@@ -232,6 +232,7 @@ class GlobalTrainingRegistrationForm extends FormBase {
     try {
       $saved = $this->saveRegistration($form_state);
       $this->postSave($form_state);
+      $form_state->setRedirect('<front>');
     }
     catch (\Exception $exception) {
       watchdog_exception('Registration Creation', $exception);
@@ -324,7 +325,6 @@ class GlobalTrainingRegistrationForm extends FormBase {
       'field_organization' => $form_state->get("organization"),
       'field_industry_experience' => $form_state->get("industry_experience"),
       'field_attend_day' => $form_state->getValue('attend_day'),
-      'field_laptop' => $form_state->getValue("laptop"),
       'field_preferred_language' => $form_state->getValue("language"),
       'field_key_expectations' => $form_state->getValue("key_expectations"),
     );
