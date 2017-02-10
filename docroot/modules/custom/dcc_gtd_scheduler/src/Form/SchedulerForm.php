@@ -9,10 +9,12 @@ use Drupal\Core\Render\Element\StatusMessages;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\dcc_multistep\StepPluginManagerInterface;
+use Drupal\views\Plugin\views\field\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Datetime\DateFormatter;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Created a form similar to 'Drupal Training Scheduler' one.
@@ -242,8 +244,9 @@ class SchedulerForm extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     try {
-      $this->saveSchedule($this->getValues($form_state));
+      $node=$this->saveSchedule($this->getValues($form_state));
       drupal_set_message(t('Training has been created!'));
+      $form_state->setRedirect('entity.node.canonical',['node' => $node->id()]);
     }
     catch (\Exception $exception) {
       watchdog_exception('Scheduler Creation', $exception);
@@ -270,7 +273,9 @@ class SchedulerForm extends FormBase {
    * Saves the schedule as a node of type 'drupal_training_schedule."
    */
   private function saveSchedule($values) {
-    $this->entity->getStorage('node')->create($this->buildFieldsForSchedule($values))->save();
+    $node = $this->entity->getStorage('node')->create($this->buildFieldsForSchedule($values));
+    $node->save();
+    return $node;
   }
 
   /**

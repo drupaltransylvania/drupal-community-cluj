@@ -1,5 +1,5 @@
 dcc.scheduler_page:
-  path: 'add-scheduler'
+  path: 'global-training/add'
   defaults:
     _form: '\Drupal\dcc_gtd_scheduler\Form\SchedulerForm'
     _title: 'Add Scheduler'
