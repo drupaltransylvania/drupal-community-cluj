@@ -66,6 +66,7 @@ class SchedulerForm extends FormBase {
    * @param \Drupal\Core\Datetime\DateFormatter $dateFormatter
    *   The date formatter.
    * @param \Drupal\dcc_multistep\StepPluginManagerInterface $stepPluginManager
+   *   The step plugin manager.
    */
   public function __construct(
     EntityTypeManagerInterface $entity,
@@ -227,7 +228,7 @@ class SchedulerForm extends FormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
-    // Only the 'Next' operation has to perform validation
+    // Only the 'Next' operation has to perform validation.
     if ($form_state->getTriggeringElement()['#value'] != 'Back') {
       parent::validateForm($form, $form_state);
 
@@ -242,9 +243,9 @@ class SchedulerForm extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     try {
-      $node=$this->saveSchedule($this->getValues($form_state));
+      $node = $this->saveSchedule($this->getValues($form_state));
       drupal_set_message(t('Training has been created!'));
-      $form_state->setRedirect('entity.node.canonical',['node' => $node->id()]);
+      $form_state->setRedirect('entity.node.canonical', ['node' => $node->id()]);
     }
     catch (\Exception $exception) {
       watchdog_exception('Scheduler Creation', $exception);
@@ -268,7 +269,7 @@ class SchedulerForm extends FormBase {
   }
 
   /**
-   * Saves the schedule as a node of type 'drupal_training_schedule."
+   * Saves the schedule as a node of type 'drupal_training_schedule'.
    */
   private function saveSchedule($values) {
     $node = $this->entity->getStorage('node')->create($this->buildFieldsForSchedule($values));
