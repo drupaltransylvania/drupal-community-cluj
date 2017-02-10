@@ -6,6 +6,9 @@
  */
 
 use Drupal\Core\Asset\AttachedAssetsInterface;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\node\NodeInterface;
 
 define('ACTIVATION_STATUS_PAGE', 'dcc_gtd_registration_activation_status_page');
 
@@ -37,7 +40,36 @@ function dcc_gtd_registration_js_alter(&$javascript, AttachedAssetsInterface $as
 
   if (array_key_exists($key, $javascript)) {
     // Loads a language specific version of the recaptcha.
-    $langCode = \Drupal::service('language_manager')->getCurrentLanguage()->getId();
+    $langCode = \Drupal::service('language_manager')
+      ->getCurrentLanguage()
+      ->getId();
     $javascript[$key]['data'] .= '?hl=' . $langCode;
   }
+}
+
+/**
+ * Implements hook_node_access().
+ *
+ * {@inheritdoc}
+ */
+function dcc_gtd_registration_node_access(NodeInterface $node, $op, AccountInterface $account) {
+  if (dcc_gtd_registration_node_view_conditions($node, $account)) {
+    return AccessResult::forbidden();
+  }
+}
+
+/**
+ * Checks if the conditions are met for view permissions.
+ *
+ * @param \Drupal\node\NodeInterface $node
+ *   The node entity.
+ * @param \Drupal\Core\Session\AccountInterface $account
+ *   The current user.
+ *
+ * @return bool
+ *   Boolean value of the conditions.
+ */
+function dcc_gtd_registration_node_view_conditions(NodeInterface $node, AccountInterface $account) {
+  return $node->getType() == 'global_training_day_registration' &&
+    !$account->hasPermission('dcc gtd registration view access');
 }
