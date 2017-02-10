@@ -9,12 +9,10 @@ use Drupal\Core\Render\Element\StatusMessages;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\dcc_multistep\StepPluginManagerInterface;
-use Drupal\views\Plugin\views\field\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Datetime\DateFormatter;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Created a form similar to 'Drupal Training Scheduler' one.
