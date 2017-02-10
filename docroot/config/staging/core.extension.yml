@@ -20,10 +20,12 @@ module:
   dcc_gtd_registration: 0
   dcc_gtd_scheduler: 0
   dcc_multistep: 0
+  dcc_seo: 0
   dynamic_page_cache: 0
   easy_breadcrumb: 0
   editor: 0
   entityqueue: 0
+  eu_cookie_compliance: 0
   field: 0
   field_ui: 0
   file: 0
