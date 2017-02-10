@@ -1,0 +1,32 @@
+domain: ''
+domains_option: 0
+domains_list: 'http://drupal-community.local'
+eu_only: false
+exclude_paths: "/admin\r\n/admin/*\r\n/batch\r\n/node/add*\r\n/node/edit*\r\n/node/*/delete*\r\n/user/*/*\r\n/user/*"
+export:
+  folder: custom
+langcode: en
+popup_agreed:
+  value: '<h2>Thank you for accepting cookies</h2><p>You can now hide this message or find out more about cookies.</p>'
+  format: restricted_html
+popup_agree_button_message: 'I agree'
+popup_agreed_enabled: false
+popup_bg_hex: 2B82AC
+popup_clicking_confirmation: true
+popup_delay: 1
+popup_disagree_button_message: null
+popup_enabled: true
+popup_find_more_button_message: 'More info'
+popup_height: 80
+popup_hide_agreed: false
+popup_hide_button_message: Hide
+popup_info:
+  value: '<h2>The website is using cookies. By continue navigating you are agreeing to the <a href="https://www.google.ro/" target="_blank">terms and conditions.</a><h2>'
+  format: restricted_html
+popup_link: null
+popup_link_new_window: null
+popup_position: false
+popup_text_hex: ffffff
+popup_width: 100%
+_core:
+  default_config_hash: kfXrsolOPAF-91bVNi2WkyMavN4TSaqPeL_A466DYwU

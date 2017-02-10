@@ -3,6 +3,7 @@ global-styling:
   css:
     theme:
       css/base.css: {}
+      css/components/cookie.css: {}
   dependencies:
     - businessgroup_zymphonies_theme/bootstrap
     - businessgroup_zymphonies_theme/global-components

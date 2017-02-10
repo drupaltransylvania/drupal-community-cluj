@@ -6862,7 +6862,7 @@
         "dist": {
             "type": "zip",
             "url": "https://ftp.drupal.org/files/projects/recaptcha-8.x-2.2.zip",
-            "reference": null,
+            "reference": "8.x-2.2",
             "shasum": "99a3bda62b34ad6dac1d497fcf578e25aad0a3e0"
         },
         "require": {
@@ -6911,6 +6911,87 @@
         "support": {
             "source": "http://git.drupal.org/project/recaptcha.git",
             "issues": "https://www.drupal.org/project/issues/recaptcha"
+        }
+    },
+    {
+        "name": "drupal/eu_cookie_compliance",
+        "version": "1.0.0-beta7",
+        "version_normalized": "1.0.0.0-beta7",
+        "source": {
+            "type": "git",
+            "url": "https://git.drupal.org/project/eu-cookie-compliance",
+            "reference": "8.x-1.0-beta7"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://ftp.drupal.org/files/projects/eu_cookie_compliance-8.x-1.0-beta7.zip",
+            "reference": null,
+            "shasum": "c8859fbeb5f6b1122c0eb6c5df1c4cd4b2961421"
+        },
+        "require": {
+            "drupal/core": "*"
+        },
+        "type": "drupal-module",
+        "extra": {
+            "branch-alias": {
+                "dev-1.x": "1.x-dev"
+            },
+            "drupal": {
+                "version": "8.x-1.0-beta7",
+                "datestamp": "1471263146"
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packages.drupal.org/8/downloads",
+        "license": [
+            "GPL-2.0+"
+        ],
+        "authors": [
+            {
+                "name": "Marcin Pajdzik",
+                "homepage": "https://www.drupal.org/user/160555"
+            },
+            {
+                "name": "achton",
+                "homepage": "https://www.drupal.org/user/712454"
+            },
+            {
+                "name": "blairski",
+                "homepage": "https://www.drupal.org/user/120835"
+            },
+            {
+                "name": "dakku",
+                "homepage": "https://www.drupal.org/user/97634"
+            },
+            {
+                "name": "grzegorz.bartman",
+                "homepage": "https://www.drupal.org/user/363120"
+            },
+            {
+                "name": "id.tornado",
+                "homepage": "https://www.drupal.org/user/2754049"
+            },
+            {
+                "name": "killua99",
+                "homepage": "https://www.drupal.org/user/699418"
+            },
+            {
+                "name": "mibfire",
+                "homepage": "https://www.drupal.org/user/155136"
+            },
+            {
+                "name": "naveenvalecha",
+                "homepage": "https://www.drupal.org/user/2665733"
+            },
+            {
+                "name": "svenryen",
+                "homepage": "https://www.drupal.org/user/667244"
+            }
+        ],
+        "description": "This module aims at making the website compliant with the new EU cookie regulation",
+        "homepage": "https://www.drupal.org/project/eu_cookie_compliance",
+        "support": {
+            "source": "http://cgit.drupalcode.org/eu_cookie_compliance"
         }
     }
 ]

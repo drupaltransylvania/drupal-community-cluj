@@ -1,0 +1,5 @@
+name: Search Engine Optimization Module
+type: module
+description: Drupal Community Cluj SEO Module.
+package: Custom
+core: 8.x
