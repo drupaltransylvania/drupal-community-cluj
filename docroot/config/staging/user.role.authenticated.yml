@@ -18,3 +18,4 @@ permissions:
   - 'access shortcuts'
   - 'search content'
   - 'register to global training days'
+  - 'display eu cookie compliance popup'

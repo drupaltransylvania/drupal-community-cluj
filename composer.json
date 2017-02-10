@@ -31,8 +31,8 @@
         "drupal/swiftmailer": "1.0-alpha2",
         "drupal/easy_breadcrumb": "1.5",
         "drupal/acquia_connector": "1.7",
-        "drupal/recaptcha": "^2.2"
-
+        "drupal/recaptcha": "^2.2",
+        "drupal/eu_cookie_compliance": "1.0-beta7"
     },
     "require-dev": {
         "behat/mink": "~1.7",
