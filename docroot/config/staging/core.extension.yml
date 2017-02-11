@@ -15,6 +15,7 @@ module:
   datetime: 0
   datetime_range: 0
   dblog: 0
+  dcc_bottom_widgets: 0
   dcc_email: 0
   dcc_encryption: 0
   dcc_form_alter: 0
