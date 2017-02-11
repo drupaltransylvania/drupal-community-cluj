@@ -1,12 +1,14 @@
 uuid: 142a0d62-0a06-4e17-87f6-61e195ba0760
 langcode: en
-status: true
+status: false
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.page.body
+    - field.field.node.page.field_image
     - node.type.page
   module:
+    - image
     - text
     - user
 _core:
@@ -19,10 +21,17 @@ content:
   body:
     label: hidden
     type: text_summary_or_trimmed
-    weight: 100
+    weight: 1
     settings:
       trim_length: 600
     third_party_settings: {  }
-  links:
-    weight: 101
-hidden: {  }
+  field_image:
+    type: image
+    weight: 0
+    label: hidden
+    settings:
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+hidden:
+  links: true
