@@ -45,7 +45,7 @@ abstract class FormAlterEventSubscriberBase implements EventSubscriberInterface 
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
-    $events['form_alter'][] = ['onFormAlter'];
+    $events[FormAlterEvent::FORM_ALTER_EVENT][] = ['onFormAlter'];
 
     return $events;
   }

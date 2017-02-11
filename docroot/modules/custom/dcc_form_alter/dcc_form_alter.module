@@ -18,7 +18,7 @@ function dcc_form_alter_form_alter(&$form, FormStateInterface $form_state, $form
   $eventDispather = \Drupal::service('event_dispatcher');
   $event = new FormAlterEvent($form, $form_state, $form_id);
 
-  $eventDispather->dispatch('form_alter', $event);
+  $eventDispather->dispatch(FormAlterEvent::FORM_ALTER_EVENT, $event);
   $form = $event->getForm();
   $form_state = $event->getFormState();
 }

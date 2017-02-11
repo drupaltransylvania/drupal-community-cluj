@@ -16,6 +16,8 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class FormAlterEvent extends Event {
 
+  const FORM_ALTER_EVENT = 'form_alter';
+
   /**
    * The form id.
    *
