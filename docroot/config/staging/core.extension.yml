@@ -17,6 +17,7 @@ module:
   dblog: 0
   dcc_email: 0
   dcc_encryption: 0
+  dcc_form_alter: 0
   dcc_gtd_registration: 0
   dcc_gtd_scheduler: 0
   dcc_multistep: 0
