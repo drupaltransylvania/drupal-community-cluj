@@ -3,6 +3,7 @@
 namespace Drupal\dcc_bottom_widgets\EventSubscriber;
 
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\dcc_form_alter\EventSubscriber\FormAlterEventSubscriberBase;
 
@@ -12,6 +13,23 @@ use Drupal\dcc_form_alter\EventSubscriber\FormAlterEventSubscriberBase;
  * @package Drupal\dcc_bottom_widgets\EventSubscriber
  */
 class FormAlterEventSubscriber extends FormAlterEventSubscriberBase {
+
+  /**
+   * The cache_tags.invalidator service.
+   *
+   * @var \Drupal\Core\Cache\CacheTagsInvalidatorInterface
+   */
+  protected $cacheTagsInvalidator;
+
+  /**
+   * FormAlterEventSubscriber constructor.
+   *
+   * @param \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cacheTagsInvalidator
+   *   The cache_tags.invalidator service.
+   */
+  public function __construct(CacheTagsInvalidatorInterface $cacheTagsInvalidator) {
+    $this->cacheTagsInvalidator = $cacheTagsInvalidator;
+  }
 
   /**
    * The config ids of the bottom widget blocks.
@@ -29,9 +47,7 @@ class FormAlterEventSubscriber extends FormAlterEventSubscriberBase {
    * {@inheritdoc}
    */
   protected function alterForm(array $form) {
-    if ($this->formId == 'entity_subqueue_homepage_bottom_widgets_edit_form') {
-      $form['actions']['submit']['#submit'][] = [$this, 'submit'];
-    }
+    $form['actions']['submit']['#submit'][] = [$this, 'submit'];
 
     return $form;
   }
@@ -45,7 +61,7 @@ class FormAlterEventSubscriber extends FormAlterEventSubscriberBase {
    *   The form state.
    */
   public function submit(array $form, FormStateInterface $formState) {
-    Cache::invalidateTags($this->getCacheTags());
+    $this->cacheTagsInvalidator->invalidateTags($this->getCacheTags());
   }
 
   /**
