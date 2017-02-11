@@ -71,6 +71,16 @@ abstract class FormAlterEventSubscriberBase implements EventSubscriberInterface 
   protected abstract function alterForm(array $form);
 
   /**
+   * Sets the form id.
+   *
+   * @param string $formId
+   *   The form id.
+   */
+  public function setFormId($formId) {
+    $this->formId = $formId;
+  }
+
+  /**
    * Initializes the properties that can be used by the child class.
    *
    * @param FormAlterEvent $event
@@ -78,8 +88,13 @@ abstract class FormAlterEventSubscriberBase implements EventSubscriberInterface 
    */
   protected function init(FormAlterEvent $event) {
     $this->event = $event;
-    $this->formId = $event->getFormId();
+    // The form id could be set from the service definition via the setFormId
+    // method.
+    if (!$this->formId) {
+      $this->formId = $event->getFormId();
+    }
     $this->formState = $event->getFormState();
+    $this->form = $event->getForm();
   }
 
   /**
