@@ -1,27 +1,29 @@
-uuid: 963a4b07-8948-4321-8b24-2a51dc1b14f9
+uuid: e9fba60e-95fb-48e6-ae22-935f1993090a
 langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.node.bottom_widget
     - field.field.node.page.body
     - field.field.node.page.field_image
     - node.type.page
   module:
-    - image
+    - dcc_bottom_widgets
     - text
     - user
 _core:
   default_config_hash: oZ-7vpIJxjxL2up9B5KrJGD0lazQ9aN0P-fIPo6OrSU
-id: node.page.default
+id: node.page.bottom_widget
 targetEntityType: node
 bundle: page
-mode: default
+mode: bottom_widget
 content:
   body:
     label: hidden
-    type: text_default
+    type: text_summary_or_trimmed
     weight: 1
-    settings: {  }
+    settings:
+      trim_length: 600
     third_party_settings: {  }
   field_image:
     weight: 0
@@ -30,6 +32,6 @@ content:
       image_style: ''
       image_link: ''
     third_party_settings: {  }
-    type: image
+    type: bottom_widget_image_field_formatter
 hidden:
   links: true

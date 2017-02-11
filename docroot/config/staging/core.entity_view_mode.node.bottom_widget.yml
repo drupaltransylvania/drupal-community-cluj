@@ -1,0 +1,10 @@
+uuid: 2ca63fdc-f405-4a7e-a576-bd6de13a8ba4
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.bottom_widget
+label: 'Bottom Widget'
+targetEntityType: node
+cache: true

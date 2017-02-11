@@ -1,0 +1,5 @@
+services:
+  my_event_subscriber:
+    class: '\Drupal\dcc_bottom_widgets\EventSubscriber\FormAlterEventSubscriber'
+    tags:
+      - { name: 'event_subscriber' }
