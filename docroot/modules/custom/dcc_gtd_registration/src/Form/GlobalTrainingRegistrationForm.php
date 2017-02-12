@@ -307,6 +307,7 @@ class GlobalTrainingRegistrationForm extends FormBase {
    *   An array of fields with form state values.
    */
   private function buildFieldsForRegistration(FormStateInterface $form_state) {
+
     return array(
       'type' => 'global_training_day_registration',
       'title' => $form_state->get("first_name"),
@@ -324,7 +325,7 @@ class GlobalTrainingRegistrationForm extends FormBase {
       'field_occupation' => $form_state->get("occupation"),
       'field_organization' => $form_state->get("organization"),
       'field_industry_experience' => $form_state->get("industry_experience"),
-      'field_attend_day' => $form_state->getValue('attend_day'),
+      'field_attend_day' => array_values($form_state->getValue("attend_day")),
       'field_preferred_language' => $form_state->getValue("language"),
       'field_key_expectations' => $form_state->getValue("key_expectations"),
     );

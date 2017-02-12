@@ -12,7 +12,7 @@ type: list_string
 settings:
   allowed_values:
     -
-      value: 'Prefer to not share'
+      value: not_share
       label: 'Prefer to not share'
     -
       value: male

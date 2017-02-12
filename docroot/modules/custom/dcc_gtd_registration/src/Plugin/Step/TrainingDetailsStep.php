@@ -45,8 +45,8 @@ class TrainingDetailsStep extends StepPluginBase {
       '#description' => 'See the schedule!',
       '#type' => 'checkboxes',
       '#options' => array(
-        'Friday' => $this->t('Friday'),
-        'Saturday' => $this->t('Saturday'),
+        'friday' => $this->t('Friday'),
+        'saturday' => $this->t('Saturday'),
       ),
       '#required' => TRUE,
       '#default_value' => isset($attend_day) ? $form_state->get("attend_day") : NULL,
