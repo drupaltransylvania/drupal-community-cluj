@@ -27,7 +27,6 @@ class TrainingDetailsStep extends StepPluginBase {
    */
   public function setCurrentValues(FormStateInterface $formState) {
     $formState->set("attend_day", $formState->getValue("attend_day"));
-    $formState->set("laptop", $formState->getValue("laptop"));
     $formState->set("language", $formState->getValue("language"));
     $formState->set("key_expectations", $formState->getValue("key_expectations"));
   }
@@ -52,15 +51,9 @@ class TrainingDetailsStep extends StepPluginBase {
       '#required' => TRUE,
       '#default_value' => isset($attend_day) ? $form_state->get("attend_day") : NULL,
     );
-    $options = array(0 => t('No'), 1 => t('Yes'));
-    $laptop = $form_state->get("laptop");
     $fields['laptop'] = array(
-      '#title' => $this->t('Will you carry a laptop ?'),
-      '#description' => 'To know how many working stations will we need we should know if will you come with your own laptop. In case you will, please pre-configure your environment to be able to install Drupal 8 on it(if you need help check Drupa.org). Note: You will need your laptop for development only on Saturday',
-      '#type' => 'radios',
-      '#options' => $options,
-      '#required' => TRUE,
-      '#default_value' => isset($laptop) ? $form_state->get("laptop") : NULL,
+      '#title' => $this->t('For Saturday, please bring your laptop. You do not need to set up a development environment on it, a web browser and ability to connect to a Wifi will be enough.'),
+      '#type' => 'item',
     );
     $options2 = array(
       'en' => t('English'),
