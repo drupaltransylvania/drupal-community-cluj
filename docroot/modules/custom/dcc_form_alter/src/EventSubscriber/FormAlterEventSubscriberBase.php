@@ -55,8 +55,16 @@ abstract class FormAlterEventSubscriberBase implements EventSubscriberInterface 
    */
   public function onFormAlter(FormAlterEvent $event) {
     $this->init($event);
-    $this->form = $this->alterForm($event->getForm());
-    $this->updateFormData($event);
+
+    // If the form altering service definition contains the form_id, then we
+    // need to perform this check so that we only alter that specific form.
+    // This check will also pass, if the developer defines as simple event
+    // subscriber service, in which case the form_id check will have to be done
+    // in the alterForm method of that service.
+    if ($event->getFormId() == $this->formId) {
+      $this->form = $this->alterForm($event->getForm());
+      $this->updateFormData($event);
+    }
   }
 
   /**
