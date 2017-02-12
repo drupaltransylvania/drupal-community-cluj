@@ -4,6 +4,7 @@ namespace Drupal\dcc_form_alter\EventSubscriber;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\dcc_form_alter\Event\FormAlterEvent;
+use Drupal\dcc_form_alter\Exception\MalformedServiceDefinition;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -21,11 +22,11 @@ abstract class FormAlterEventSubscriberBase implements EventSubscriberInterface 
   protected $event;
 
   /**
-   * The form id.
+   * An array of form ids.
    *
-   * @var string
+   * @var array
    */
-  protected $formId;
+  protected $formIds;
 
   /**
    * The form array.
@@ -56,12 +57,13 @@ abstract class FormAlterEventSubscriberBase implements EventSubscriberInterface 
   public function onFormAlter(FormAlterEvent $event) {
     $this->init($event);
 
-    // If the form altering service definition contains the form_id, then we
-    // need to perform this check so that we only alter that specific form.
+    // If the form altering service definition contains the form_ids, then we
+    // need to perform this check so that we only alter those specific forms.
     // This check will also pass, if the developer defines as simple event
     // subscriber service, in which case the form_id check will have to be done
     // in the alterForm method of that service.
-    if ($event->getFormId() == $this->formId) {
+    $formId = $event->getFormId();
+    if (in_array($formId, $this->formIds)) {
       $this->form = $this->alterForm($event->getForm());
       $this->updateFormData($event);
     }
@@ -79,13 +81,13 @@ abstract class FormAlterEventSubscriberBase implements EventSubscriberInterface 
   protected abstract function alterForm(array $form);
 
   /**
-   * Sets the form id.
+   * Sets the form ids.
    *
-   * @param string $formId
-   *   The form id.
+   * @param array $formIds
+   *   The form ids.
    */
-  public function setFormId($formId) {
-    $this->formId = $formId;
+  public function setFormIds(array $formIds) {
+    $this->formIds = $formIds;
   }
 
   /**
@@ -96,10 +98,11 @@ abstract class FormAlterEventSubscriberBase implements EventSubscriberInterface 
    */
   protected function init(FormAlterEvent $event) {
     $this->event = $event;
-    // The form id could be set from the service definition via the setFormId
+    // The form id could be set from the service definition via the setformIds
     // method.
-    if (!$this->formId) {
-      $this->formId = $event->getFormId();
+    if (!$this->formIds) {
+      $serviceId = $this->_serviceId;
+      throw new MalformedServiceDefinition("The $serviceId service doesn't define the form ids");
     }
     $this->formState = $event->getFormState();
     $this->form = $event->getForm();
