@@ -12,10 +12,10 @@ type: list_string
 settings:
   allowed_values:
     -
-      value: Friday
+      value: friday
       label: Friday
     -
-      value: Saturday
+      value: saturday
       label: Saturday
   allowed_values_function: ''
 module: options
