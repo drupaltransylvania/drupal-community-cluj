@@ -3,12 +3,16 @@
 namespace Drupal\dcc_gtd_registration\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\dcc_encryption\Cryptor;
+use Drupal\dcc_gtd_registration\RegistrationPostSaveRule\SuccessRule;
 use Drupal\dcc_gtd_scheduler\Controller\ScheduleManager;
 use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Finder\Exception\AccessDeniedException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Class RegistrationStatusController.
@@ -41,6 +45,13 @@ class RegistrationStatusController extends ControllerBase {
   protected $entityTypeManager;
 
   /**
+   * The active database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $databaseConnection;
+
+  /**
    * RegistrationActivationController constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
@@ -48,6 +59,7 @@ class RegistrationStatusController extends ControllerBase {
    */
   public function __construct(EntityTypeManagerInterface $entityTypeManager) {
     $this->entityTypeManager = $entityTypeManager;
+    $this->databaseConnection = Database::getConnection();
   }
 
   /**
@@ -65,20 +77,28 @@ class RegistrationStatusController extends ControllerBase {
    * @param string $encryption
    *   A onetime activation string.
    *
-   * @return array
-   *   Render array.
+   * @return array|AccessDeniedHttpException
+   *   Render array or access denied exception.
    */
   public function activate($encryption) {
     $decryptedInformation = $this->getDecryptedInfo($encryption);
 
+    $this->checkOneTimeLinkUsage($decryptedInformation, $encryption, SuccessRule::ACTIVATION_LINK);
+
     /* @var NodeInterface $node */
     $node = $this->entityTypeManager->getStorage('node')->load($decryptedInformation['nid']);
+
+    $message = $this->registrationStatusMessage(
+      $node,
+      ScheduleManager::PLACE_CONFIRMED,
+      $this->messages['activation']
+    );
 
     return [
       '#theme' => ACTIVATION_STATUS_PAGE,
       '#first_name' => $decryptedInformation['first_name'],
       '#last_name' => $decryptedInformation['last_name'],
-      '#message' => $this->registrationStatusMessage($node, ScheduleManager::PLACE_CONFIRMED, $this->messages['activation']),
+      '#message' => $message,
     ];
   }
 
@@ -88,11 +108,12 @@ class RegistrationStatusController extends ControllerBase {
    * @param string $encryption
    *   A onetime activation string.
    *
-   * @return array
-   *   Render array.
+   * @return array|AccessDeniedHttpException
+   *   Render array or access denied exception.
    */
   public function cancel($encryption) {
     $decryptedInformation = $this->getDecryptedInfo($encryption);
+    $this->checkOneTimeLinkUsage($decryptedInformation, $encryption, SuccessRule::CANCEL_LINK);
 
     /* @var NodeInterface $node */
     $node = $this->entityTypeManager->getStorage('node')->load($decryptedInformation['nid']);
@@ -103,6 +124,109 @@ class RegistrationStatusController extends ControllerBase {
       '#last_name' => $decryptedInformation['last_name'],
       '#message' => $this->registrationStatusMessage($node, ScheduleManager::PLACE_CANCELED, $this->messages['cancel']),
     ];
+  }
+
+  /**
+   * Checks if the status link has been used already.
+   *
+   * @param array $decryptedInformation
+   *   The decrypted information.
+   * @param string $encryption
+   *   The encryption from the URL.
+   * @param int $linkType
+   *   The link type to check for: activation or cancel.
+   *
+   * @throws AccessDeniedException
+   */
+  private function checkOneTimeLinkUsage(array $decryptedInformation, $encryption, $linkType) {
+    $oneTimeLink = $this->getUnusedActivationLink($decryptedInformation, $encryption, $linkType);
+
+    $updated = 0;
+    if (!is_null($oneTimeLink)) {
+      $updated = $this->updateOneTimeLink($oneTimeLink);
+    }
+
+    if ($updated == 0) {
+      throw new AccessDeniedHttpException();
+    }
+  }
+
+  /**
+   * Selects the unused activation entry from the data table.
+   *
+   * @param array $decryptedInformation
+   *   The decrypted information.
+   * @param string $encryption
+   *   The encryption from the URL.
+   * @param int $linkType
+   *   The link type to check for: activation or cancel.
+   *
+   * @return \stdClass|null
+   *   Returns the one time link entry from the data table.
+   */
+  private function getUnusedActivationLink(array $decryptedInformation, $encryption, $linkType) {
+    $oneTimeLink = NULL;
+    try {
+      $query = $this->databaseConnection->select(SuccessRule::ONE_TIME_LINK_TABLE, 'r', array());
+      $query->fields('r')
+        ->condition('r.nid', $decryptedInformation['nid'])
+        ->condition('r.link_type', $linkType)
+        ->condition('r.encryption', $encryption)
+        ->condition('r.used', SuccessRule::LINK_IS_NOT_USED);
+
+      $results = $query->execute()->fetchAll();
+
+      $oneTimeLink = $this->getOneTimeLinkResult($results);
+    }
+    catch (\Exception $exception) {
+      watchdog_exception('One Time Link Select', $exception);
+    }
+
+    return $oneTimeLink;
+  }
+
+  /**
+   * Gets the one time activation entry from the database query results.
+   *
+   * @param array $results
+   *   The results from the database.
+   *
+   * @return \stdClass|null
+   *   The one time link object.
+   */
+  private function getOneTimeLinkResult(array $results) {
+    $output = NULL;
+    if ($results) {
+      $output = $results[0];
+    }
+
+    return $output;
+  }
+
+  /**
+   * Updates the database entry and sets the one time link to used.
+   *
+   * @param \stdClass $oneTimeLink
+   *   The one time link entry from the database.
+   *
+   * @return int
+   *   Returns the number of updated entries.
+   */
+  private function updateOneTimeLink(\stdClass $oneTimeLink) {
+    $updatedAmount = 0;
+    if ($oneTimeLink) {
+      $fields = [
+        'used' => SuccessRule::LINK_IS_USED,
+        'updated' => time(),
+      ];
+
+      $updatedAmount = $this->databaseConnection->update(SuccessRule::ONE_TIME_LINK_TABLE)
+        ->fields($fields)
+        ->condition('lid', $oneTimeLink->lid)
+        ->execute();
+    }
+
+    return $updatedAmount;
   }
 
   /**
