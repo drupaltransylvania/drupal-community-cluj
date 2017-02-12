@@ -52,29 +52,29 @@ class FormAlterPass implements CompilerPassInterface {
         throw new MalformedServiceDefinition($message);
       }
       $definition->addTag('event_subscriber');
-      $definition->addMethodCall('setFormId', [$formId]);
+      $definition->addMethodCall('setFormIds', [$formId]);
     }
   }
 
   /**
-   * Parses the tags of the service definition to find the form id.
+   * Parses the tags of the service definition to find the form ids.
    *
    * @param \Symfony\Component\DependencyInjection\Definition $definition
    *   The service definition.
    *
-   * @return null|string
+   * @return array
    *   The form id or NULL.
    */
   private function getFormIdFromDefinition(Definition $definition) {
     $tag = $definition->getTag(self::FORM_ALTER_TAG);
-    $formId = NULL;
+    $formIds = [];
     foreach ($tag as $tagAttributes) {
       if (array_key_exists(self::FORM_ID_TAG, $tagAttributes)) {
-        $formId = $tagAttributes[self::FORM_ID_TAG];
+        $formIds[] = $tagAttributes[self::FORM_ID_TAG];
       }
     }
 
-    return $formId;
+    return $formIds;
   }
 
 }
