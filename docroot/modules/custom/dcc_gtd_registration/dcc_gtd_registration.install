@@ -1,0 +1,90 @@
+<?php
+
+/**
+ * @file
+ * Contains install and update hooks.
+ */
+
+use Drupal\Core\Database\Database;
+
+/**
+ * Implements hook_schema().
+ */
+function dcc_gtd_registration_schema() {
+  $schema['dcc_gtd_registration_one_time_link'] = dcc_gtd_registration_one_time_link_schema_definition();
+
+  return $schema;
+}
+
+/**
+ * The schema definition for the data table.
+ *
+ * @return array
+ *   The schema definition.
+ */
+function dcc_gtd_registration_one_time_link_schema_definition() {
+  return array(
+    'description' => '',
+    'fields' => array(
+      'lid' => array(
+        'description' => 'The link id',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'nid' => array(
+        'description' => 'The {node}.nid of the registration.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'link_type' => array(
+        'description' => 'Boolean indicating which type of link is. 0 - cancel, 1-activate',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'size' => 'tiny',
+      ),
+      'encryption' => array(
+        'description' => 'The encrypted data sent in the link.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'used' => array(
+        'description' => 'Boolean indicating if the link was already used',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'size' => 'tiny',
+      ),
+      'updated' => array(
+        'description' => 'The updated date.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'primary key' => array('lid'),
+    'foreign keys' => array(
+      'registration_node' => array(
+        'table' => 'node',
+        'columns' => array('nid' => 'nid'),
+      ),
+    ),
+  );
+}
+
+/**
+ * Adds one time link table.
+ */
+function dcc_gtd_registration_update_8001() {
+  $spec = dcc_gtd_registration_one_time_link_schema_definition();
+  $schema = Database::getConnection()->schema();
+  $schema->createTable('dcc_gtd_registration_one_time_link', $spec);
+}
