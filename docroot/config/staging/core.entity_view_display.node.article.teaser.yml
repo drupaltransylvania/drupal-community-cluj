@@ -8,10 +8,8 @@ dependencies:
     - field.field.node.article.comment
     - field.field.node.article.field_image
     - field.field.node.article.field_tags
-    - image.style.medium
     - node.type.article
   module:
-    - image
     - text
     - user
 _core:
@@ -28,24 +26,8 @@ content:
       trim_length: 600
     third_party_settings: {  }
     label: hidden
-  field_image:
-    type: image
-    weight: -1
-    settings:
-      image_style: medium
-      image_link: content
-    third_party_settings: {  }
-    label: hidden
-  field_tags:
-    type: entity_reference_label
-    weight: 10
-    settings:
-      link: true
-    third_party_settings: {  }
-    label: above
-  links:
-    weight: 100
 hidden:
   comment: true
   field_image: true
   field_tags: true
+  links: true
