@@ -9,6 +9,7 @@ dependencies:
     - field.field.node.drupal_training_scheduler.field_location
     - field.field.node.drupal_training_scheduler.field_logo
     - field.field.node.drupal_training_scheduler.field_metatag_image
+    - field.field.node.drupal_training_scheduler.field_metatag_image
     - field.field.node.drupal_training_scheduler.field_number_of_members
     - field.field.node.drupal_training_scheduler.field_registration_period
     - field.field.node.drupal_training_scheduler.field_saturday_schedule
