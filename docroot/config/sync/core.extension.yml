@@ -5,6 +5,7 @@ module:
   block: 0
   block_content: 0
   breakpoint: 0
+  captcha: 0
   ckeditor: 0
   color: 0
   comment: 0
@@ -15,15 +16,19 @@ module:
   datetime: 0
   datetime_range: 0
   dblog: 0
+  dcc_bottom_widgets: 0
   dcc_email: 0
   dcc_encryption: 0
+  dcc_form_alter: 0
   dcc_gtd_registration: 0
   dcc_gtd_scheduler: 0
   dcc_multistep: 0
+  dcc_seo: 0
   dynamic_page_cache: 0
   easy_breadcrumb: 0
   editor: 0
   entityqueue: 0
+  eu_cookie_compliance: 0
   field: 0
   field_ui: 0
   file: 0
@@ -43,6 +48,7 @@ module:
   path: 0
   quickedit: 0
   rdf: 0
+  recaptcha: 0
   search: 0
   shortcut: 0
   swiftmailer: 0
