@@ -25,6 +25,8 @@ content:
     settings:
       trim_length: 600
     third_party_settings: {  }
+hidden:
+  links: true
   field_image:
     type: image
     weight: 0
