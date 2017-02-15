@@ -27,6 +27,11 @@ class TrainingDateStep extends StepPluginBase {
       '#type' => 'fieldset',
       '#title' => $this->t('Training date'),
     );
+    $fields['training']['title'] = array(
+      '#type' => 'textfield',
+      '#title' => $this->t('Training title'),
+      '#default_value' => $form_state->getValue('title') ?:NULL,
+    );
     $fields['training']['training_start_date'] = array(
       '#type' => 'datetime',
       '#title' => $this->t('Start Date'),
