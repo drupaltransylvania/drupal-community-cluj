@@ -16,31 +16,33 @@ use Drupal\dcc_multistep\StepPluginBase;
  *   step_number = 7,
  * )
  */
-class CompanyInformationStep extends StepPluginBase{
+class CompanyInformationStep extends StepPluginBase {
 
   /**
    * @inheritdoc
    */
   public function buildStep(FormStateInterface $form_state, FormInterface $form) {
-  
-      $fields['company'] = array(
+
+
+
+    $fields['company'] = array(
         '#type' => 'fieldset',
         '#title' => $this->t('Company information'),
       );
-      $fields['company']['name'] = array(
+    $fields['company']['name'] = array(
         '#type' => 'textfield',
         '#title' => $this->t("Company name"),
-      );
-      $fields['company']['logo'] = array(
+    );
+    $fields['company']['logo'] = array(
         '#type' => 'managed_file',
         '#title' => $this->t("Logo"),
-      );
-      $fields['company']['website'] = array(
+    );
+    $fields['company']['website'] = array(
         '#type' => 'url',
         '#title' => $this->t("Website link")
-      );
+    );
   
-      $fields['back'] = array(
+    $fields['back'] = array(
         '#type' => 'button',
         '#value' => 'Back',
         '#ajax' => array(
@@ -52,14 +54,14 @@ class CompanyInformationStep extends StepPluginBase{
           ),
         ),
         '#attributes' => ['style' => ['float: left; margin-right: 4px;']],
-      );
+    );
       
-      $fields['submit'] = array(
+    $fields['submit'] = array(
         '#type' => 'submit',
         '#value' => 'Save',
-      );
+    );
 
     return $fields;
-    }
+  }
 
 }
