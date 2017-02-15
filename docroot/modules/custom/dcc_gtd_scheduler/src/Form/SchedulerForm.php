@@ -281,7 +281,7 @@ class SchedulerForm extends FormBase {
    * Builds an array with the fields of the entity.
    */
   private function buildFieldsForSchedule($values) {
-    $title = $values['training_start_date']->format("Y-m-d") . ' - ' . $values['training_end_date']->format("Y-m-d");
+    $title = $values['title'];
 
     return array(
       'type' => 'drupal_training_scheduler',
@@ -305,6 +305,9 @@ class SchedulerForm extends FormBase {
         'value' => $values['training_start_date']->format("Y-m-d\Th:i:s"),
         'end_value' => $values['training_end_date']->format("Y-m-d\Th:i:s"),
       ],
+      'field_company_name' => $values['name'],
+      'field_logo' => $values['logo'],
+      'field_website_link' => $values['website'],
     );
   }
 
