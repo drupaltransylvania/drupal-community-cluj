@@ -4,16 +4,22 @@ status: true
 dependencies:
   config:
     - field.field.node.drupal_training_scheduler.body
+    - field.field.node.drupal_training_scheduler.field_company_name
     - field.field.node.drupal_training_scheduler.field_friday_schedule
     - field.field.node.drupal_training_scheduler.field_location
+    - field.field.node.drupal_training_scheduler.field_logo
+    - field.field.node.drupal_training_scheduler.field_metatag_image
     - field.field.node.drupal_training_scheduler.field_number_of_members
     - field.field.node.drupal_training_scheduler.field_registration_period
     - field.field.node.drupal_training_scheduler.field_saturday_schedule
     - field.field.node.drupal_training_scheduler.field_training_date
+    - field.field.node.drupal_training_scheduler.field_website_link
     - node.type.drupal_training_scheduler
   module:
     - datetime_range
     - google_map_field
+    - image
+    - link
     - text
     - user
 id: node.drupal_training_scheduler.default
@@ -21,26 +27,45 @@ targetEntityType: node
 bundle: drupal_training_scheduler
 mode: default
 content:
+  addtoany:
+    weight: 8
+    settings: {  }
+    third_party_settings: {  }
   body:
     label: hidden
     type: text_default
-    weight: 101
+    weight: 1
     settings: {  }
     third_party_settings: {  }
+  field_company_name:
+    weight: 9
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
   field_friday_schedule:
-    weight: 106
+    weight: 6
     label: above
     settings: {  }
     third_party_settings: {  }
     type: text_default
   field_location:
-    weight: 104
+    weight: 4
     label: above
     settings: {  }
     third_party_settings: {  }
     type: google_map_field_default
+  field_logo:
+    weight: 10
+    label: above
+    settings:
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+    type: image
   field_number_of_members:
-    weight: 105
+    weight: 5
     label: above
     settings:
       thousand_separator: ''
@@ -48,7 +73,7 @@ content:
     third_party_settings: {  }
     type: number_integer
   field_registration_period:
-    weight: 103
+    weight: 3
     label: above
     settings:
       separator: '-'
@@ -57,13 +82,13 @@ content:
     third_party_settings: {  }
     type: daterange_default
   field_saturday_schedule:
-    weight: 107
+    weight: 7
     label: above
     settings: {  }
     third_party_settings: {  }
     type: text_default
   field_training_date:
-    weight: 102
+    weight: 2
     label: above
     settings:
       separator: '-'
@@ -71,6 +96,20 @@ content:
       timezone_override: ''
     third_party_settings: {  }
     type: daterange_default
+  field_website_link:
+    weight: 11
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
   links:
-    weight: 100
-hidden: {  }
+    weight: 0
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  field_metatag_image: true

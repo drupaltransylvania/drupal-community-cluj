@@ -4,16 +4,23 @@ status: true
 dependencies:
   config:
     - field.field.node.drupal_training_scheduler.body
+    - field.field.node.drupal_training_scheduler.field_company_name
     - field.field.node.drupal_training_scheduler.field_friday_schedule
     - field.field.node.drupal_training_scheduler.field_location
+    - field.field.node.drupal_training_scheduler.field_logo
+    - field.field.node.drupal_training_scheduler.field_metatag_image
     - field.field.node.drupal_training_scheduler.field_number_of_members
     - field.field.node.drupal_training_scheduler.field_registration_period
     - field.field.node.drupal_training_scheduler.field_saturday_schedule
     - field.field.node.drupal_training_scheduler.field_training_date
+    - field.field.node.drupal_training_scheduler.field_website_link
+    - image.style.thumbnail
     - node.type.drupal_training_scheduler
   module:
     - datetime_range
     - google_map_field
+    - image
+    - link
     - path
     - text
 id: node.drupal_training_scheduler.default
@@ -34,6 +41,13 @@ content:
     weight: 10
     settings: {  }
     third_party_settings: {  }
+  field_company_name:
+    weight: 39
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
   field_friday_schedule:
     weight: 36
     settings:
@@ -46,6 +60,20 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: google_map_field_default
+  field_logo:
+    weight: 40
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+    type: image_image
+  field_metatag_image:
+    weight: 38
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+    type: image_image
   field_number_of_members:
     weight: 35
     settings:
@@ -69,6 +97,13 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: daterange_default
+  field_website_link:
+    weight: 41
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+    type: link_default
   path:
     type: path
     weight: 30
