@@ -1,0 +1,18 @@
+uuid: 93b0a98e-3167-4aca-aba9-28df91fd6549
+langcode: en
+status: true
+dependencies:
+  theme:
+    - dcc_theme
+id: pagetitle
+theme: dcc_theme
+region: page_title
+weight: 0
+provider: null
+plugin: page_title_block
+settings:
+  id: page_title_block
+  label: 'Page title'
+  provider: core
+  label_display: '0'
+visibility: {  }
