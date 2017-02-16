@@ -1,0 +1,22 @@
+uuid: d9cffbec-6421-42b2-8de1-978705fc2d26
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: gtd_registration
+label: 'GTD Registration'
+type: 'canonical_entities:node'
+pattern: '/global-training/[scheduler:title]/register'
+selection_criteria:
+  04b7ef29-3a94-40ca-9b0f-59402b5a19ae:
+    id: node_type
+    bundles:
+      global_training_day_registration: global_training_day_registration
+    negate: false
+    context_mapping:
+      node: node
+    uuid: 04b7ef29-3a94-40ca-9b0f-59402b5a19ae
+selection_logic: and
+weight: -5
+relationships: {  }
