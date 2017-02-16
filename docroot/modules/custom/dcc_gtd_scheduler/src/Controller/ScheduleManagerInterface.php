@@ -3,6 +3,7 @@
 namespace Drupal\dcc_gtd_scheduler\Controller;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Entity\EntityInterface;
 
 /**
  * Interface ScheduleManagerInterface.
@@ -18,6 +19,14 @@ interface ScheduleManagerInterface extends ContainerInjectionInterface {
    *   The ID of the active schedule or NULL if no schedule is currently active.
    */
   public function getActiveSchedulerId();
+
+  /**
+   * Gets the last created schedule that's currently active.
+   *
+   * @return EntityInterface|null
+   *   The active schedule or NULL if no schedule is currently active.
+   */
+  public function getActiveScheduler();
 
   /**
    * Gets the number of remaining seats for a given schedule.
