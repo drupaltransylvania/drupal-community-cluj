@@ -1,5 +1,5 @@
 dcc_gtd_registration.form:
-  path: '/global-training/registration'
+  path: '/global-training/register'
   defaults:
     _form: '\Drupal\dcc_gtd_registration\Form\GlobalTrainingRegistrationForm'
     _title: 'Global Training Registration'
