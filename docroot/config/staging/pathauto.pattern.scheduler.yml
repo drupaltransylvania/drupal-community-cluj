@@ -1,0 +1,22 @@
+uuid: ae9858d3-fdee-42be-96bc-6b67ead10284
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: scheduler
+label: Scheduler
+type: 'canonical_entities:node'
+pattern: '/global-training/[node:title]'
+selection_criteria:
+  1e6a56b7-a6cd-4a12-a4e5-068afe5725e5:
+    id: node_type
+    bundles:
+      drupal_training_scheduler: drupal_training_scheduler
+    negate: false
+    context_mapping:
+      node: node
+    uuid: 1e6a56b7-a6cd-4a12-a4e5-068afe5725e5
+selection_logic: and
+weight: -5
+relationships: {  }
