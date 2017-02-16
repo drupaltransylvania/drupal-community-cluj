@@ -2,7 +2,7 @@ cloud_migration: {  }
 identifier: HIMW-141824
 key: d3fea6a35c928cde850b0f16de59d1b0
 subscription_data:
-  active: false
+  active: true
   href: 'https://insight.acquia.com/node/uuid/c29068e9-50b5-4b50-ac7b-4f9bb6c86409/dashboard'
   uuid: c29068e9-50b5-4b50-ac7b-4f9bb6c86409
   subscription_name: drupalcluj

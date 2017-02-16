@@ -1,0 +1,71 @@
+<?php
+
+/**
+ * @file
+ * It contains all the hooks needed for the functionalities of the module.
+ */
+
+use Drupal\Core\Render\BubbleableMetadata;
+
+/**
+ * Hook that creates a token in token list.
+ *
+ * @return array
+ *   An associative array of available tokens and token types. The outer array has two components: types and tokens.
+ */
+function dcc_gtd_scheduler_token_info() {
+  $types['scheduler'] = array(
+    'name' => 'Active Scheduler',
+    'description' => 'Tokens related to the currentlly active Training.',
+  );
+
+  $tokens_array = [
+    'scheduler' => [
+      'title' => [
+        'name' => 'title',
+        'description' => 'The title of the currentlly active training',
+      ],
+    ],
+  ];
+
+  return array(
+    'types' => $types,
+    'tokens' => $tokens_array,
+  );
+}
+
+/**
+ * Hook that is called when replacing the element created in token_info hook.
+ *
+ * @param string $type
+ *   The machine-readable name of the type (group) of token being replaced.
+ * @param array $tokens
+ *   An array of tokens to be replaced.
+ * @param array $data
+ *   An associative array of data objects to be used when generating replacement values.
+ * @param array $options
+ *   An associative array of options for token replacement.
+ * @param \Drupal\Core\Render\BubbleableMetadata $bubbleable_metadata
+ *   The bubbleable metadata.
+ *
+ * @return array
+ *   An associative array of replacement values, keyed by the raw [type:token] strings from the original text.
+ */
+function dcc_gtd_scheduler_tokens($type, array $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata) {
+  $replacements = array();
+
+  if ($type = 'scheduler') {
+    $container = Drupal::getContainer();
+    $scheduleManager = $container->get('dcc_schedule.manager');
+    $node = $scheduleManager->getActiveScheduler();
+
+    foreach ($tokens as $name => $original) {
+      if ($original == "[scheduler:title]") {
+        $replacements[$original] = $node->getTitle();
+      }
+    }
+
+  }
+
+  return $replacements;
+}
