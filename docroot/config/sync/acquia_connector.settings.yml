@@ -1,16 +1,16 @@
 cloud_migration: {  }
-identifier: HIMW-141824
-key: d3fea6a35c928cde850b0f16de59d1b0
+identifier: HJTU-145803
+key: 24709dd379428093e8138c668c5e9ca8
 subscription_data:
   active: true
-  href: 'https://insight.acquia.com/node/uuid/c29068e9-50b5-4b50-ac7b-4f9bb6c86409/dashboard'
-  uuid: c29068e9-50b5-4b50-ac7b-4f9bb6c86409
-  subscription_name: drupalcluj
+  href: 'https://insight.acquia.com/node/uuid/4d2fa498-7313-435f-9e25-83bb9fa8190e/dashboard'
+  uuid: 4d2fa498-7313-435f-9e25-83bb9fa8190e
+  subscription_name: 'Drupal Community Cluj-Napoca'
   expiration_date:
-    value: '2017-12-20T00:00:00'
+    value: '2020-02-05T00:00:00'
   product:
     view: 'Acquia Network'
-  derived_key_salt: 4c0b9acb79e3de5a451800c731be4b50
+  derived_key_salt: e9f9a1615d4969e5420f3e44aefc7514
   update_service: '1'
   search_service_enabled: 1
   rpc_version: '3'
@@ -28,7 +28,7 @@ subscription_data:
         secret_key: ''
         js_path: ''
     search_service_enabled: 1
-subscription_name: drupalcluj
+subscription_name: 'Drupal Community Cluj-Napoca'
 debug: false
 cron_interval: 30
 cron_interval_override: 0
