@@ -5,7 +5,7 @@ php5:
   volumes :
     - .:/var/www/html
   ports:
-    - 5001:80
+    - 4001:80
   extra_hosts:
     - "db:172.17.0.1"
 
