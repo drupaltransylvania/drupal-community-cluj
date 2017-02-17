@@ -757,7 +757,7 @@ if (file_exists(__DIR__ . '/settings.local.php')) {
 // conflicts with other modules.
 $settings['install_profile'] = 'dcc';
 // Set the config staging directory.
-$config_directories['sync'] = 'config/staging';
+$config_directories['sync'] = 'config/sync';
 // The site uuid.
 $settings['site_uuid'] = 'a32f9d1b-cc01-4fee-8dc2-870dd0251941';
 
@@ -766,7 +766,7 @@ $settings['site_uuid'] = 'a32f9d1b-cc01-4fee-8dc2-870dd0251941';
 // settings.php for development on your local workstation, set $db_url
 // (Drupal 5 or 6) or $databases (Drupal 7 or 8) as described in comments above.
 if (file_exists('/var/www/site-php')) {
-  require '/var/www/site-php/drupalcluj/drupalcluj-settings.inc';
+  require '/var/www/site-php/clujapocadc/clujapocadc-settings.inc';
 }
 
 // Make sure drush keeps working.

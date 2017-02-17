@@ -1,0 +1,8 @@
+uuid: 3da0b242-739d-45a6-88ca-0a934bb3fd13
+langcode: en
+status: true
+dependencies: {  }
+id: node__page
+label: 'Content: Basic page'
+tags:
+  og_image: '[node:field_metatag_image:open_graph]'

@@ -1,0 +1,19 @@
+uuid: 698f39cd-596b-4cc7-87a4-7dad4a4375d8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_company_name
+    - node.type.drupal_training_scheduler
+id: node.drupal_training_scheduler.field_company_name
+field_name: field_company_name
+entity_type: node
+bundle: drupal_training_scheduler
+label: 'Company name'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

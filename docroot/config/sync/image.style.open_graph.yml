@@ -1,0 +1,14 @@
+uuid: abf5f4de-f821-4b42-8d99-2955c6d39341
+langcode: en
+status: true
+dependencies: {  }
+name: open_graph
+label: 'Open Graph (1200 x 630)'
+effects:
+  80d0a48d-38f2-4166-ab69-d6a628845093:
+    uuid: 80d0a48d-38f2-4166-ab69-d6a628845093
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 1200
+      height: 630

@@ -59,9 +59,17 @@ class LocationStep extends StepPluginBase {
       '#attributes' => ['style' => ['float: left; margin-right: 4px;']],
     );
 
-    $fields['submit'] = array(
-      '#type' => 'submit',
-      '#value' => 'Save',
+    $fields['next'] = array(
+      '#type' => 'button',
+      '#value' => 'Next',
+      '#ajax' => array(
+        'callback' => array($form, 'ajax'),
+        'event' => 'click',
+        'progress' => array(
+          'type' => 'throbber',
+          'message' => NULL,
+        ),
+      ),
     );
 
     return $fields;

@@ -33,8 +33,9 @@
         "drupal/acquia_connector": "1.7",
         "drupal/recaptcha": "^2.2",
         "drupal/eu_cookie_compliance": "1.0-beta7",
-        "wkse/metatag": "^8.0",
-        "drupal/pathauto": "^1.0@RC"
+        "drupal/pathauto": "^1.0@RC",
+        "drupal/addtoany": "1.7",
+        "drupal/metatag": "1.0"
     },
     "require-dev": {
         "behat/mink": "~1.7",
