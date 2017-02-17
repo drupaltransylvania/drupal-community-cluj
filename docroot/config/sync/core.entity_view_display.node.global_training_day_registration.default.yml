@@ -25,6 +25,7 @@ dependencies:
   module:
     - country
     - options
+    - telephone
     - user
 id: node.global_training_day_registration.default
 targetEntityType: node
@@ -128,9 +129,10 @@ content:
   field_phone:
     weight: 110
     label: above
-    settings: {  }
+    settings:
+      title: ''
     third_party_settings: {  }
-    type: basic_string
+    type: telephone_link
   field_preferred_language:
     weight: 120
     label: above
@@ -154,4 +156,7 @@ content:
     type: entity_reference_label
   links:
     weight: 100
-hidden: {  }
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  addtoany: true

@@ -19,6 +19,10 @@ targetEntityType: node
 bundle: article
 mode: teaser
 content:
+  addtoany:
+    weight: 5
+    settings: {  }
+    third_party_settings: {  }
   body:
     type: text_summary_or_trimmed
     weight: 0

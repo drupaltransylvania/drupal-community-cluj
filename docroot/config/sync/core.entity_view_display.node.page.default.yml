@@ -4,10 +4,9 @@ status: true
 dependencies:
   config:
     - field.field.node.page.body
-    - field.field.node.page.field_image
+    - field.field.node.page.field_metatag_image
     - node.type.page
   module:
-    - image
     - text
     - user
 _core:
@@ -17,24 +16,19 @@ targetEntityType: node
 bundle: page
 mode: default
 content:
+  addtoany:
+    weight: 2
+    settings: {  }
+    third_party_settings: {  }
   body:
     label: hidden
     type: text_default
+    weight: 0
+    settings: {  }
+    third_party_settings: {  }
+  links:
     weight: 1
     settings: {  }
     third_party_settings: {  }
-  field_image:
-    weight: 0
-    label: hidden
-    settings:
-      image_style: ''
-      image_link: ''
-    third_party_settings: {  }
-    type: image
 hidden:
-  links: true
-  links:
-    weight: 101
-    settings: {  }
-    third_party_settings: {  }
-hidden: {  }
+  field_metatag_image: true

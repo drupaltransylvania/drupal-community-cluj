@@ -1,5 +1,5 @@
 {
-  "name": "wkse/metatag",
+  "name": "drupal/metatag",
   "description": "Manage meta tags for all entities.",
   "type": "drupal-module",
   "license": "GPL-2.0+",

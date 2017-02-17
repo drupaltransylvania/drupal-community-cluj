@@ -1,0 +1,28 @@
+uuid: b3f44736-0008-4fc4-8e34-0971f373e002
+langcode: en
+status: false
+dependencies:
+  module:
+    - addtoany
+    - node
+  theme:
+    - dcc_theme
+id: addtoanybuttons
+theme: dcc_theme
+region: '-1'
+weight: -3
+provider: null
+plugin: addtoany_block
+settings:
+  id: addtoany_block
+  label: 'AddToAny buttons'
+  provider: addtoany
+  label_display: visible
+visibility:
+  node_type:
+    id: node_type
+    bundles:
+      page: page
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
