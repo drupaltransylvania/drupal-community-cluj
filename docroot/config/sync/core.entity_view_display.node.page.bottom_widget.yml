@@ -34,4 +34,6 @@ content:
     third_party_settings: {  }
     type: bottom_widget_image_field_formatter
 hidden:
+  addtoany: true
+  field_metatag_image: true
   links: true
