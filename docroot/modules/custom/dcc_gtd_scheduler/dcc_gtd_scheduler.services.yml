@@ -4,3 +4,9 @@ services:
     arguments: ['@entity_type.manager']
     tags:
       - { name: dcc_schedule.manager }
+
+  dcc_schedule.active_training_title_token_generator:
+    class: Drupal\dcc_gtd_scheduler\Controller\ActiveScheduleTitleToken
+    arguments: ['@dcc_schedule.manager']
+    tags:
+      - { name: dcc_schedule.active_training_title_token_generator }
