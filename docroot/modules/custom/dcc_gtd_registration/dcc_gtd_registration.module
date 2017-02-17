@@ -11,6 +11,9 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\node\NodeInterface;
 
 define('ACTIVATION_STATUS_PAGE', 'dcc_gtd_registration_activation_status_page');
+define('GOOGLE_MAP_FIELD_NAME', 'dcc_gtd_regisration_google_map_field_name');
+define('DATE_RANGE_WRAPPER', 'dcc_gtd_regisration_date_range_wrapper');
+define('SPONSORED_BY', 'dcc_gtd_regisration_sponsored_by_logo');
 
 /**
  * Implements hook_theme().
@@ -26,6 +29,25 @@ function dcc_gtd_registration_theme($existing, $type, $theme, $path) {
         'message' => NULL,
       ],
       'template' => 'registration-activation-page',
+    ],
+    GOOGLE_MAP_FIELD_NAME => [
+      'variables' => [
+        'name' => NULL,
+      ],
+      'template' => 'google-map-field-name',
+    ],
+    DATE_RANGE_WRAPPER => [
+      'variables' => [
+        'children' => NULL,
+      ],
+      'template' => 'date-range-wrapper',
+    ],
+    SPONSORED_BY => [
+      'variables' => [
+        'children' => NULL,
+        'link' => NULL,
+      ],
+      'template' => 'sponsored-by-logo',
     ],
   ];
 }
