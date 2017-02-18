@@ -1,0 +1,8 @@
+uuid: 650fd724-83cb-40dd-9144-fb76af22aad6
+langcode: en
+status: true
+dependencies: {  }
+id: medium_date_format_without_time
+label: 'Medium Date Format without time'
+locked: false
+pattern: 'D, m/d/Y'
