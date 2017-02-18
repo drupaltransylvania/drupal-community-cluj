@@ -1,0 +1,20 @@
+uuid: 842566fa-0f38-4650-871f-b3392c23e050
+langcode: en
+status: true
+dependencies:
+  module:
+    - dcc_gtd_registration
+  theme:
+    - dcc_theme
+id: gtdregistrationblock
+theme: dcc_theme
+region: sidebar_second
+weight: 0
+provider: null
+plugin: gtd_registration_block
+settings:
+  id: gtd_registration_block
+  label: 'Register for the next GTD'
+  provider: dcc_gtd_registration
+  label_display: visible
+visibility: {  }
