@@ -28,6 +28,7 @@ module:
   dynamic_page_cache: 0
   easy_breadcrumb: 0
   editor: 0
+  entity_reference_revisions: 0
   entityqueue: 0
   eu_cookie_compliance: 0
   field: 0
@@ -62,10 +63,12 @@ module:
   tour: 0
   update: 0
   user: 0
+  video: 0
   views_ui: 0
   menu_link_content: 1
   pathauto: 1
   views: 10
+  paragraphs: 11
   dcc: 1000
 theme:
   stable: 0
