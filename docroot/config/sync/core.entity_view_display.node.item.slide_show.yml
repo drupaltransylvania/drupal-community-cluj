@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.slide_show
-    - field.field.node.item.field_description
     - field.field.node.item.field_picture
     - image.style.homepage_slider
     - node.type.item
@@ -16,12 +15,6 @@ targetEntityType: node
 bundle: item
 mode: slide_show
 content:
-  field_description:
-    weight: 3
-    label: hidden
-    settings: {  }
-    third_party_settings: {  }
-    type: basic_string
   field_picture:
     type: image
     weight: 2
@@ -31,4 +24,5 @@ content:
       image_link: ''
     third_party_settings: {  }
 hidden:
+  addtoany: true
   links: true
