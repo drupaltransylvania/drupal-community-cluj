@@ -1,0 +1,14 @@
+uuid: 41c7999d-a7ed-4956-baef-6dd060c444b8
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: scheduler
+label: Scheduler
+type: 'canonical_entities:node'
+pattern: '/global-training/[node:title]'
+selection_criteria: {  }
+selection_logic: and
+weight: 0
+relationships: {  }

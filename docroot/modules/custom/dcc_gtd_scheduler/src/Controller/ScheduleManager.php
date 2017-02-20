@@ -4,6 +4,7 @@ namespace Drupal\dcc_gtd_scheduler\Controller;
 
 use DateTime;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -27,6 +28,13 @@ class ScheduleManager implements ScheduleManagerInterface {
   protected $entityTypeManager;
 
   /**
+   * The node storage.
+   *
+   * @var \Drupal\Core\Entity\ContentEntityStorageInterface
+   */
+  protected $nodeStorage;
+
+  /**
    * ScheduleManager constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
@@ -36,6 +44,7 @@ class ScheduleManager implements ScheduleManagerInterface {
     EntityTypeManagerInterface $entityTypeManager
   ) {
     $this->entityTypeManager = $entityTypeManager;
+    $this->nodeStorage = $entityTypeManager->getStorage('node');
   }
 
   /**
@@ -54,11 +63,9 @@ class ScheduleManager implements ScheduleManagerInterface {
    *   The ID of the active schedule or NULL if no schedule is currently active.
    */
   public function getActiveSchedulerId() {
-    $node_storage = $this->entityTypeManager->getStorage('node');
-
     // Query the database for the last added training scheduler which has the
     // registration period open.
-    $query = $node_storage->getQuery();
+    $query = $this->nodeStorage->getQuery();
     $query->condition('type', 'drupal_training_scheduler');
     $query->condition('field_registration_period.value', date('Y-m-d\TH:i:s'), '<');
     $query->condition('field_registration_period.end_value', date('Y-m-d\TH:i:s'), '>');
@@ -69,6 +76,20 @@ class ScheduleManager implements ScheduleManagerInterface {
       return NULL;
     }
     return current($nid);
+  }
+
+  /**
+   * Gets the last created schedule that's currently active.
+   *
+   * @return EntityInterface|null
+   *   The active schedule or NULL if no schedule is currently active.
+   */
+  public function getActiveScheduler() {
+    $nid = $this->getActiveSchedulerId();
+    if ($nid === NULL) {
+      return NULL;
+    }
+    return $this->nodeStorage->load($nid);
   }
 
   /**
