@@ -9,10 +9,10 @@ dependencies:
     - field.field.node.drupal_training_scheduler.field_location
     - field.field.node.drupal_training_scheduler.field_logo
     - field.field.node.drupal_training_scheduler.field_metatag_image
-    - field.field.node.drupal_training_scheduler.field_metatag_image
     - field.field.node.drupal_training_scheduler.field_number_of_members
     - field.field.node.drupal_training_scheduler.field_registration_period
     - field.field.node.drupal_training_scheduler.field_saturday_schedule
+    - field.field.node.drupal_training_scheduler.field_scheduler_description
     - field.field.node.drupal_training_scheduler.field_training_date
     - field.field.node.drupal_training_scheduler.field_website_link
     - node.type.drupal_training_scheduler
@@ -29,7 +29,7 @@ bundle: drupal_training_scheduler
 mode: default
 content:
   addtoany:
-    weight: 8
+    weight: 9
     settings: {  }
     third_party_settings: {  }
   body:
@@ -39,14 +39,14 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_company_name:
-    weight: 9
+    weight: 10
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
     type: string
   field_friday_schedule:
-    weight: 6
+    weight: 7
     label: above
     settings: {  }
     third_party_settings: {  }
@@ -58,7 +58,7 @@ content:
     third_party_settings: {  }
     type: google_map_field_default
   field_logo:
-    weight: 10
+    weight: 11
     label: above
     settings:
       image_style: ''
@@ -83,7 +83,13 @@ content:
     third_party_settings: {  }
     type: daterange_default
   field_saturday_schedule:
-    weight: 7
+    weight: 8
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+  field_scheduler_description:
+    weight: 6
     label: above
     settings: {  }
     third_party_settings: {  }
@@ -98,7 +104,7 @@ content:
     third_party_settings: {  }
     type: daterange_default
   field_website_link:
-    weight: 11
+    weight: 12
     label: above
     settings:
       trim_length: 80

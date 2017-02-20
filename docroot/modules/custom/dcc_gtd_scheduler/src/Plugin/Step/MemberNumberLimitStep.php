@@ -32,6 +32,15 @@ class MemberNumberLimitStep extends StepPluginBase {
       '#default_value' => $form_state->getValue('number_of_members') ?: NULL,
     );
 
+    $description = $form_state->getValue('scheduler_description');
+
+    $fields['members']['scheduler_description'] = array(
+      '#type' => 'text_format',
+      '#title' => $this->t('Scheduler Description'),
+      '#default_value' => $description['value'] ?: NULL,
+      '#format' => $description['format'] ?: 'basic_html',
+    );
+
     $fields['back'] = array(
       '#type' => 'button',
       '#value' => 'Back',
@@ -61,4 +70,5 @@ class MemberNumberLimitStep extends StepPluginBase {
 
     return $fields;
   }
+
 }
