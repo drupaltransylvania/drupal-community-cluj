@@ -3,11 +3,11 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.page.body
+    - field.field.node.page.field_layout
     - field.field.node.page.field_metatag_image
     - node.type.page
   module:
-    - text
+    - entity_reference_revisions
     - user
 _core:
   default_config_hash: oZ-7vpIJxjxL2up9B5KrJGD0lazQ9aN0P-fIPo6OrSU
@@ -20,16 +20,17 @@ content:
     weight: 2
     settings: {  }
     third_party_settings: {  }
-  body:
+  field_layout:
+    type: entity_reference_revisions_entity_view
+    weight: 3
     label: hidden
-    type: text_default
-    weight: 0
-    settings: {  }
+    settings:
+      view_mode: default
+      link: ''
     third_party_settings: {  }
   links:
     weight: 1
     settings: {  }
     third_party_settings: {  }
 hidden:
-  field_image: true
   field_metatag_image: true

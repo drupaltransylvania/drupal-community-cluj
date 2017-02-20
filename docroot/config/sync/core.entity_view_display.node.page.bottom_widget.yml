@@ -4,12 +4,9 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.bottom_widget
-    - field.field.node.page.body
-    - field.field.node.page.field_image
+    - field.field.node.page.field_metatag_image
     - node.type.page
   module:
-    - dcc_bottom_widgets
-    - text
     - user
 _core:
   default_config_hash: oZ-7vpIJxjxL2up9B5KrJGD0lazQ9aN0P-fIPo6OrSU
@@ -17,22 +14,7 @@ id: node.page.bottom_widget
 targetEntityType: node
 bundle: page
 mode: bottom_widget
-content:
-  body:
-    label: hidden
-    type: text_summary_or_trimmed
-    weight: 1
-    settings:
-      trim_length: 600
-    third_party_settings: {  }
-  field_image:
-    weight: 0
-    label: hidden
-    settings:
-      image_style: ''
-      image_link: ''
-    third_party_settings: {  }
-    type: bottom_widget_image_field_formatter
+content: {  }
 hidden:
   addtoany: true
   field_metatag_image: true
