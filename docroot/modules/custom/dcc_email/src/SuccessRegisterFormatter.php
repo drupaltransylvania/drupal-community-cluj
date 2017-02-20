@@ -2,48 +2,31 @@
 
 namespace Drupal\dcc_email;
 
-use Drupal\Core\Link;
 use Drupal\Core\Render\Renderer;
+use Drupal\dcc_email\EmailFormater;
 use Drupal\dcc_gtd_registration\Form\GlobalTrainingRegistrationForm;
 
 /**
- * Class EmailFormatter.
+ * Class SuccessRegisterFormatter.
  *
  * @package Drupal\dcc_email
  */
-class EmailFormatter {
+class SuccessRegisterFormatter extends EmailFormater {
 
   /**
    * Formats the email.
    *
-   * @param string $key
-   *   The key of the email.
-   * @param mixed $message
-   *   The message of the email.
-   * @param mixed $params
-   *   The parameters of the email.
+   * @param string $message
+   *   The message of the mail.
+   * @param string $params
+   *   The parameters of the mail.
    *
    * @return mixed
    *   Returns the formatted message.
    */
-  public function format($key, $message, $params) {
-    $message['from'] = \Drupal::config('system.site')->get('mail');
-    $message['subject'] = t('Registration');
-    $message['body'][] = $this->generateGlobalRegistrationEmailBody($params);
+  public function formatMessage($message, $params) {
 
-    return $message;
-  }
-
-  /**
-   * Generates the HTML for the email body.
-   *
-   * @param array $params
-   *   Parameters of the email.
-   *
-   * @return \Drupal\Component\Render\MarkupInterface|string
-   *   The HTML body of the email.
-   */
-  private function generateGlobalRegistrationEmailBody(array $params) {
+    parent::formatMessage($message, $params);
     $renderArray = [
       '#theme' => GlobalTrainingRegistrationForm::GLOBAL_TRAINING_REGISTRATION_EMAIL_KEY,
       '#first_name' => $params['registration_info']['first_name'],
@@ -62,6 +45,7 @@ class EmailFormatter {
    *   The renderer service.
    */
   private function renderer() {
+
     return \Drupal::service('renderer');
   }
 
