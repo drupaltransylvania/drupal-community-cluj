@@ -202,6 +202,12 @@ class SchedulerForm extends FormBase {
       $element['container']['saturday_scheduler']['format']['guidelines']['#access'] = FALSE;
       $element['container']['saturday_scheduler']['format']['help']['#access'] = FALSE;
     }
+    if (!empty($element['container']['members']['scheduler_description'])) {
+      $element['container']['members']['scheduler_description']['format']['#attributes']['class'][] = 'hidden';
+      $element['container']['members']['scheduler_description']['format']['format']['#access'] = FALSE;
+      $element['container']['members']['scheduler_description']['format']['guidelines']['#access'] = FALSE;
+      $element['container']['members']['scheduler_description']['format']['help']['#access'] = FALSE;
+    }
     return $element;
   }
 
@@ -296,6 +302,7 @@ class SchedulerForm extends FormBase {
         'zoom' => $values['field_location'][0]['zoom'],
       ),
       'field_number_of_members' => $values['number_of_members'],
+      'field_scheduler_description' => $values['scheduler_description'],
       'field_registration_period' => [
         'value' => $values['registration_start_date']->format("Y-m-d\Th:i:s"),
         'end_value' => $values['registration_end_date']->format("Y-m-d\Th:i:s"),
