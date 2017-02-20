@@ -7436,19 +7436,19 @@
         }
     },
     {
-        "name": "drupal/video",
-        "version": "1.2.0",
-        "version_normalized": "1.2.0.0",
+        "name": "drupal/youtube",
+        "version": "1.0.0-beta3",
+        "version_normalized": "1.0.0.0-beta3",
         "source": {
             "type": "git",
-            "url": "https://git.drupal.org/project/video",
-            "reference": "8.x-1.2"
+            "url": "https://git.drupal.org/project/youtube",
+            "reference": "8.x-1.0-beta3"
         },
         "dist": {
             "type": "zip",
-            "url": "https://ftp.drupal.org/files/projects/video-8.x-1.2.zip",
+            "url": "https://ftp.drupal.org/files/projects/youtube-8.x-1.0-beta3.zip",
             "reference": null,
-            "shasum": "d0af8254ad0e3c496fda89d5b796d6fb86ebda7d"
+            "shasum": "bea118474961f0e89d3aae29a20e97c6bdb6128b"
         },
         "require": {
             "drupal/core": "*"
@@ -7459,9 +7459,8 @@
                 "dev-1.x": "1.x-dev"
             },
             "drupal": {
-                "version": "8.x-1.x",
-                "datestamp": "1455470039",
-                "package": "Field types"
+                "version": "8.x-1.0-beta3",
+                "datestamp": "1459452539"
             }
         },
         "installation-source": "dist",
@@ -7471,30 +7470,22 @@
         ],
         "authors": [
             {
-                "name": "Jorrit",
-                "homepage": "https://www.drupal.org/user/161217"
+                "name": "guschilds",
+                "homepage": "https://www.drupal.org/user/1468898"
             },
             {
-                "name": "abhishek-anand",
-                "homepage": "https://www.drupal.org/user/468982"
+                "name": "jenlampton",
+                "homepage": "https://www.drupal.org/user/85586"
             },
             {
-                "name": "brycefisherfleig",
-                "homepage": "https://www.drupal.org/user/1300764"
-            },
-            {
-                "name": "chaitanya17",
-                "homepage": "https://www.drupal.org/user/1998300"
-            },
-            {
-                "name": "heshanlk",
-                "homepage": "https://www.drupal.org/user/199102"
+                "name": "pferlito",
+                "homepage": "https://www.drupal.org/user/511172"
             }
         ],
-        "description": "Video module allows you to embedded videos from YouTube, Vimeo, Facebook, Vine etc (Drupal 8 only) and upload videos and play using HTML5 video player.",
-        "homepage": "https://www.drupal.org/project/video",
+        "description": "Defines a YouTube video and thumbnail field type.",
+        "homepage": "https://www.drupal.org/project/youtube",
         "support": {
-            "source": "http://cgit.drupalcode.org/video"
+            "source": "http://cgit.drupalcode.org/youtube"
         }
     }
 ]

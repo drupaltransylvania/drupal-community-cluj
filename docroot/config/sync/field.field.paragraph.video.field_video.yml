@@ -1,4 +1,4 @@
-uuid: c63aed72-29d4-4ae0-8071-0f2c498550c8
+uuid: 74f25729-3423-4c7e-b5a6-2de9b4816a2e
 langcode: en
 status: true
 dependencies:
@@ -6,7 +6,7 @@ dependencies:
     - field.storage.paragraph.field_video
     - paragraphs.paragraphs_type.video
   module:
-    - video
+    - youtube
 id: paragraph.video.field_video
 field_name: field_video
 entity_type: paragraph
@@ -17,10 +17,5 @@ required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
-settings:
-  file_extensions: ''
-  file_directory: 'videos/[date:custom:Y]-[date:custom:m]'
-  max_filesize: ''
-  handler: 'default:file'
-  handler_settings: {  }
-field_type: video
+settings: {  }
+field_type: youtube

@@ -1,4 +1,4 @@
-uuid: b686abdc-cce0-4791-a91e-096fab741cfc
+uuid: 24dfa648-7be9-4cd9-85b9-97583e8f9c61
 langcode: en
 status: true
 dependencies:
@@ -24,17 +24,17 @@ settings:
   handler: 'default:paragraph'
   handler_settings:
     target_bundles:
-      image: image
       text: text
+      image: image
       video: video
     target_bundles_drag_drop:
-      image:
-        enabled: true
-        weight: 4
       text:
         enabled: true
-        weight: 5
+        weight: -7
+      image:
+        enabled: true
+        weight: -6
       video:
         enabled: true
-        weight: 6
+        weight: -5
 field_type: entity_reference_revisions

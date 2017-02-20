@@ -1,4 +1,4 @@
-uuid: d717d5ba-7eab-4dc4-b605-92c0546d152a
+uuid: 1976c87b-d169-4798-9c83-6135761949ae
 langcode: en
 status: true
 dependencies:
@@ -6,7 +6,7 @@ dependencies:
     - field.field.paragraph.video.field_video
     - paragraphs.paragraphs_type.video
   module:
-    - video
+    - youtube
 id: paragraph.video.default
 targetEntityType: paragraph
 bundle: video
@@ -14,11 +14,17 @@ mode: default
 content:
   field_video:
     weight: 0
-    label: hidden
+    label: above
     settings:
-      width: '854'
-      height: '480'
-      autoplay: true
+      youtube_size: 450x315
+      youtube_width: ''
+      youtube_height: ''
+      youtube_autoplay: false
+      youtube_loop: false
+      youtube_showinfo: false
+      youtube_controls: false
+      youtube_autohide: false
+      youtube_iv_load_policy: false
     third_party_settings: {  }
-    type: video_embed_player
+    type: youtube_video
 hidden: {  }
