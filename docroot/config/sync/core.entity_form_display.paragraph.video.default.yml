@@ -1,4 +1,4 @@
-uuid: 112bb100-787f-4cb0-97a2-e7480bf387f4
+uuid: de3a5c1f-b663-4957-89fd-dee59491a197
 langcode: en
 status: true
 dependencies:
@@ -6,7 +6,7 @@ dependencies:
     - field.field.paragraph.video.field_video
     - paragraphs.paragraphs_type.video
   module:
-    - video
+    - youtube
 id: paragraph.video.default
 targetEntityType: paragraph
 bundle: video
@@ -14,13 +14,9 @@ mode: default
 content:
   field_video:
     weight: 0
-    settings:
-      file_directory: 'video-thumbnails/[date:custom:Y]-[date:custom:m]'
-      allowed_providers:
-        youtube: youtube
-      uri_scheme: public
+    settings: {  }
     third_party_settings: {  }
-    type: video_embed
+    type: youtube
 hidden:
   created: true
   status: true
