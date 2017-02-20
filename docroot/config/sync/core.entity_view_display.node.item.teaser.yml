@@ -4,7 +4,6 @@ status: false
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
-    - field.field.node.item.field_description
     - field.field.node.item.field_picture
     - node.type.item
   module:
@@ -17,5 +16,5 @@ content:
   links:
     weight: 100
 hidden:
-  field_description: true
+  addtoany: true
   field_picture: true

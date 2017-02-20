@@ -9,6 +9,7 @@ dependencies:
     - node.type.item
   module:
     - image
+    - text
     - user
 id: node.item.default
 targetEntityType: node
@@ -16,11 +17,11 @@ bundle: item
 mode: default
 content:
   field_description:
-    type: basic_string
-    weight: 0
+    weight: 1
     label: above
     settings: {  }
     third_party_settings: {  }
+    type: text_default
   field_picture:
     type: image
     weight: 0
@@ -30,4 +31,5 @@ content:
       image_link: ''
     third_party_settings: {  }
 hidden:
+  addtoany: true
   links: true
