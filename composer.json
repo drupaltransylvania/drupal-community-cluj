@@ -34,7 +34,8 @@
         "drupal/recaptcha": "^2.2",
         "drupal/eu_cookie_compliance": "1.0-beta7",
         "drupal/addtoany": "1.7",
-        "drupal/metatag": "1.0"
+        "drupal/metatag": "1.0",
+        "drupal/pathauto": "^1.0@RC"
     },
     "require-dev": {
         "behat/mink": "~1.7",
