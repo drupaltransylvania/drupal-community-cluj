@@ -76,3 +76,23 @@ a {
   float: right;
   margin-right: 4px;
 }
+
+.big-btn {
+  padding: 10px 20px;
+  background-color: $linkColor;
+  color: #FFF;
+  display: inline-block;
+  text-align: center;
+  font-size: $baseFontSize * 1.15;
+  font-weight: 600;
+  transition: background-color 0.15s, color 0.15s;
+
+  &:hover {
+    background-color: scale_color($linkColor, lightness, 15%);
+    color: mix($linkColor, #FFF, 5%);
+  }
+
+  &.full-width {
+    display: block;
+  }
+}
