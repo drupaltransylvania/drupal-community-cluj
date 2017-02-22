@@ -13,13 +13,10 @@ use Drupal\dcc_gtd_registration\Form\GlobalTrainingRegistrationForm;
  * {@inheritdoc}
  */
 function dcc_email_mail($key, &$message, $params) {
-  switch ($key) {
-    case GlobalTrainingRegistrationForm::GLOBAL_TRAINING_REGISTRATION_EMAIL_KEY:
-      /* @var \Drupal\dcc_email\EmailFormatter $formatter */
-      $formatter = \Drupal::service('dcc_email.email_formatter');
-
-      $message = $formatter->format($key, $message, $params);
-      break;
+  $formatter = \Drupal::service('dcc_email.email_factory');
+  $formatterService = $formatter->getEmail($key, $message, $params);
+  if (!empty($formatterService)) {
+    $message = $formatterService->formatMessage($message, $params);
   }
 }
 
@@ -34,6 +31,9 @@ function dcc_email_theme($existing, $type, $theme, $path) {
       'variables' => [
         'first_name' => NULL,
         'last_name' => NULL,
+        'logo_url' => NULL,
+        'big_image_url' => NULL,
+        'left_image_url' => NULL,
         'activation_link' => NULL,
         'cancel_link' => NULL,
       ],

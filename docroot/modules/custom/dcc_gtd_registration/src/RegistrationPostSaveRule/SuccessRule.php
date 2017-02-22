@@ -189,6 +189,12 @@ class SuccessRule implements RegistrationPostSaveRule {
       'first_name' => $formState->get('first_name'),
       'last_name' => $formState->get('last_name'),
     ];
+    $logoImageFile = file_get_contents("themes/custom/dcc_theme/image/logo.png");
+    $bigImageFile = file_get_contents("themes/custom/dcc_theme/image/bigimage.png");
+    $leftImageFile = file_get_contents("themes/custom/dcc_theme/image/left-image.png");
+    $params['registration_info']['logo_url'] = base64_encode($logoImageFile);
+    $params['registration_info']['big_image_url'] = base64_encode($bigImageFile);
+    $params['registration_info']['left_image_url'] = base64_encode($leftImageFile);
 
     return $params;
   }

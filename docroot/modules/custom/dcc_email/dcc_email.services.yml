@@ -1,3 +1,11 @@
 services:
   dcc_email.email_formatter:
-    class: Drupal\dcc_email\EmailFormatter
+    class: Drupal\dcc_email\EmailFormater
+  dcc_email.success_email_formatter:
+    class: Drupal\dcc_email\SuccessRegisterFormatter
+  dcc_email.reminder_email_formatter:
+    class: Drupal\dcc_email\ReminderEmailFormatter
+  dcc_email.waiting_list_formatter:
+    class: Drupal\dcc_email\WaitingListFormatter
+  dcc_email.email_factory:
+    class: Drupal\dcc_email\EmailFactory
