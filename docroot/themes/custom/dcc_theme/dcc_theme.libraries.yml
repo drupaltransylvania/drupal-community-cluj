@@ -1,9 +1,12 @@
 global-styling:
   version: 1.x
   css:
+    component:
+      css/components/field.css: {}
     theme:
       css/base.css: {}
       css/components/cookie.css: {}
+      css/components/addtoany.css: {}
   dependencies:
     - businessgroup_zymphonies_theme/bootstrap
     - businessgroup_zymphonies_theme/global-components

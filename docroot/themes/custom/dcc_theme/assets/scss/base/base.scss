@@ -1,21 +1,35 @@
+@import "../_variables.scss";
+
 body {
-  font-size: 17px;
+  font-size: $baseFontSize;
+}
+
+h1, .h2 {
+  font-size: $baseFontSize * 1.8;
 }
 
 h2, .h2 {
-  font-size: 22px;
+  font-size: $baseFontSize * 1.4;
+}
+
+a {
+  transition: color 0.14s;
+
+  &:hover {
+    color: darken($linkColor, 13%);
+  }
 }
 
 .breadcrumb {
-  font-size: 15px;
+  font-size: $baseFontSize * 0.93;
 }
 
 .copyright, .form-item .description {
-  font-size: 14px;
+  font-size: $baseFontSize * 0.90;
 }
 
 .comment-submitted {
-  font-size: 13px;
+  font-size: $baseFontSize * 0.88;
 }
 
 @media (min-width: 992px) {
