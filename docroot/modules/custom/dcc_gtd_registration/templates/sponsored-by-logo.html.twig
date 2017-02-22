@@ -1,4 +1,10 @@
 <div>
   Sponsored By:
-  {{ link(children, link, {'target': '_blank'}) }}
+  {% if link %}
+  <a href="{{ link }}" target="_blank">
+    {{ children }}
+  </a>
+  {% else %}
+    {{ children }}
+  {% endif %}
 </div>
