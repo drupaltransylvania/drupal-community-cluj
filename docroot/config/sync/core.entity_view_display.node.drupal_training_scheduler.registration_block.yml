@@ -13,12 +13,12 @@ dependencies:
     - field.field.node.drupal_training_scheduler.field_number_of_members
     - field.field.node.drupal_training_scheduler.field_registration_period
     - field.field.node.drupal_training_scheduler.field_saturday_schedule
+    - field.field.node.drupal_training_scheduler.field_scheduler_description
     - field.field.node.drupal_training_scheduler.field_training_date
     - field.field.node.drupal_training_scheduler.field_website_link
     - node.type.drupal_training_scheduler
   module:
     - dcc_gtd_registration
-    - image
     - user
 id: node.drupal_training_scheduler.registration_block
 targetEntityType: node
@@ -38,7 +38,7 @@ content:
       image_style: ''
       image_link: ''
     third_party_settings: {  }
-    type: image
+    type: sponsored_by_image_field_formatter
   field_training_date:
     weight: 0
     label: hidden
@@ -57,5 +57,6 @@ hidden:
   field_number_of_members: true
   field_registration_period: true
   field_saturday_schedule: true
+  field_scheduler_description: true
   field_website_link: true
   links: true

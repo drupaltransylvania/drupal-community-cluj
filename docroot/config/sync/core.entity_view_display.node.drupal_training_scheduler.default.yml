@@ -18,9 +18,8 @@ dependencies:
     - node.type.drupal_training_scheduler
   module:
     - datetime_range
+    - dcc_gtd_registration
     - google_map_field
-    - image
-    - link
     - text
     - user
 id: node.drupal_training_scheduler.default
@@ -29,7 +28,7 @@ bundle: drupal_training_scheduler
 mode: default
 content:
   addtoany:
-    weight: 9
+    weight: 10
     settings: {  }
     third_party_settings: {  }
   body:
@@ -39,14 +38,14 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_company_name:
-    weight: 10
+    weight: 8
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
     type: string
   field_friday_schedule:
-    weight: 7
+    weight: 6
     label: above
     settings: {  }
     third_party_settings: {  }
@@ -58,21 +57,13 @@ content:
     third_party_settings: {  }
     type: google_map_field_default
   field_logo:
-    weight: 11
-    label: above
+    weight: 9
+    label: hidden
     settings:
       image_style: ''
-      image_link: ''
+      image_link: field_website_link
     third_party_settings: {  }
-    type: image
-  field_number_of_members:
-    weight: 5
-    label: above
-    settings:
-      thousand_separator: ''
-      prefix_suffix: true
-    third_party_settings: {  }
-    type: number_integer
+    type: sponsored_by_image_field_formatter
   field_registration_period:
     weight: 3
     label: above
@@ -83,13 +74,13 @@ content:
     third_party_settings: {  }
     type: daterange_default
   field_saturday_schedule:
-    weight: 8
+    weight: 7
     label: above
     settings: {  }
     third_party_settings: {  }
     type: text_default
   field_scheduler_description:
-    weight: 6
+    weight: 5
     label: above
     settings: {  }
     third_party_settings: {  }
@@ -103,20 +94,11 @@ content:
       timezone_override: ''
     third_party_settings: {  }
     type: daterange_default
-  field_website_link:
-    weight: 12
-    label: above
-    settings:
-      trim_length: 80
-      url_only: false
-      url_plain: false
-      rel: ''
-      target: ''
-    third_party_settings: {  }
-    type: link
   links:
     weight: 0
     settings: {  }
     third_party_settings: {  }
 hidden:
   field_metatag_image: true
+  field_number_of_members: true
+  field_website_link: true
