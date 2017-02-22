@@ -1,3 +1,23 @@
+body {
+  font-size: 17px;
+}
+
+h2, .h2 {
+  font-size: 22px;
+}
+
+.breadcrumb {
+  font-size: 15px;
+}
+
+.copyright, .form-item .description {
+  font-size: 14px;
+}
+
+.comment-submitted {
+  font-size: 13px;
+}
+
 @media (min-width: 992px) {
   .col-md-3 {
     width: 30%;
