@@ -1,0 +1,24 @@
+#sliding-popup .popup-content div#popup-text h2 {
+    font-size: 18px;
+    vertical-align: middle;
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+#sliding-popup .popup-content #popup-text a {
+    color: lightblue;
+    font-weight: bold;
+}
+
+#sliding-popup .popup-content #popup-text a:hover {
+    text-decoration: underline;
+    color: white;
+}
+
+#sliding-popup .popup-content #popup-buttons .agree-button, #sliding-popup
+.popup-content #popup-buttons .agree-button:hover {
+    vertical-align: middle;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    color: rgb(43, 130, 172);
+}

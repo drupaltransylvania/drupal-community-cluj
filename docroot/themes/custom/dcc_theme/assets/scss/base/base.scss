@@ -1,0 +1,64 @@
+body {
+  font-size: 17px;
+}
+
+h2, .h2 {
+  font-size: 22px;
+}
+
+.breadcrumb {
+  font-size: 15px;
+}
+
+.copyright, .form-item .description {
+  font-size: 14px;
+}
+
+.comment-submitted {
+  font-size: 13px;
+}
+
+@media (min-width: 992px) {
+  .col-md-3 {
+    width: 30%;
+  }
+
+  .col-md-9 {
+    width: 70%;
+  }
+}
+
+.region-header .site-name {
+  padding-top: 4px;
+  max-width: 200px;
+  line-height: 140%;
+}
+
+.region-header .logo img {
+  min-width: 40px;
+}
+
+.js-form-type-radio > label,
+.js-form-type-checkbox > label {
+  display: inline;
+}
+
+.dcc-training-start .form-item-training-start-date-date,
+.dcc-training-start .form-item-training-start-date-time,
+.dcc-training-end .form-item-training-end-date-date,
+.dcc-training-end .form-item-training-end-date-time {
+  display: inline;
+}
+
+.main-header nav {
+  z-index: 500;
+}
+
+.next-btn {
+  float: right;
+}
+
+.back-btn {
+  float: right;
+  margin-right: 4px;
+}
