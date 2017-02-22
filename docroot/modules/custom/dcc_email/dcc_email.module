@@ -15,7 +15,9 @@ use Drupal\dcc_gtd_registration\Form\GlobalTrainingRegistrationForm;
 function dcc_email_mail($key, &$message, $params) {
   $formatter = \Drupal::service('dcc_email.email_factory');
   $formatterService = $formatter->getEmail($key, $message, $params);
-  $message = $formatterService->formatMessage($message, $params);
+  if (!empty($formatterService)) {
+    $message = $formatterService->formatMessage($message, $params);
+  }
 }
 
 /**
