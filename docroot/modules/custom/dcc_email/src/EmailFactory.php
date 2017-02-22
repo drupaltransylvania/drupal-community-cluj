@@ -21,18 +21,21 @@ class EmailFactory extends EmailFormater {
    * @param string $params
    *   The parameters for email.
    *
-   * @return mixed
+   * @return FormatterInterface
    *   Returns the message.
    */
-  public function getEmail($key, $message, $params) {
+  public static function getEmail($key, $message, $params) {
     switch ($key) {
       case GlobalTrainingRegistrationForm::GLOBAL_TRAINING_REGISTRATION_EMAIL_KEY:
-        $formater = \Drupal::service('dcc_email.success_email_formatter');
-        $message['body'][] = $formater->formatMessage($message, $params);
-        break;
-    }
+        return \Drupal::service('dcc_email.success_email_formatter');
 
-    return $message;
+      break;
+
+      default:
+        return NULL;
+      break;
+
+    }
   }
 
 }

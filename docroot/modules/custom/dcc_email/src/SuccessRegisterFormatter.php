@@ -24,18 +24,23 @@ class SuccessRegisterFormatter extends EmailFormater {
    * @return mixed
    *   Returns the formatted message.
    */
-  public function formatMessage($message, $params) {
-
-    parent::formatMessage($message, $params);
+  public function formatMessage(string $message, string $params) {
     $renderArray = [
       '#theme' => GlobalTrainingRegistrationForm::GLOBAL_TRAINING_REGISTRATION_EMAIL_KEY,
       '#first_name' => $params['registration_info']['first_name'],
       '#last_name' => $params['registration_info']['last_name'],
+      '#logo_url' => $params['registration_info']['logo_url'],
+      '#big_image_url' => $params['registration_info']['big_image_url'],
+      '#left_image_url' => $params['registration_info']['left_image_url'],
       '#activation_link' => $params['registration_status_links']['activation_link'],
       '#cancel_link' => $params['registration_status_links']['cancel_link'],
     ];
 
-    return $this->renderer()->render($renderArray);
+    $message['body'][] = $this->renderer()->render($renderArray);
+    $message = $this->changeContentType($message, 'text/html');
+
+    return $message;
+
   }
 
   /**

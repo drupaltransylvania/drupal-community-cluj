@@ -7,12 +7,62 @@ namespace Drupal\dcc_email;
  *
  * @package Drupal\dcc_email
  */
-class EmailFormater {
+class EmailFormater implements FormatterInterface {
+
+  /**
+   * The email sender.
+   *
+   * @var from
+   */
   private $from;
+
+  /**
+   * The email subject.
+   *
+   * @var subject
+   */
   private $subject;
+
+  /**
+   * The email body.
+   *
+   * @var body
+   */
   private $body;
+
+  /**
+   * The email parameters.
+   *
+   * @var param
+   */
   private $param;
-  private $encryption;
+
+  /**
+   * The email content type.
+   *
+   * @var contentType
+   */
+  private $contentType;
+
+  /**
+   * Returns the email content type.
+   *
+   * @return mixed
+   *   The content type.
+   */
+  public function getContentType() {
+    return $this->contentType;
+  }
+
+  /**
+   * Sets the email content type.
+   *
+   * @param mixed $contentType
+   *   The email content type.
+   */
+  public function setContentType($contentType) {
+    $this->contentType = $contentType;
+  }
 
   /**
    * Returns the email subject.
@@ -95,42 +145,38 @@ class EmailFormater {
   }
 
   /**
-   * Returns the email encryption.
-   *
-   * @return mixed
-   *   The email encryption.
-   */
-  public function getEncryption() {
-    return $this->encryption;
-  }
-
-  /**
-   * Sets the email encryption.
-   *
-   * @param mixed $encryption
-   *   The email encryption.
-   */
-  public function setEncryption($encryption) {
-    $this->encryption = $encryption;
-  }
-
-  /**
    * Creates the message for email.
    *
    * @param string $message
    *   The message of the email.
    * @param string $params
    *   The parameters of the email.
-   *
-   * @return string
-   *   Returns the formatted email.
    */
-  public function formatMessage($message, $params) {
+  public function formatMessage(string $message, string $params) {
     $this->setFrom($message['from']);
     $this->setSubject($message['subject']);
     $this->setBody($message['body']);
     $this->setParam($params);
-    $this->setEncryption("text/html");
+    $this->setContentType("text/html");
+  }
+
+  /**
+   * Changes the content type of the email.
+   *
+   * @param string $message
+   *   The email message.
+   * @param string $newContentType
+   *   The new content type of the email.
+   *
+   * @return mixed
+   *   Returns the message.
+   */
+  protected function changeContentType(string $message, string $newContentType) {
+    $contentType = $message['headers']['Content-Type'];
+    $contentTypeArray = explode(';', $contentType);
+    $contentTypeArray[0] = $newContentType;
+
+    $message['headers']['Content-Type'] = implode(';', $contentTypeArray);
 
     return $message;
   }
