@@ -10,3 +10,9 @@ global-styling:
   dependencies:
     - businessgroup_zymphonies_theme/bootstrap
     - businessgroup_zymphonies_theme/global-components
+
+node--drupal-training-scheduler:
+  version: 1.x
+  css:
+    theme:
+      css/content/drupal-training-scheduler.css: {}

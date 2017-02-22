@@ -26,6 +26,7 @@ var sources = {
         root : './docroot/themes/custom/dcc_theme/',
         scss : {
             'components/*' : 'components/*',
+            'content/*' : 'content/*',
             'base/*' : 'base.css',
         }
     }
