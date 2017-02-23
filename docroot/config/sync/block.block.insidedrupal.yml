@@ -1,0 +1,25 @@
+uuid: 2ee3a187-0bef-45b9-a9a1-b16a60261de2
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:4065e6d0-57d7-4120-90bc-c5012ca7dac2'
+  module:
+    - block_content
+  theme:
+    - dcc_theme
+id: insidedrupal
+theme: dcc_theme
+region: bottom_second
+weight: 0
+provider: null
+plugin: 'block_content:4065e6d0-57d7-4120-90bc-c5012ca7dac2'
+settings:
+  id: 'block_content:4065e6d0-57d7-4120-90bc-c5012ca7dac2'
+  label: 'Inside Drupal'
+  provider: block_content
+  label_display: visible
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }
