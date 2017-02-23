@@ -122,6 +122,11 @@ AddEncoding gzip svgz
   # uncomment the following line:
   # RewriteBase /
 
+  # Redirect all request came from https://drupalcluj.ro to
+  # https://www.drupalcluj.ro
+  RewriteCond %{HTTP_HOST} !^www\.* [NC]
+  RewriteRule ^/?(.*) http://www.%{HTTP_HOST}/$1 [L,R,NE]
+
   # Redirect common PHP files to their new locations.
   RewriteCond %{REQUEST_URI} ^(.*)?/(install.php) [OR]
   RewriteCond %{REQUEST_URI} ^(.*)?/(rebuild.php)

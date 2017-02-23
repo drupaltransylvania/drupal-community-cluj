@@ -1,9 +1,4 @@
-#sliding-popup .popup-content div#popup-text h2 {
-    font-size: 18px;
-    vertical-align: middle;
-    margin-top: 25px;
-    margin-bottom: 25px;
-}
+@import "../variables";
 
 #sliding-popup .popup-content #popup-text a {
     color: lightblue;
@@ -18,7 +13,35 @@
 #sliding-popup .popup-content #popup-buttons .agree-button, #sliding-popup
 .popup-content #popup-buttons .agree-button:hover {
     vertical-align: middle;
-    margin-top: 25px;
-    margin-bottom: 25px;
     color: rgb(43, 130, 172);
+}
+
+#sliding-popup .popup-content.info {
+    display: table;
+    height: 100%;
+
+    h2 {
+        font-size: $baseFontSize * 1.05;
+    }
+
+    @media (max-width: 750px) {
+        h2, button {
+            font-size: $baseFontSize * 0.85 !important;
+        }
+    }
+
+    > div {
+        display: table-cell;
+        vertical-align: middle;
+        height: 100%;
+        float: none !important;
+
+        > h2, > button {
+            margin: 0 !important;
+        }
+
+        &:last-child {
+            min-width: 30%;
+        }
+    }
 }
