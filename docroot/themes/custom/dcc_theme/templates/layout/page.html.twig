@@ -58,345 +58,349 @@
  */
 #}
 
-
-<!-- Header and Navbar -->
-<header class="main-header">
-  <nav class="navbar topnav navbar-default" role="navigation">
-    <div class="container">
-      <div class="row">
-      <div class="navbar-header col-md-3">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navigation">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        {% if page.header %}
-          {{ page.header }}
-        {% endif %}
-      </div>
-
-      <!-- Navigation -->
-      <div class="col-md-9">
-        {% if page.primary_menu %}
-          {{ page.primary_menu }}
-        {% endif %}      
-      </div>
-      <!--End Navigation -->
-
-      </div>
-    </div>
-  </nav>
-
-  <!-- Banner -->
-  {% if is_front and page.slideshow %}  
-    <div class="container slideshow">
-      <div class="row">
-        <div class="col-md-12">
-            {{ page.slideshow }}
-        </div>
-      </div>
-    </div>
-  {% endif %}
-  <!-- End Banner -->
-
-</header>
-<!--End Header & Navbar -->
-
-
-<!--Search-->
-  {% if is_front and page.search %}
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          {{ page.search }}
-        </div>
-      </div>
-    </div>
-  {% endif %}
-<!--End Search-->
-
-
-<!--Highlighted-->
-  {% if page.highlighted %}
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          {{ page.highlighted }}
-        </div>
-      </div>
-    </div>
-  {% endif %}
-<!--End Highlighted-->
-
-
-<!-- Start Top Widget -->
-{% if is_front %}  
-  {% if page.topwidget_first or page.topwidget_second or page.topwidget_third %}
-    <div class="topwidget">
-      <!-- start: Container -->
-      <div class="container">
-        
-        <div class="row">
-          <!-- Top widget first region -->
-          <div class = {{ topwidget_class }}>
-            {% if page.topwidget_first %}
-              {{ page.topwidget_first }}
+<div class="main-wrapper">
+  <div class="content-wrapper">
+    <!-- Header and Navbar -->
+    <header class="main-header">
+      <nav class="navbar topnav navbar-default" role="navigation">
+        <div class="container">
+          <div class="row">
+          <div class="navbar-header col-md-3">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navigation">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            {% if page.header %}
+              {{ page.header }}
             {% endif %}
           </div>
-          <!-- End top widget third region -->
-          <!-- Top widget second region -->
-          <div class = {{ topwidget_class }}>
-            {% if page.topwidget_second %}
-              {{ page.topwidget_second }}
+
+          <!-- Navigation -->
+          <div class="col-md-9">
+            {% if page.primary_menu %}
+              {{ page.primary_menu }}
             {% endif %}
           </div>
-          <!-- End top widget third region -->
-          <!-- Top widget third region -->
-          <div class = {{ topwidget_third_class }}>
-            {% if page.topwidget_third %}
-              {{ page.topwidget_third }}
-            {% endif %}
+          <!--End Navigation -->
+
           </div>
-          <!-- End top widget third region -->
         </div>
-      </div>
-    </div>
-  {% endif %}
-{% endif %}
-<!--End Top Widget -->
+      </nav>
 
-
-<!-- Page Title -->
-{%  if page.page_title and not is_front %}
-  <div id="page-title">
-    <div id="page-title-inner">
-      <!-- start: Container -->
-      <div class="container">
-        {{ page.page_title }}
-      </div>
-    </div>
-  </div>
-{% endif %}
-<!-- End Page Title ---- >
-
-
-<!-- layout -->
-<div id="wrapper">
-  <!-- start: Container -->
-  <div class="container">
-    
-    <!--Content top-->
-      {% if page.content_top %}
-        <div class="row">
-          {{ page.content_top }}
-        </div>
-      {% endif %}
-    <!--End Content top-->
-    
-    <!--start:content -->
-    <div class="row">
-      <div class="col-md-12">{{ page.breadcrumb }}</div>
-    </div>
-
-    <div class="row layout">
-      <!--- Start Left SideBar -->
-      {% if page.sidebar_first %}
-        <div class="sidebar" >
-          <div class = {{sidebarfirst}} >
-            {{ page.sidebar_first }}
+      <!-- Banner -->
+      {% if is_front and page.slideshow %}
+        <div class="container slideshow">
+          <div class="row">
+            <div class="col-md-12">
+                {{ page.slideshow }}
+            </div>
           </div>
         </div>
       {% endif %}
-      <!---End Right SideBar -->
+      <!-- End Banner -->
 
-      <!--- Start content -->
-      {% if page.content %}
-        <div class="content_layout">
-          <div class={{contentlayout}}>
-            {{ page.content }}
+    </header>
+    <!--End Header & Navbar -->
+
+
+    <!--Search-->
+      {% if is_front and page.search %}
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              {{ page.search }}
+            </div>
           </div>
         </div>
       {% endif %}
-      <!---End content -->
+    <!--End Search-->
 
-      <!--- Start Right SideBar -->
-      {% if page.sidebar_second %}
-        <div class="sidebar">
-          <div class={{sidebarsecond}}>
-            {{ page.sidebar_second }}
+
+    <!--Highlighted-->
+      {% if page.highlighted %}
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              {{ page.highlighted }}
+            </div>
           </div>
         </div>
       {% endif %}
-      <!---End Right SideBar -->
-      
-    </div>
-    <!--End Content -->
+    <!--End Highlighted-->
 
-    <!--Start Content Bottom-->
-    {% if page.content_bottom %}
-      <div class="row">
-        {{ page.content_bottom }}
+
+    <!-- Start Top Widget -->
+    {% if is_front %}
+      {% if page.topwidget_first or page.topwidget_second or page.topwidget_third %}
+        <div class="topwidget">
+          <!-- start: Container -->
+          <div class="container">
+
+            <div class="row">
+              <!-- Top widget first region -->
+              <div class = {{ topwidget_class }}>
+                {% if page.topwidget_first %}
+                  {{ page.topwidget_first }}
+                {% endif %}
+              </div>
+              <!-- End top widget third region -->
+              <!-- Top widget second region -->
+              <div class = {{ topwidget_class }}>
+                {% if page.topwidget_second %}
+                  {{ page.topwidget_second }}
+                {% endif %}
+              </div>
+              <!-- End top widget third region -->
+              <!-- Top widget third region -->
+              <div class = {{ topwidget_third_class }}>
+                {% if page.topwidget_third %}
+                  {{ page.topwidget_third }}
+                {% endif %}
+              </div>
+              <!-- End top widget third region -->
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    {% endif %}
+    <!--End Top Widget -->
+
+
+    <!-- Page Title -->
+    {%  if page.page_title and not is_front %}
+      <div id="page-title">
+        <div id="page-title-inner">
+          <!-- start: Container -->
+          <div class="container">
+            {{ page.page_title }}
+          </div>
+        </div>
       </div>
     {% endif %}
-    <!--End Content Bottom-->
-  </div>
-</div>
-<!-- End layout -->
+    <!-- End Page Title ---- >
 
 
-
-<!-- start: Footer -->
-{% if  is_front and (page.footer_first or page.footer_second or page.footer_third) %}
-  <div class="footerwidget">
-    <div class="container">
-      
-      <div class="row">
-
-        <!-- Start Footer First Region -->
-        <div class = {{ footer_first_class }}>
-          {% if page.footer_first %}
-            {{ page.footer_first }}
-          {% endif %}
-        </div>
-        <!-- End Footer First Region -->
-
-        <!-- Start Footer Second Region -->
-        <div class = {{ footer_class }}>
-          {% if page.footer_second %}
-            {{ page.footer_second }}
-          {% endif %}
-        </div>
-        <!-- End Footer Second Region -->
-
-        <!-- Start Footer third Region -->
-        <div class = {{ footer_class }}>
-          {% if page.footer_third %}
-            {{ page.footer_third }}
-          {% endif %}
-        </div>
-        <!-- End Footer Third Region -->
-      </div>
-    </div>
-  </div>
-{% endif %}
-<!--End Footer -->
-
-
-
-<!-- Start bottom -->
-{% if is_front %}  
-  {% if page.bottom_first or page.bottom_second or page.bottom_third %}
-    <div class="bottom-widgets">
-      <!-- Start Container -->
+    <!-- layout -->
+    <div id="wrapper">
+      <!-- start: Container -->
       <div class="container">
-        
+
+        <!--Content top-->
+          {% if page.content_top %}
+            <div class="row">
+              {{ page.content_top }}
+            </div>
+          {% endif %}
+        <!--End Content top-->
+
+        <!--start:content -->
         <div class="row">
+          <div class="col-md-12">{{ page.breadcrumb }}</div>
+        </div>
 
-          <!-- Start Bottom First Region -->
-          <div class = {{ bottom_class }}>
-            {% if page.bottom_first %}
-              {{ page.bottom_first }}
-            {% endif %}
-          </div>
-          <!-- End Bottom First Region -->
+        <div class="row layout">
+          <!--- Start Left SideBar -->
+          {% if page.sidebar_first %}
+            <div class="sidebar" >
+              <div class = {{sidebarfirst}} >
+                {{ page.sidebar_first }}
+              </div>
+            </div>
+          {% endif %}
+          <!---End Right SideBar -->
 
-          <!-- Start Bottom Second Region -->
-          <div class = {{ bottom_class }}>
-            {% if page.bottom_second %}
-              {{ page.bottom_second }}
-            {% endif %}
-          </div>
-          <!-- End Bottom Second Region -->
+          <!--- Start content -->
+          {% if page.content %}
+            <div class="content_layout">
+              <div class={{contentlayout}}>
+                {{ page.content }}
+              </div>
+            </div>
+          {% endif %}
+          <!---End content -->
 
-          <!-- Start Bottom third Region -->
-          <div class = {{ bottom_class }}>
-            {% if page.bottom_third %}
-              {{ page.bottom_third }}
-            {% endif %}
-          </div>
-          <!-- End Bottom Third Region -->
-
-          <div class = {{ bottom_class }}>
-            {% if page.bottom_forth %}
-              {{ page.bottom_forth }}
-            {% endif %}
-          </div>
+          <!--- Start Right SideBar -->
+          {% if page.sidebar_second %}
+            <div class="sidebar">
+              <div class={{sidebarsecond}}>
+                {{ page.sidebar_second }}
+              </div>
+            </div>
+          {% endif %}
+          <!---End Right SideBar -->
 
         </div>
-      </div>
-    </div>
-  {% endif %}
-{% endif %}
-<!--End Bottom -->
+        <!--End Content -->
 
-
-<!-- Start Footer Menu -->
-{% if page.footer_menu %}
-  <div class="footer-menu">
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-6">
-          {{ page.footer_menu }}
-        </div>
-        {% if show_social_icon %}
-        <div class="col-sm-6">
-          <div class="social-media">
-            {% if facebook_url %}
-              <a href="{{ facebook_url }}"  class="facebook" target="_blank" ><i class="fa fa-facebook"></i></a>
-            {% endif %}
-            {% if google_plus_url %}
-              <a href="{{ google_plus_url }}"  class="google-plus" target="_blank" ><i class="fa fa-google-plus"></i></a>
-            {% endif %}
-            {% if twitter_url %}
-              <a href="{{ twitter_url }}" class="twitter" target="_blank" ><i class="fa fa-twitter"></i></a>
-            {% endif %}
-            {% if linkedin_url %}
-              <a href="{{ linkedin_url }}" class="linkedin" target="_blank"><i class="fa fa-linkedin"></i></a>
-            {% endif %}
-            {% if pinterest_url %}
-              <a href="{{ pinterest_url }}" class="pinterest" target="_blank" ><i class="fa fa-pinterest"></i></a>
-            {% endif %}
-            {% if rss_url %}
-              <a href="{{ rss_url }}" class="rss" target="_blank" ><i class="fa fa-rss"></i></a>
-            {% endif %}
+        <!--Start Content Bottom-->
+        {% if page.content_bottom %}
+          <div class="row">
+            {{ page.content_bottom }}
           </div>
-        </div>
         {% endif %}
+        <!--End Content Bottom-->
       </div>
     </div>
+    <!-- End layout -->
   </div>
-{% endif %}
-<!-- End Footer Menu -->
 
 
-<div class="copyright">
-  <div class="container">
-    <div class="row">
+  <div class="footer-wrapper">
+    <!-- start: Footer -->
+    {% if  is_front and (page.footer_first or page.footer_second or page.footer_third) %}
+      <div class="footerwidget">
+        <div class="container">
 
-      <!-- Copyright -->
-      <div class="col-sm-6">
-        <p>Copyright © {{ "now"|date("Y") }}. All rights reserved</p>
+          <div class="row">
+
+            <!-- Start Footer First Region -->
+            <div class = {{ footer_first_class }}>
+              {% if page.footer_first %}
+                {{ page.footer_first }}
+              {% endif %}
+            </div>
+            <!-- End Footer First Region -->
+
+            <!-- Start Footer Second Region -->
+            <div class = {{ footer_class }}>
+              {% if page.footer_second %}
+                {{ page.footer_second }}
+              {% endif %}
+            </div>
+            <!-- End Footer Second Region -->
+
+            <!-- Start Footer third Region -->
+            <div class = {{ footer_class }}>
+              {% if page.footer_third %}
+                {{ page.footer_third }}
+              {% endif %}
+            </div>
+            <!-- End Footer Third Region -->
+          </div>
+        </div>
       </div>
-      <!-- End Copyright -->
+    {% endif %}
+    <!--End Footer -->
 
-      <!-- Credit link -->
-      {% if show_credit_link %}
-        <div class="col-sm-6">
-          <p class="credit-link">Designed By <a href="http://www.zymphonies.com" target="_blank">Zymphonies</a></p>
+
+
+    <!-- Start bottom -->
+    {% if is_front %}
+      {% if page.bottom_first or page.bottom_second or page.bottom_third %}
+        <div class="bottom-widgets">
+          <!-- Start Container -->
+          <div class="container">
+
+            <div class="row">
+
+              <!-- Start Bottom First Region -->
+              <div class = {{ bottom_class }}>
+                {% if page.bottom_first %}
+                  {{ page.bottom_first }}
+                {% endif %}
+              </div>
+              <!-- End Bottom First Region -->
+
+              <!-- Start Bottom Second Region -->
+              <div class = {{ bottom_class }}>
+                {% if page.bottom_second %}
+                  {{ page.bottom_second }}
+                {% endif %}
+              </div>
+              <!-- End Bottom Second Region -->
+
+              <!-- Start Bottom third Region -->
+              <div class = {{ bottom_class }}>
+                {% if page.bottom_third %}
+                  {{ page.bottom_third }}
+                {% endif %}
+              </div>
+              <!-- End Bottom Third Region -->
+
+              <div class = {{ bottom_class }}>
+                {% if page.bottom_forth %}
+                  {{ page.bottom_forth }}
+                {% endif %}
+              </div>
+
+            </div>
+          </div>
         </div>
       {% endif %}
-      <!-- End Credit link -->
-      
+    {% endif %}
+    <!--End Bottom -->
+
+
+    <!-- Start Footer Menu -->
+    {% if page.footer_menu %}
+      <div class="footer-menu">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-6">
+              {{ page.footer_menu }}
+            </div>
+            {% if show_social_icon %}
+            <div class="col-sm-6">
+              <div class="social-media">
+                {% if facebook_url %}
+                  <a href="{{ facebook_url }}"  class="facebook" target="_blank" ><i class="fa fa-facebook"></i></a>
+                {% endif %}
+                {% if google_plus_url %}
+                  <a href="{{ google_plus_url }}"  class="google-plus" target="_blank" ><i class="fa fa-google-plus"></i></a>
+                {% endif %}
+                {% if twitter_url %}
+                  <a href="{{ twitter_url }}" class="twitter" target="_blank" ><i class="fa fa-twitter"></i></a>
+                {% endif %}
+                {% if linkedin_url %}
+                  <a href="{{ linkedin_url }}" class="linkedin" target="_blank"><i class="fa fa-linkedin"></i></a>
+                {% endif %}
+                {% if pinterest_url %}
+                  <a href="{{ pinterest_url }}" class="pinterest" target="_blank" ><i class="fa fa-pinterest"></i></a>
+                {% endif %}
+                {% if rss_url %}
+                  <a href="{{ rss_url }}" class="rss" target="_blank" ><i class="fa fa-rss"></i></a>
+                {% endif %}
+              </div>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+    <!-- End Footer Menu -->
+
+
+    <div class="copyright">
+      <div class="container">
+        <div class="row">
+
+          <!-- Copyright -->
+          <div class="col-sm-6">
+            <p>Copyright © {{ "now"|date("Y") }}. All rights reserved</p>
+          </div>
+          <!-- End Copyright -->
+
+          <!-- Credit link -->
+          {% if show_credit_link %}
+            <div class="col-sm-6">
+              <p class="credit-link">Designed By <a href="http://www.zymphonies.com" target="_blank">Zymphonies</a></p>
+            </div>
+          {% endif %}
+          <!-- End Credit link -->
+
+        </div>
+      </div>
     </div>
+
+
+    <!-- Google map -->
+    {% if is_front and page.google_map %}
+      <div class="google_map">
+        {{ page.google_map }}
+      </div>
+    {% endif %}
+    <!-- End Google map -->
   </div>
 </div>
-
-
-<!-- Google map -->
-{% if is_front and page.google_map %}
-  <div class="google_map">
-    {{ page.google_map }}
-  </div>
-{% endif %}
-<!-- End Google map -->
