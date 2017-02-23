@@ -42,6 +42,26 @@ a {
   }
 }
 
+@media (max-width: 767px) {
+  .menu-base-theme {
+    li a {
+      color: $baseFontColor;
+      background-color: #EEE;
+      margin-bottom: 1px;
+
+      &:hover, &:active {
+        color: #444;
+        background-color: #DFDFDF;
+      }
+
+      &.is-active {
+        background-color: $linkColor;
+        color: #FFF;
+      }
+    }
+  }
+}
+
 .region-header .site-name {
   padding-top: 4px;
   max-width: 200px;
