@@ -7,5 +7,13 @@ _core:
 id: front
 label: 'Front page'
 tags:
-  canonical_url: '[site:url]'
+  title: 'Drupal Community Cluj-Napoca'
+  keywords: 'Drupal, Cluj-Napoca, Cluj, Global Training Days'
   shortlink: '[site:url]'
+  canonical_url: '[site:url]'
+  og_title: 'Drupal Community Cluj-Napoca'
+  og_description: 'Drupal Global Training Days is an exciting initiative from the Drupal community to introduce new and beginning users to Drupal'
+  og_url: '[site:url]'
+  og_site_name: 'Drupal Community Cluj-Napoca'
+  og_type: content
+  og_determiner: Automatic
