@@ -117,9 +117,12 @@ class GtdRegistrationBlock extends BlockBase implements ContainerFactoryPluginIn
   private function buildExistingRegistrationContent(NodeInterface $node) {
     $renderController = \Drupal::entityTypeManager()->getViewBuilder('node');
 
+    $registerUrl = Link::createFromRoute($this->t('Register here'), 'dcc_gtd_registration.form')->toRenderable();
+    $registerUrl['#attributes']['class'] = ['big-btn', 'full-width'];
+
     return [
       'node' => $renderController->view($node, 'registration_block'),
-      'url' => Link::createFromRoute($this->t('Register here'), 'dcc_gtd_registration.form')->toRenderable(),
+      'url' => $registerUrl,
     ];
   }
 

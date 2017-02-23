@@ -45,7 +45,7 @@ class SponsoredByImageFieldFormatter extends ImageFormatter {
     // Check if the formatter involves a link.
     if ($imageLinkSetting == 'field_website_link') {
       $entity = $items->getEntity();
-      $uri = $entity->{$image_link_setting}->uri;
+      $uri = $entity->get($imageLinkSetting)->uri;
     }
 
     foreach ($items as $delta => $item) {
