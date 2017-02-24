@@ -98,6 +98,11 @@ class GtdRegistrationBlock extends BlockBase implements ContainerFactoryPluginIn
     }
 
     $build += [
+      '#attached' => [
+        'library' => [
+            'dcc_gtd_registration/dcc_gtd_registration.block'
+        ],
+      ],
       '#cache' => array(
         'max-age' => 0
       ),

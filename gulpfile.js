@@ -29,6 +29,12 @@ var sources = {
             'content/*' : 'content/*',
             'base/*' : 'base.css',
         }
+    },
+    dcc_gtd_registration: {
+      root : './docroot/modules/custom/dcc_gtd_registration/',
+      scss : {
+        'registration-block.scss': 'registration-block.css'
+      }
     }
 };
 
