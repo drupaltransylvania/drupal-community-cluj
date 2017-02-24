@@ -147,12 +147,12 @@ class EmailFormater implements FormatterInterface {
   /**
    * Creates the message for email.
    *
-   * @param string $message
+   * @param array $message
    *   The message of the email.
-   * @param string $params
+   * @param mixed $params
    *   The parameters of the email.
    */
-  public function formatMessage(string $message, string $params) {
+  public function formatMessage(array $message, $params) {
     $this->setFrom($message['from']);
     $this->setSubject($message['subject']);
     $this->setBody($message['body']);
@@ -171,7 +171,7 @@ class EmailFormater implements FormatterInterface {
    * @return mixed
    *   Returns the message.
    */
-  protected function changeContentType(string $message, string $newContentType) {
+  protected function changeContentType($message, $newContentType) {
     $contentType = $message['headers']['Content-Type'];
     $contentTypeArray = explode(';', $contentType);
     $contentTypeArray[0] = $newContentType;
