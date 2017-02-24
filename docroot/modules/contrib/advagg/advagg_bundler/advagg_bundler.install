@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Handles Advanced Aggregation bundler submodule installation/upgrade tasks.
+ */
+
+/**
+ * Implements hook_update_N().
+ *
+ * Set the bundler logic settings.
+ */
+function advagg_bundler_update_8201() {
+  \Drupal::service('config.factory')
+    ->getEditable('advagg_bundler.settings')
+    ->set('css_logic', 0)
+    ->set('js_logic', 0)
+    ->save();
+}

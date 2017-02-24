@@ -1,0 +1,16 @@
+<?php
+/**
+ * @file
+ * Advanced CSS/JS aggregation module.
+ */
+
+use Drupal\Core\Url;
+use Drupal\Component\Utility\Crypt;
+
+
+/**
+ * Implements hook_page_attachments().
+ */
+function advagg_test_page_attachments(array &$page) {
+  $page['#attached']['library'][] = 'advagg_test/external';
+}

@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Advanced aggregation css minification module.
+ */
+
+/**
+ * Implements hook_advagg_current_hooks_hash_array_alter().
+ */
+function advagg_css_minify_advagg_current_hooks_hash_array_alter(&$aggregate_settings) {
+  $aggregate_settings['variables']['advagg_css_minify'] = \Drupal::config('advagg_css_minify.settings')->get();
+}
+
+/**
+ * Implements hook_advagg_hooks_implemented_alter().
+ */
+function advagg_css_minify_advagg_hooks_implemented_alter(&$hooks, $all) {
+  if ($all) {
+    $hooks['advagg_css_minify_configuration_alter'] = [];
+  }
+}

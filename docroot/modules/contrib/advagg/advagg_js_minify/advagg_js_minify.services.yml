@@ -1,0 +1,7 @@
+services:
+  logger.channel.advagg_js_minify:
+    parent: logger.channel_base
+    arguments: ['advagg_js_minify']
+  asset.js.optimizer:
+    class: Drupal\advagg_js_minify\Asset\JsOptimizer
+    arguments: [ '@cache.advagg.minify', '@config.factory', '@state.advagg.files', '@module_handler', '@logger.channel.advagg_js_minify' ]
