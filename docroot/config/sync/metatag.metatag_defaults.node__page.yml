@@ -14,6 +14,4 @@ tags:
   og_description: 'Drupal Global Training Days is an exciting initiative from the Drupal community to introduce new and beginning users to Drupal'
   og_url: '[node:url]'
   og_site_name: 'Drupal Community Cluj-Napoca'
-  og_type: content
   og_image: '[node:field_metatag_image:open_graph]'
-  og_determiner: Automatic
