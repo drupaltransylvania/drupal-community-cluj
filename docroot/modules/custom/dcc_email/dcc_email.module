@@ -39,5 +39,17 @@ function dcc_email_theme($existing, $type, $theme, $path) {
       ],
       'template' => 'global-registration-email',
     ],
+    'global_training_reminder_email' => [
+      'variables' => [
+        'first_name' => NULL,
+        'last_name' => NULL,
+        'logo_url' => NULL,
+        'big_image_url' => NULL,
+        'left_image_url' => NULL,
+        'reminder_image_url' => NULL,
+        'cancel_link' => NULL,
+      ],
+      'template' => 'global-reminder-email',
+    ],
   ];
 }
