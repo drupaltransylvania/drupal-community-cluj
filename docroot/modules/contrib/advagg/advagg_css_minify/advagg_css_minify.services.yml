@@ -1,0 +1,4 @@
+services:
+  asset.css.optimizer:
+    class: Drupal\advagg_css_minify\Asset\CssOptimizer
+    arguments: [ '@cache.advagg.minify', '@config.factory', '@state.advagg.files', '@module_handler' ]

@@ -1,0 +1,19 @@
+advagg_css_minify.settings:
+  type: config_entity
+  label: Settings
+  mapping:
+    minifier:
+      type: integer
+      label: 'Which minifier to use. 0 is Disabled.'
+    file_settings:
+      type: sequence
+      label: 'Per file minification settings.'
+      sequence:
+        type: mapping
+        mapping:
+          path:
+            type: string
+            label: 'File path to asset.'
+          minifier:
+            type: integer
+            label: 'Which minifier to use for this file. 0 is disabled.'

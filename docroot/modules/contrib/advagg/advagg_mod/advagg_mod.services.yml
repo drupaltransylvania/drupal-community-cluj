@@ -1,0 +1,7 @@
+services:
+  init_subscriber:
+    class: Drupal\advagg_mod\EventSubscriber\InitSubscriber
+    tags:
+      -
+        name: event_subscriber
+    arguments: [ '@config.factory' ]

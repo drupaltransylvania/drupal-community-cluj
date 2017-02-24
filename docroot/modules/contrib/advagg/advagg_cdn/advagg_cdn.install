@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * @file
+ * Handles Advanced Aggregation installation and upgrade tasks.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function advagg_cdn_requirements($phase) {
+  $requirements = [];
+  // Ensure translations don't break at install time.
+  $t = 't';
+
+  // If not at runtime, return here.
+  if ($phase !== 'runtime') {
+    return $requirements;
+  }
+
+  $description = '';
+  if (\Drupal::config('advagg.settings')->get('cache_level') < 0) {
+    $description = $t('Will be using the unminified version due to AdvAgg being in Development mode.');
+  }
+
+  $requirements['advagg_cdn'] = [
+    'title' => $t('AdvAgg CDN'),
+    'severity' => REQUIREMENT_OK,
+    'value' => $t('OK'),
+    'description' => $t('Selected libraries should be coming from the CDN.') . ' ' . $description,
+  ];
+
+  return $requirements;
+}

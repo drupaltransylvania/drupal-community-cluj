@@ -1,0 +1,19 @@
+advagg_bundler.settings:
+  type: config_entity
+  label: Settings
+  mapping:
+    active:
+      type: boolean
+      label: '.'
+    max_css:
+      type: integer
+      label: 'Maximum target css aggregates.'
+    css_logic:
+      type: integer
+      label: 'The logic to use for bundling the CSS Files.'
+    max_js:
+      type: integer
+      label: 'Maximum target js aggregates.'
+    js_logic:
+      type: integer
+      label: 'The logic to use for bundling the JS Files.'
