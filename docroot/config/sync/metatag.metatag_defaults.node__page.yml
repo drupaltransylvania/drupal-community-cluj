@@ -5,4 +5,13 @@ dependencies: {  }
 id: node__page
 label: 'Content: Basic page'
 tags:
+  description: 'Drupal Global Training Days is an exciting initiative from the Drupal community to introduce new and beginning users to Drupal. Trainers from companies and local groups around the world make newcomers to the Drupal community feel inspired and empowered to start great work. Once a quarter, free or low-cost training events take place around the globe. It''s also a great opportunity for companies to showcase their Drupal services and the impact they''ve had in their local communities.'
+  abstract: 'Drupal Global Training Days is an exciting initiative from the Drupal community to introduce new and beginning users to Drupal. Trainers from companies and local groups around the world make newcomers to the Drupal community feel inspired and empowered to start great work.'
+  title: '[node:title]'
+  keywords: 'Drupal, Cluj-Napoca, Cluj, Global Training Days'
+  og_title: '[node:title]'
+  og_image_url: '[node:field_metatag_image:open_graph]'
+  og_description: 'Drupal Global Training Days is an exciting initiative from the Drupal community to introduce new and beginning users to Drupal'
+  og_url: '[node:url]'
+  og_site_name: 'Drupal Community Cluj-Napoca'
   og_image: '[node:field_metatag_image:open_graph]'

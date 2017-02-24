@@ -1,0 +1,52 @@
+<?php
+
+/**
+ * @file
+ * Advanced aggregation bundler module.
+ */
+
+/**
+ * Implements hook_advagg_current_hooks_hash_array_alter().
+ */
+function advagg_bundler_advagg_current_hooks_hash_array_alter(&$aggregate_settings) {
+  $aggregate_settings['variables']['advagg_bundler'] = \Drupal::config('advagg_bundler.settings')->get();
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function advagg_bundler_form_advagg_settings_alter(&$form, $form_state) {
+  if (advagg_bundler_enabled()) {
+    $form['global']['core_groups']['#disabled'] = TRUE;
+    $form['global']['core_groups']['#description'] = t('The bundler submodule disables core grouping logic.');
+    $form['global']['core_groups']['#states'] = [];
+    $form['global']['core_groups']['#default_value'] = FALSE;
+    array_unshift($form['#submit'], 'advagg_bundler_advagg_setting_form_submit');
+  }
+}
+
+/**
+ * Prevent the bundler config overrides from being saved into stored config.
+ */
+function advagg_bundler_advagg_setting_form_submit(array &$form, \Drupal\Core\Form\FormStateInterface &$form_state) {
+  $form_state->setValue('core_groups', \Drupal::config('advagg.settings')->getOriginal('core_groups', FALSE));
+}
+
+/**
+ * Returns TRUE if the bundler will run.
+ *
+ * @param string $type
+ *   (optional) The type to check for - either 'css' or 'js'.
+ */
+function advagg_bundler_enabled($type = NULL) {
+  $config = \Drupal::config('advagg_bundler.settings');
+  if (!$config->get('active')) {
+    return FALSE;
+  }
+  if ($type) {
+    return $config->get('max_' . $type);
+  }
+  if ($config->get('max_css') || $config->get('max_js')) {
+    return TRUE;
+  }
+}

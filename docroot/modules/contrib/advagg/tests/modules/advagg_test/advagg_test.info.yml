@@ -1,0 +1,11 @@
+name: 'Advanced CSS/JS Aggregation Testing'
+description: 'Provides assets for automated testing.'
+package: Testing
+# core: 8.x
+type: module
+
+# Information added by Drupal.org packaging script on 2016-10-18
+version: '8.x-2.0'
+core: '8.x'
+project: 'advagg'
+datestamp: 1476823488

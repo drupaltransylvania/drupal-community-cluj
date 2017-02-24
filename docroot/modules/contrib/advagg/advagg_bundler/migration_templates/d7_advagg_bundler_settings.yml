@@ -1,0 +1,21 @@
+id: d7_advagg_bundler_settings
+label: 'AdvAgg Bundler configuration'
+migration_tags:
+  - Drupal 7
+source:
+  plugin: variable
+  variables:
+    - advagg_bundler_active
+    - advagg_bundler_grouping_logic
+    - advagg_bundler_max_css
+    - advagg_bundler_max_js
+
+process:
+  active: advagg_bundler_active
+  max_css: advagg_bundler_max_css
+  css_logic: advagg_bundler_grouping_logic
+  max_js: advagg_bundler_max_js
+  js_logic: advagg_bundler_grouping_logic
+destination:
+  plugin: config
+  config_name: advagg_bundler.settings

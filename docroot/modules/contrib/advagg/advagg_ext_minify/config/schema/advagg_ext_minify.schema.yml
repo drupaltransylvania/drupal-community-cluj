@@ -1,0 +1,10 @@
+advagg_ext_minify.settings:
+  type: config_entity
+  label: Settings
+  mapping:
+    css_cmd:
+      type: string
+      label: 'Command line for external CSS minification.'
+    js_cmd:
+      type: string
+      label: 'Command line for external JavaScript minification.'

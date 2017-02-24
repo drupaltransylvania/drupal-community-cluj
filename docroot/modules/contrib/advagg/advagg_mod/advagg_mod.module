@@ -1,0 +1,444 @@
+<?php
+
+/**
+ * @file
+ * Advanced aggregation modifier module.
+ */
+
+// Core hook implementations.
+/**
+ * Implements hook_js_alter().
+ */
+function advagg_mod_js_alter(&$js) {
+  if (\Drupal::moduleHandler()->moduleExists('advagg') && !advagg_enabled()) {
+    return;
+  }
+  $config = \Drupal::config('advagg_mod.settings');
+
+  $css_defer = $config->get('css_defer');
+  if (advagg_mod_css_defer_active()) {
+    if ($css_defer == 3) {
+      $js['modules/advagg/advagg_mod/js/loadCSS.js']['scope'] = 'header';
+      $js['modules/advagg/advagg_mod/js/css_defer.js']['scope'] = 'header';
+    }
+    $css_defer_js_code = $config->get('css_defer_js_code');
+    if ($css_defer_js_code == 0) {
+      $js['modules/advagg/advagg_mod/js/loadCSS.js']['inline'] = TRUE;
+      $js['modules/advagg/advagg_mod/js/css_defer.js']['inline'] = TRUE;
+    }
+    elseif ($css_defer_js_code == 4) {
+      $js['modules/advagg/advagg_mod/js/loadCSS.js']['type'] = 'external';
+      $js['modules/advagg/advagg_mod/js/loadCSS.js']['data'] = '//cdn.rawgit.com/filamentgroup/loadCSS/master/loadCSS.js';
+    }
+  }
+
+  // Change sort order so aggregates do not get split up.
+  if ($config->get('js_adjust_sort_external') || $config->get('js_adjust_sort_browsers')) {
+    advagg_mod_sort_css_js($js, 'js');
+  }
+
+  // Move JS to the footer.
+  if ($config->get('js_footer')) {
+    advagg_mod_js_move_to_footer($js);
+  }
+
+  // Force all JS to be preprocessed.
+  if ($config->get('js_preprocess')) {
+    foreach ($js as $path => &$values) {
+      // However CKEditor must not be combined or errors *will* occur.
+      if ($path == 'core/assets/vendor/ckeditor/ckeditor.js') {
+        continue;
+      }
+      $values['preprocess'] = TRUE;
+      $values['cache'] = TRUE;
+    }
+    unset($values);
+  }
+
+  // Add the defer or the async tag to JS.
+  advagg_mod_js_async_defer($js);
+
+  // Move all async JS to the header.
+  if ($config->get('js_async_in_header')) {
+    foreach ($js as &$values) {
+      // Skip if not file or external.
+      if ($values['type'] !== 'file' && $values['type'] !== 'external') {
+        continue;
+      }
+      // Skip if not async.
+      if (empty($values['async']) && empty($values['attributes']['async'])) {
+        continue;
+      }
+
+      // Move to the header with a group of 1000.
+      $values['scope'] = 'header';
+      $values['group'] = 1000;
+    }
+    unset($values);
+  }
+}
+
+/**
+ * Implements hook_css_alter().
+ */
+function advagg_mod_css_alter(&$css) {
+  if (\Drupal::moduleHandler()->moduleExists('advagg') && !advagg_enabled()) {
+    return;
+  }
+  $config = \Drupal::config('advagg_mod.settings');
+  if ($config->get('css_adjust_sort_external') || $config->get('css_adjust_sort_browsers')) {
+    advagg_mod_sort_css_js($css, 'css');
+  }
+
+  // Force all CSS to be preprocessed.
+  if ($config->get('css_preprocess')) {
+    foreach ($css as &$values) {
+      $values['preprocess'] = TRUE;
+    }
+    unset($values);
+  }
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function advagg_mod_page_attachments_alter(array &$page) {
+  if (advagg_mod_css_defer_active()) {
+    $page['#attached']['library'][] = 'advagg_mod/css_defer';
+  }
+}
+
+// AdvAgg hook implementations.
+/**
+ * Implements hook_advagg_current_hooks_hash_array_alter().
+ */
+function advagg_mod_advagg_current_hooks_hash_array_alter(array &$aggregate_settings) {
+  $aggregate_settings['variables']['advagg_mod'] = \Drupal::config('advagg_mod.settings')->get();
+}
+
+/**
+ * Implements hook_advagg_asset_render_alter().
+ */
+function advagg_mod_advagg_asset_render_alter(&$assets, $render_type, $asset_type) {
+  if (!advagg_enabled()) {
+    return;
+  }
+
+  if ($render_type == 'html') {
+    if ($asset_type == 'styles') {
+      foreach ($assets as &$value) {
+        if (!empty($value['#inline'])) {
+          $value['#value'] = @file_get_contents($value['#attributes']['href']);
+          if ($value['#value']) {
+            unset($value['#attributes']['href']);
+          }
+        }
+        elseif (advagg_mod_css_defer_active()) {
+          // Skip prefetch links and inline styles.
+          if ($value['#tag'] == 'style') {
+            continue;
+          }
+          $value['#noscript'] = TRUE;
+        }
+      }
+      unset($value);
+    }
+    elseif ($asset_type == 'scripts' || $asset_type == 'scripts_bottom') {
+      foreach ($assets as &$value) {
+        if (!empty($value['#inline'])) {
+          $value['#value'] = @file_get_contents($value['#attributes']['src']);
+          if ($value['#value']) {
+            unset($value['#attributes']['src']);
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_advagg_hooks_implemented_alter().
+ */
+function advagg_mod_advagg_hooks_implemented_alter(&$hooks, $all) {
+  if ($all) {
+    $hooks += [
+      'advagg_mod_get_lists_alter' => [],
+    ];
+  }
+}
+
+/**
+ * Implements hook_advagg_asset_path_alter().
+ */
+function advagg_mod_advagg_asset_path_alter(&$path, $extension) {
+  if ($dir = rtrim(\Drupal::config('advagg_mod.settings')->get('unified_multisite_dir'), '/')) {
+    if ($extension == 'js') {
+      $path = $dir . '/js';
+    }
+    elseif ($extension == 'css') {
+      $path = $dir . '/css';
+    }
+  }
+}
+
+// Helper Functions.
+/**
+ * Generate a list of rules and exceptions for js files.
+ *
+ * Controls no async/defer file list.
+ *
+ * @return array
+ *   A multidimensional array.
+ */
+function advagg_mod_get_lists() {
+  $lists = &drupal_static(__FUNCTION__);
+  if (!isset($lists)) {
+    // Do not defer/async list.
+    $no_async_defer_list = [
+      // Wistia js.
+      '//fast.wistia.',
+      // Maps.
+      '//maps.googleapis.com',
+      '//dev.virtualearth.net',
+      '//api.maps.yahoo.com',
+    ];
+    $no_move = [
+      '//cdn.rawgit.com/stubbornella/csslint/master/release/csslint.js',
+    ];
+
+    // Allow other modules to add/edit the above lists.
+    // Call hook_advagg_mod_get_lists_alter().
+    $lists = [
+      $no_async_defer_list,
+      $no_move,
+    ];
+    \Drupal::moduleHandler()->alter('advagg_mod_get_lists', $lists);
+  }
+  return $lists;
+}
+
+/**
+ * Move JS to the footer.
+ *
+ * @param array $js
+ *   JS array.
+ */
+function advagg_mod_js_move_to_footer(array &$js) {
+  // Move all JS to the footer.
+  $move_js_to_footer = \Drupal::config('advagg_mod.settings')->get('js_footer');
+  $core_header_js = [
+    'core/assets/vendor/modernizr/modernizr.min.js' => 0,
+    'core/assets/vendor/html5shiv/html5shiv.min.js' => 0,
+  ];
+
+  foreach ($js as $key => &$values) {
+    // Skip if a core header file and configured to do so.
+    if ($move_js_to_footer == 3 && isset($core_header_js[$key])) {
+      continue;
+    }
+
+    // Skip if the scope has been locked.
+    if (!empty($values['scope_lock'])) {
+      continue;
+    }
+
+    // If JS is not in the header decrease weight by 10000.
+    if ($values['scope'] === 'header') {
+      $values['weight'] -= 10000;
+    }
+    // If JS is already in the footer decrease weight by 10000.
+    if ($values['scope'] !== 'footer') {
+      $values['weight'] -= 10000;
+    }
+    $values['scope'] = 'footer';
+  }
+  unset($values);
+}
+
+/**
+ * Add the defer and or the async tag to js.
+ *
+ * @param array $js
+ *   JS array.
+ */
+function advagg_mod_js_async_defer(array &$js) {
+  // Return early if this is disabled.
+  $config = \Drupal::config('advagg_mod.settings');
+  $defer = $config->get('js_defer');
+  $async = $config->get('js_async');
+  list($no_async_defer_list) = advagg_mod_get_lists();
+
+  // Make all scripts defer and/or async.
+  foreach ($js as $name => &$values) {
+    $values['attributes'] = [];
+    // Defer all scripts.
+    if ($defer) {
+      $values['attributes']['defer'] = TRUE;
+
+      // Do not defer external scripts setting.
+      if ($defer == 2 && $values['type'] === 'external') {
+        unset($values['attributes']['defer']);
+      }
+    }
+
+    // Async all scripts. On most browsers this will run instead of defer.
+    // On some older browsers if defer is also set they will run that instead
+    // if they don't support async.
+    if ($async) {
+      $values['attributes']['async'] = TRUE;
+    }
+
+    // No async defer list.
+    foreach ($no_async_defer_list as $search_string) {
+      if (strpos($name, $search_string) !== FALSE) {
+        // Do not defer/async the loading this script.
+        if ($defer) {
+          unset($values['attributes']['async'], $values['attributes']['defer']);
+        }
+      }
+    }
+  }
+  unset($values);
+}
+
+/**
+ * Rearrange CSS/JS so that aggregates are better grouped.
+ *
+ * This can move all external assets to the top, thus in one group.
+ * This can move all browser conditional assets together.
+ *
+ * @param array $assets
+ *   The CSS or JS array.
+ * @param string $type
+ *   String: css or js.
+ */
+function advagg_mod_sort_css_js(array &$assets, $type) {
+  $config = \Drupal::config('advagg_mod.settings');
+  if ($config->get($type . '_adjust_sort_external')) {
+    // Find all external items.
+    $external = [];
+    $group = NULL;
+    $weight = NULL;
+    foreach ($assets as $key => $value) {
+      // Set values if not set.
+      if (is_null($group)) {
+        $group = $value['group'];
+      }
+      if (is_null($weight)) {
+        $weight = $value['weight'];
+      }
+
+      // Find "lightest" item.
+      if ($value['group'] < $group) {
+        $group = $value['group'];
+      }
+      if ($value['weight'] < $weight) {
+        $weight = $value['weight'];
+      }
+
+      list(, $no_move) = advagg_mod_get_lists();
+      if (!empty($value['type']) && $value['type'] === 'external' && !in_array($key, $no_move) && empty($value['movable'])) {
+        $external[$key] = $value;
+        unset($assets[$key]);
+      }
+    }
+    // Sort the array so that it appears in the correct order.
+    advagg_drupal_sort_css_js_stable($external);
+
+    // Group all external together.
+    $offset = 0.0001;
+    $weight -= 1;
+    $group -= 10;
+    $found_jquery = FALSE;
+    foreach ($external as $key => $value) {
+
+      // If bootstrap is used, it must be loaded after jquery. Don't move
+      // bootstrap if jquery is not above it.
+      if ($key == 'assets/vendor/jquery/jquery.min.js') {
+        $found_jquery = TRUE;
+      }
+      if (!$found_jquery && (strpos($value['data'], 'bootstrap.min.js') !== FALSE || strpos($value['data'], 'bootstrap.js') !== FALSE)) {
+        $assets[$key] = $value;
+        continue;
+      }
+      $value['group'] = $group;
+      $value['weight'] = $weight;
+      $weight += $offset;
+      $assets[$key] = $value;
+    }
+  }
+
+  if ($config->get($type . '_adjust_sort_browsers')) {
+    // Get a list of browsers.
+    $browsers_list = [];
+    foreach ($assets as $key => $value) {
+      if (isset($value['browsers']['IE']) && $value['browsers']['IE'] !== TRUE) {
+        $browsers_list['IE'][] = $value['browsers']['IE'];
+      }
+    }
+
+    // Group browsers CSS together.
+    if (isset($browsers_list['IE'])) {
+      $browsers_list['IE'] = array_values(array_unique($browsers_list['IE']));
+      foreach ($browsers_list['IE'] as $browser) {
+        $browsers = [];
+        $group = NULL;
+        $weight = NULL;
+        foreach ($assets as $key => $value) {
+          if (isset($value['browsers']['IE']) && $browser === $value['browsers']['IE']) {
+            // Set values if not set.
+            if (is_null($group)) {
+              $group = $value['group'];
+            }
+            if (is_null($weight)) {
+              $weight = $value['weight'];
+            }
+
+            // Find "heaviest" item.
+            if ($value['group'] > $group) {
+              $group = $value['group'];
+            }
+            if ($value['weight'] > $weight) {
+              $weight = $value['weight'];
+            }
+
+            $browsers[$key] = $value;
+            unset($assets[$key]);
+          }
+        }
+
+        // Sort the array so that it appears in the correct order.
+        advagg_drupal_sort_css_js_stable($browsers);
+
+        // Group all browsers together.
+        $offset = 0.0001;
+        $group += 1000;
+        foreach ($browsers as $key => $value) {
+          if (isset($value['movable']) && empty($value['movable'])) {
+            $assets[$key] = $value;
+            continue;
+          }
+          $value['group'] = $group;
+          $value['weight'] = $weight;
+          $weight += $offset;
+          $assets[$key] = $value;
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Determines whether css defering should be active for the current request.
+ */
+function advagg_mod_css_defer_active() {
+  $config = \Drupal::config('advagg_mod.settings');
+  if (!$config->get('css_defer')) {
+    return FALSE;
+  }
+  $admin_route = \Drupal::service('router.admin_context')->isAdminRoute();
+  if ($admin_route && !$config->get('css_defer_admin')) {
+    return FALSE;
+  }
+  return TRUE;
+}

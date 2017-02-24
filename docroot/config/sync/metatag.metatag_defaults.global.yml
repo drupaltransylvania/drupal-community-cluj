@@ -7,4 +7,10 @@ _core:
 id: global
 label: Global
 tags:
+  description: 'Drupal Global Training Days is an exciting initiative from the Drupal community to introduce new and beginning users to Drupal. Trainers from companies and local groups around the world make newcomers to the Drupal community feel inspired and empowered to start great work.'
+  abstract: 'Drupal Global Training Days is an exciting initiative from the Drupal community to introduce new and beginning users to Drupal. Trainers from companies and local groups around the world make newcomers to the Drupal community feel inspired and empowered to start great work.'
   title: '[current-page:title] | [site:name]'
+  keywords: 'Drupal, Cluj-Napoca, Cluj, Global Training Days'
+  og_title: 'Drupal Community Cluj-Napoca'
+  og_description: 'Drupal Global Training Days is an exciting initiative from the Drupal community to introduce new and beginning users to Drupal'
+  og_site_name: 'Drupal Community Cluj-Napoca'
