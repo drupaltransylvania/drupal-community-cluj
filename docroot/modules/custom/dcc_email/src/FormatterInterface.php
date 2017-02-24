@@ -12,11 +12,11 @@ interface FormatterInterface {
   /**
    * Formats the email.
    *
-   * @param string $message
+   * @param array $message
    *   The email message.
-   * @param string $params
+   * @param mixed $params
    *   The email parameters.
    */
-  public function formatMessage(string $message, string $params);
+  public function formatMessage(array $message, $params);
 
 }

@@ -9,7 +9,7 @@ use Drupal\dcc_gtd_registration\Form\GlobalTrainingRegistrationForm;
  *
  * @package Drupal\dcc_email
  */
-class EmailFactory extends EmailFormater {
+class EmailFactory {
 
   /**
    * Prepares the email.
