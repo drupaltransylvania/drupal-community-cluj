@@ -7,6 +7,8 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\Site\Settings;
+use Drupal\dcc_email\Entity\PersonalInformation;
+use Drupal\dcc_email\RegistrationEmailTrait;
 use Drupal\dcc_encryption\Cryptor;
 use Drupal\dcc_gtd_registration\Form\GlobalTrainingRegistrationForm;
 
@@ -16,6 +18,8 @@ use Drupal\dcc_gtd_registration\Form\GlobalTrainingRegistrationForm;
  * @package Drupal\dcc_gtd_registration\RegistrationPostSaveRule
  */
 class SuccessRule implements RegistrationPostSaveRule {
+
+  use RegistrationEmailTrait;
 
   const ACTIVATION_LINK = 1;
   const CANCEL_LINK = 0;
@@ -162,9 +166,12 @@ class SuccessRule implements RegistrationPostSaveRule {
    *   Returns the message array that was sent.
    */
   private function sendMail(FormStateInterface $formState, $encryption) {
-    $params = $this->generateStatusActionLinks($encryption);
+    $personalInformation = new PersonalInformation(
+      $formState->get('first_name'),
+      $formState->get('last_name')
+    );
 
-    $params += $this->generateUserRegistrationInfo($formState);
+    $params = $this->buildParams($personalInformation, $encryption);
 
     return $this->mailManager()->mail(
       'dcc_email',
@@ -173,70 +180,6 @@ class SuccessRule implements RegistrationPostSaveRule {
       'en',
       $params
     );
-  }
-
-  /**
-   * Generates an array of parameters with user info.
-   *
-   * @param \Drupal\Core\Form\FormStateInterface $formState
-   *   The form state of the global registration form.
-   *
-   * @return array
-   *   An array of user info.
-   */
-  private function generateUserRegistrationInfo(FormStateInterface $formState) {
-    $params['registration_info'] = [
-      'first_name' => $formState->get('first_name'),
-      'last_name' => $formState->get('last_name'),
-    ];
-    $logoImageFile = file_get_contents("themes/custom/dcc_theme/image/logo.png");
-    $bigImageFile = file_get_contents("themes/custom/dcc_theme/image/bigimage.png");
-    $leftImageFile = file_get_contents("themes/custom/dcc_theme/image/left-image.png");
-    $params['registration_info']['logo_url'] = base64_encode($logoImageFile);
-    $params['registration_info']['big_image_url'] = base64_encode($bigImageFile);
-    $params['registration_info']['left_image_url'] = base64_encode($leftImageFile);
-
-    return $params;
-  }
-
-  /**
-   * Generates the registration status action links.
-   *
-   * @param string $encryption
-   *   The encrypted information.
-   *
-   * @return array
-   *   An array of parameters that contain the links.
-   */
-  private function generateStatusActionLinks($encryption) {
-    $activationLink = Link::createFromRoute(t(
-      'Activation Link'),
-      'dcc_gtd_registration.activation_link',
-      [
-        'encryption' => $encryption,
-      ],
-      [
-        'absolute' => TRUE,
-      ]
-    );
-
-    $cancelLink = Link::createFromRoute(t(
-      'Cancel Link'),
-      'dcc_gtd_registration.cancel_link',
-      [
-        'encryption' => $encryption,
-      ],
-      [
-        'absolute' => TRUE,
-      ]
-    );
-
-    $params['registration_status_links'] = [
-      'activation_link' => $activationLink,
-      'cancel_link' => $cancelLink,
-    ];
-
-    return $params;
   }
 
   /**
