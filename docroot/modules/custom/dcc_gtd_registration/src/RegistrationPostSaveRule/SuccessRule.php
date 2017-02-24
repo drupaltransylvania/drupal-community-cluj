@@ -171,7 +171,7 @@ class SuccessRule implements RegistrationPostSaveRule {
       $formState->get('last_name')
     );
 
-    $params = $this->buildParams($personalInformation, $encryption);
+    $params = $this->buildParams($personalInformation ,$encryption);
 
     return $this->mailManager()->mail(
       'dcc_email',
@@ -181,7 +181,7 @@ class SuccessRule implements RegistrationPostSaveRule {
       $params
     );
   }
-
+  
   /**
    * The mail manager service.
    *
