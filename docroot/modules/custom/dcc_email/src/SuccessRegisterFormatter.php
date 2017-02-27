@@ -17,6 +17,8 @@ class SuccessRegisterFormatter extends EmailFormater {
    * {@inheritdoc}
    */
   public function formatMessage(array $message, $params) {
+    global $base_url;
+
     $renderArray = [
       '#theme' => GlobalTrainingRegistrationForm::GLOBAL_TRAINING_REGISTRATION_EMAIL_KEY,
       '#first_name' => $params['registration_info']['first_name'],
@@ -26,6 +28,7 @@ class SuccessRegisterFormatter extends EmailFormater {
       '#left_image_url' => $params['registration_info']['images']['left_image_url'],
       '#activation_link' => $params['registration_status_links']['activation_link'],
       '#cancel_link' => $params['registration_status_links']['cancel_link'],
+      '#base_url' => $base_url,
     ];
 
     $message['body'][] = $this->renderer()->render($renderArray);
