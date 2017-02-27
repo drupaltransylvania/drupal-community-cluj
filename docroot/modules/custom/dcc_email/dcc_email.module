@@ -36,6 +36,7 @@ function dcc_email_theme($existing, $type, $theme, $path) {
         'left_image_url' => NULL,
         'activation_link' => NULL,
         'cancel_link' => NULL,
+        'base_url' => NULL,
       ],
       'template' => 'global-registration-email',
     ],
