@@ -21,7 +21,7 @@ popup_height: 80
 popup_hide_agreed: false
 popup_hide_button_message: Hide
 popup_info:
-  value: '<h2>The website is using cookies. By continue navigating you are agreeing to the <a href="https://www.google.ro/" target="_blank">terms and conditions.</a><h2>'
+  value: '<h2>The website is using cookies. By continue navigating you are agreeing to the <a href="/terms-and-conditions" target="_blank">terms and conditions.</a><h2>'
   format: restricted_html
 popup_link: null
 popup_link_new_window: null
