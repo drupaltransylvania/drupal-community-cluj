@@ -29,6 +29,7 @@ class SuccessRegisterFormatter extends EmailFormater {
     ];
 
     $message['body'][] = $this->renderer()->render($renderArray);
+    $message['subject'] = t('Drupal Global Training Days');
     $message = $this->changeContentType($message, 'text/html');
 
     return $message;
