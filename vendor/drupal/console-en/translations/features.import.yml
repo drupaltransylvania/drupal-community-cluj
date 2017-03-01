@@ -1,6 +1,0 @@
-description: 'Import module config.'
-help: ''
-options:
-  bundle: 'Bundle name'
-arguments:
-  packages: 'Package name'
