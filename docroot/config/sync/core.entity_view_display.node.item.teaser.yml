@@ -17,4 +17,5 @@ content:
     weight: 100
 hidden:
   addtoany: true
+  field_description: true
   field_picture: true

@@ -21,6 +21,7 @@ content:
   links:
     weight: 100
 hidden:
+  addtoany: true
   body: true
   comment: true
   field_image: true
