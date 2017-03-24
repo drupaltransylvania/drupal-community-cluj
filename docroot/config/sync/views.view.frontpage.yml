@@ -3,8 +3,8 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.node.article_listing
     - core.entity_view_mode.node.rss
-    - core.entity_view_mode.node.teaser
   module:
     - node
     - user
@@ -195,7 +195,8 @@ display:
       row:
         type: 'entity:node'
         options:
-          view_mode: teaser
+          relationship: none
+          view_mode: article_listing
       sorts:
         sticky:
           admin_label: ''
@@ -233,7 +234,7 @@ display:
           row_class: ''
           default_row_class: true
           uses_fields: false
-      title: ''
+      title: 'Welcome to Drupal Community Cluj !'
       header: {  }
       footer: {  }
       relationships: {  }

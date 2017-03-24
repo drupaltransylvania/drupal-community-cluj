@@ -1,6 +1,6 @@
 uuid: edd2c83c-38d6-49ad-b189-6b869f4fb6a7
 langcode: en
-status: true
+status: false
 dependencies:
   content:
     - 'block_content:basic:391656fc-6b9e-45cf-9b45-96ba2640c8d8'
@@ -10,8 +10,8 @@ dependencies:
     - dcc_theme
 id: settingupafunctionalsite
 theme: dcc_theme
-region: bottom_third
-weight: 0
+region: '-1'
+weight: -4
 provider: null
 plugin: 'block_content:391656fc-6b9e-45cf-9b45-96ba2640c8d8'
 settings:
