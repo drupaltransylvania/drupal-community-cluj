@@ -24,4 +24,5 @@ content:
     third_party_settings: {  }
 hidden:
   addtoany: true
+  field_description: true
   links: true

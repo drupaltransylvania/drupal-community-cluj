@@ -37,6 +37,7 @@ module:
   field_ui: 0
   file: 0
   filter: 0
+  google_analytics: 0
   google_map_field: 0
   help: 0
   history: 0
@@ -68,6 +69,7 @@ module:
   update: 0
   user: 0
   video: 0
+  views_ui: 0
   youtube: 0
   menu_link_content: 1
   pathauto: 1
