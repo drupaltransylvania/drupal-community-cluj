@@ -20,6 +20,14 @@ a {
   }
 }
 
+iframe {
+  max-width: 100%;
+}
+
+.youtube-container iframe {
+  max-height: 60vw;
+}
+
 .breadcrumb {
   font-size: $baseFontSize * 0.93;
 }

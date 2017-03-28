@@ -102,9 +102,9 @@
                     </tr>
                     <!-- Spacing -->
                     <tr>
-                        <td align="right" valign="middle" style="font-family: Helvetica, arial, sans-serif; font-size: 10px;color: #999999" st-content="preheader">
-                            If you cannot read this email, please  <a class="hlite" href="#" style="text-decoration: none; color: #0db9ea">click here</a>
-                        </td>
+                        {#<td align="right" valign="middle" style="font-family: Helvetica, arial, sans-serif; font-size: 10px;color: #999999" st-content="preheader">#}
+                            {#If you cannot read this email, please  <a class="hlite" href="#" style="text-decoration: none; color: #0db9ea">click here</a>#}
+                        {#</td>#}
                     </tr>
                     <!-- Spacing -->
                     <tr>
@@ -135,7 +135,7 @@
                                 <tr>
                                     <td valign="middle" width="270" style="padding: 10px 0 10px 20px;" class="logo">
                                         <div class="imgpop">
-                                            <a href="#"><img src="data:image/png;base64,{{ logo_url }}" alt="logo" border="0" style="display:block; border:none; outline:none; text-decoration:none;" st-image="edit" class="logo"></a>
+                                            <a href="#"><img src="{{ logo_url }}" alt="logo" border="0" style="display:block; border:none; outline:none; text-decoration:none;" st-image="edit" class="logo"></a>
                                             <h1>Drupal Community Cluj-Napoca</h1>
                                         </div>
                                     </td>
@@ -148,9 +148,9 @@
                                 <tbody>
                                 <tr>
                                     <td width="270" valign="middle" style="font-family: Helvetica, Arial, sans-serif;font-size: 14px; color: #ffffff;line-height: 24px; padding: 10px 0;" align="right" class="menu" st-content="menu">
-                                        <a href="#" style="text-decoration: none; color: #ffffff;">HOME</a>
+                                        <a href="{{ base_url }}" style="text-decoration: none; color: #ffffff;">HOME</a>
                                         &nbsp;|&nbsp;
-                                        <a href="#" style="text-decoration: none; color: #ffffff;">CONTACT</a>
+                                        <a href="{{ base_url }}/contact" style="text-decoration: none; color: #ffffff;">CONTACT</a>
                                     </td>
                                     <td width="20"></td>
                                 </tr>
@@ -184,7 +184,7 @@
                                 <tr>
                                     <!-- start of image -->
                                     <td align="center">
-                                        <a target="_blank" href="#"><img width="540" border="0" height="282" alt="bigimage" style="display:block; border:none; outline:none; text-decoration:none;" src="data:image/png;base64,{{ big_image_url }}" class="bigimage"></a>
+                                        <a target="_blank" href="#"><img width="540" border="0" height="282" alt="bigimage" style="display:block; border:none; outline:none; text-decoration:none;" src="{{ big_image_url }}" class="bigimage"></a>
                                     </td>
                                 </tr>
                                 <!-- end of image -->
@@ -314,7 +314,7 @@
                                             <!-- image -->
                                             <tr>
                                                 <td width="200" height="180" align="center">
-                                                    <img src="data:image/png;base64,{{ left_image_url }}" alt="left-image" border="0" width="180" height="180" style="display:block; border:none; outline:none; text-decoration:none;">
+                                                    <img src="{{ left_image_url }}" alt="left-image" border="0" width="180" height="180" style="display:block; border:none; outline:none; text-decoration:none;">
                                                 </td>
                                             </tr>
                                             </tbody>

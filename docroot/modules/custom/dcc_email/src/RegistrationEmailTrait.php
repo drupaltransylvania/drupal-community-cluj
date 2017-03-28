@@ -70,10 +70,13 @@ trait RegistrationEmailTrait {
    *   Parameters of the email.
    */
   public function generateImages(&$params) {
-    $basePath = 'themes/custom/dcc_theme/image/';
+    global $base_url;
+
+    $pathToTheme = drupal_get_path('theme', 'dcc_theme');
+    $basePath = $base_url . '/' . $pathToTheme . '/image/';
 
     foreach ($this->images as $key => $imageName) {
-      $params['registration_info']['images'][$key] = $this->getEncodedImage($basePath . $imageName);
+      $params['registration_info']['images'][$key] = $basePath . $imageName;
     }
   }
 
