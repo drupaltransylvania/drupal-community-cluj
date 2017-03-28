@@ -10,7 +10,7 @@ dependencies:
 id: addtoanybuttons
 theme: dcc_theme
 region: '-1'
-weight: -3
+weight: -7
 provider: null
 plugin: addtoany_block
 settings:

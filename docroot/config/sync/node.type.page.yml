@@ -17,4 +17,4 @@ description: 'Use <em>basic pages</em> for your static content, such as an ''Abo
 help: ''
 new_revision: true
 preview_mode: 1
-display_submitted: false
+display_submitted: true

@@ -1,6 +1,6 @@
 uuid: 29f3b27c-e264-433d-a5ed-fd119be5b9f6
 langcode: en
-status: true
+status: false
 dependencies:
   content:
     - 'block_content:basic:dcd63436-c368-4722-8cb7-64ded5b57217'
@@ -10,8 +10,8 @@ dependencies:
     - dcc_theme
 id: intothecommunity
 theme: dcc_theme
-region: bottom_forth
-weight: 0
+region: '-1'
+weight: -3
 provider: null
 plugin: 'block_content:dcd63436-c368-4722-8cb7-64ded5b57217'
 settings:

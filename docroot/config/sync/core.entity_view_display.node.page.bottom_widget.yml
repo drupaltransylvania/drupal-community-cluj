@@ -17,5 +17,6 @@ mode: bottom_widget
 content: {  }
 hidden:
   addtoany: true
+  field_layout: true
   field_metatag_image: true
   links: true
