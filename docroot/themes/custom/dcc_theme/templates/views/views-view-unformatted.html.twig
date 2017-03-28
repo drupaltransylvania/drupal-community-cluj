@@ -17,7 +17,8 @@
  * @ingroup themeable
  */
 #}
-{% if view.title %}
+
+{% if view.id == 'frontpage' and view.title %}
   <h1>{{ view.title }}</h1>
 {% endif %}
 {% for row in rows %}

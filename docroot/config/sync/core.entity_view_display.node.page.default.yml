@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.page.field_event_type
     - field.field.node.page.field_layout
     - field.field.node.page.field_metatag_image
     - node.type.page
@@ -20,6 +21,13 @@ content:
     weight: 2
     settings: {  }
     third_party_settings: {  }
+  field_event_type:
+    weight: 3
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
   field_layout:
     type: entity_reference_revisions_entity_view
     weight: 0

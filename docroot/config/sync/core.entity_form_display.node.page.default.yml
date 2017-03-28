@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.page.field_event_type
     - field.field.node.page.field_layout
     - field.field.node.page.field_metatag_image
     - image.style.thumbnail
@@ -23,6 +24,14 @@ content:
     weight: 3
     settings: {  }
     third_party_settings: {  }
+  field_event_type:
+    weight: 26
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
   field_layout:
     type: entity_reference_paragraphs
     weight: 1
