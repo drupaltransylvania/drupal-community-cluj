@@ -35,9 +35,11 @@ class ActiveScheduleTitleToken implements TokenGeneratorInterface {
     if ($type = 'scheduler') {
 
       $node = $this->scheduleManager->getActiveScheduler();
-      foreach ($tokens as $name => $original) {
-        if ($original == "[scheduler:title]") {
-          $replacements[$original] = $node->getTitle();
+      if ($node) {
+        foreach ($tokens as $name => $original) {
+          if ($original == "[scheduler:title]") {
+            $replacements[$original] = $node->getTitle();
+          }
         }
       }
     }

@@ -7,5 +7,6 @@ _core:
 id: taxonomy_term
 label: 'Taxonomy term'
 tags:
-  title: '[term:name] | [site:name]'
   description: '[term:description]'
+  title: '[term:name] | [site:name]'
+  keywords: 'Drupal, Cluj-Napoca, Cluj, Global Training Days, Romania, Community, Meetups, Sprints, Drupal Camps'
