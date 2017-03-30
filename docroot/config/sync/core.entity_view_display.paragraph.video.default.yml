@@ -13,6 +13,7 @@ bundle: video
 mode: default
 content:
   field_video:
+    type: youtube_video
     weight: 0
     label: above
     settings:
@@ -26,5 +27,4 @@ content:
       youtube_autohide: false
       youtube_iv_load_policy: false
     third_party_settings: {  }
-    type: youtube_video
 hidden: {  }
