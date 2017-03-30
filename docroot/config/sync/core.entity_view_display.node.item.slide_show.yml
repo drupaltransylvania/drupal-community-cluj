@@ -21,7 +21,7 @@ content:
     weight: 2
     label: hidden
     settings:
-      image_style: homepage_slider_1400x500_
+      image_style: homepage_slider_970x346
       image_link: ''
     third_party_settings: {  }
 hidden:

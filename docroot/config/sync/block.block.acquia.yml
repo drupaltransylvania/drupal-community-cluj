@@ -1,0 +1,25 @@
+uuid: 408b8547-e62e-4775-884f-cb59ba098948
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:0b06e393-c8b9-412b-a74b-50158c8d87a9'
+  module:
+    - block_content
+  theme:
+    - dcc_theme
+id: acquia
+theme: dcc_theme
+region: footer_menu
+weight: 0
+provider: null
+plugin: 'block_content:0b06e393-c8b9-412b-a74b-50158c8d87a9'
+settings:
+  id: 'block_content:0b06e393-c8b9-412b-a74b-50158c8d87a9'
+  label: Acquia
+  provider: block_content
+  label_display: '0'
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }
