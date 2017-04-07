@@ -58,5 +58,5 @@ deploy:
       - REPO="drupal-community-cluj"
       - GH_REPO="github.com/${USER}/${REPO}.git"
       - ACQUIA_REPO="clujapocadc@svn-22901.prod.hosting.acquia.com:clujapocadc.git"
-#  on:
-#    branch: master
+  on:
+    branch: master
