@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+echo 'starting'
+mkdir 'deploy'
+chmod 700 deploy
+cd deploy
 git clone git://${GH_REPO}
 git config user.email ${EMAIL}
 git config user.name ${USER}
