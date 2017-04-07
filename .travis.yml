@@ -5,13 +5,13 @@ php:
   - 5.6
 
 before_install:
-  - composer selfupdate
+#  - composer selfupdate
   - phpenv config-rm xdebug.ini
 
 install:
   # Load composer dependencies.
-  - composer validate --no-check-all --ansi
-  - composer install
+#  - composer validate --no-check-all --ansi
+#  - composer install
   # Prepare a list of files that should be checked for coding standard.
   # If the branch was force updated the commit range might not be good.
   # In this case we get the difference between the master and this.
@@ -43,7 +43,7 @@ script:
   - if [ -s changed_existing_files.txt ]; then ./vendor/bin/phpcs --file-list=changed_existing_files.txt; fi
 
 before_deploy:
-#  - openssl aes-256-cbc -K $encrypted_ddbdcf50acb4_key -iv $encrypted_ddbdcf50acb4_iv -in id_rsa.pub.enc -out /tmp/id_rsa.pub -d
+  - openssl aes-256-cbc -K $encrypted_ddbdcf50acb4_key -iv $encrypted_ddbdcf50acb4_iv -in id_rsa.pub.enc -out /tmp/id_rsa.pub -d
 #  - eval "$(ssh-agent -s)"
 #  - chmod 600 /tmp/id_rsa.pub
 #  - ssh-add /tmp/id_rsa.pub
