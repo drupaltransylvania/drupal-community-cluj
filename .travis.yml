@@ -41,3 +41,22 @@ install:
 script:
   # Run for each changed file the code sniffer.
   - if [ -s changed_existing_files.txt ]; then ./vendor/bin/phpcs --file-list=changed_existing_files.txt; fi
+
+before_deploy:
+  - openssl aes-256-cbc -K $encrypted_ddbdcf50acb4_key -iv $encrypted_ddbdcf50acb4_iv -in id_rsa.pub.enc -out /tmp/id_rsa.pub -d
+  - eval "$(ssh-agent -s)"
+  - chmod 600 /tmp/id_rsa.pub
+#  - ssh-add /tmp/id_rsa.pub
+
+deploy:
+  provider: script
+  script: deploy.sh
+  env:
+    global:
+      - USER="danielpopdan"
+      - EMAIL="popdan.daniel@gmail.com"
+      - REPO="drupal-community-cluj"
+      - GH_REPO="github.com/${USER}/${REPO}.git"
+      - ACQUIA_REPO="clujapocadc@svn-22901.prod.hosting.acquia.com:clujapocadc.git"
+  on:
+    branch: master
