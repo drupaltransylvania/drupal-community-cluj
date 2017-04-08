@@ -1,0 +1,26 @@
+uuid: c3495b80-2421-405f-8af6-5903aeea31f0
+langcode: en
+status: true
+dependencies:
+  module:
+    - dcc_bottom_widgets
+    - system
+  theme:
+    - dcc_theme
+id: bottomwidgetsfirstblock
+theme: dcc_theme
+region: bottom_first
+weight: 0
+provider: null
+plugin: bottom_widgets_first_block
+settings:
+  id: bottom_widgets_first_block
+  label: 'Bottom widgets first block'
+  provider: dcc_bottom_widgets
+  label_display: '0'
+visibility:
+  request_path:
+    id: request_path
+    pages: '<front>'
+    negate: false
+    context_mapping: {  }

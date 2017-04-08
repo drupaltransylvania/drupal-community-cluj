@@ -1,0 +1,36 @@
+uuid: d0b2368c-b96a-4f9d-a0b9-82fa0601d91c
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_gender
+field_name: field_gender
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: not_share
+      label: 'Prefer to not share'
+    -
+      value: male
+      label: male
+    -
+      value: female
+      label: female
+    -
+      value: transgender
+      label: transgender
+    -
+      value: other
+      label: other
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

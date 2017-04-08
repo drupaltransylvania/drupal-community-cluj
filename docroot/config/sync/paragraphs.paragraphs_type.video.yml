@@ -1,0 +1,7 @@
+uuid: 20db5938-1e69-4b4f-ba11-49b5802cdeb9
+langcode: en
+status: true
+dependencies: {  }
+id: video
+label: Video
+behavior_plugins: {  }

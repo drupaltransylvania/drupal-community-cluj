@@ -1,0 +1,32 @@
+version: 1.0.0
+services:
+  - mysql
+
+variables:
+  global:
+    COMPOSER_BIN: $BUILD_DIR/vendor/bin
+    BLT_DIR: $BUILD_DIR/vendor/acquia/blt
+
+events:
+  build:
+    steps:
+        # Install global packages and set global configuration.
+        - setup:
+            type: script
+            script:
+              - composer validate --no-check-all --ansi
+              - composer install
+              - source ${BLT_DIR}/scripts/pipelines/setup_environment
+              - source ${BLT_DIR}/scripts/pipelines/setup_project
+
+        # Execute all testing and validation tasks.
+        - run-tests:
+            type: script
+            script:
+              - source ${BLT_DIR}/scripts/pipelines/run_tests
+
+        # Generate artifact.
+        - build-artifact:
+            type: script
+            script:
+              - source ${BLT_DIR}/scripts/pipelines/build_artifact

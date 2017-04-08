@@ -1,0 +1,147 @@
+uuid: 82ffa6ad-78c7-4976-a840-540575c25ccb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.drupal_training_scheduler.body
+    - field.field.node.drupal_training_scheduler.field_company_name
+    - field.field.node.drupal_training_scheduler.field_friday_schedule
+    - field.field.node.drupal_training_scheduler.field_location
+    - field.field.node.drupal_training_scheduler.field_logo
+    - field.field.node.drupal_training_scheduler.field_metatag_image
+    - field.field.node.drupal_training_scheduler.field_number_of_members
+    - field.field.node.drupal_training_scheduler.field_registration_period
+    - field.field.node.drupal_training_scheduler.field_saturday_schedule
+    - field.field.node.drupal_training_scheduler.field_scheduler_description
+    - field.field.node.drupal_training_scheduler.field_training_date
+    - field.field.node.drupal_training_scheduler.field_website_link
+    - image.style.thumbnail
+    - node.type.drupal_training_scheduler
+  module:
+    - datetime_range
+    - google_map_field
+    - image
+    - link
+    - path
+    - text
+id: node.drupal_training_scheduler.default
+targetEntityType: node
+bundle: drupal_training_scheduler
+mode: default
+content:
+  body:
+    type: text_textarea_with_summary
+    weight: 6
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
+    third_party_settings: {  }
+  created:
+    type: datetime_timestamp
+    weight: 2
+    settings: {  }
+    third_party_settings: {  }
+  field_company_name:
+    weight: 15
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+  field_friday_schedule:
+    weight: 12
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textarea
+  field_location:
+    weight: 9
+    settings: {  }
+    third_party_settings: {  }
+    type: google_map_field_default
+  field_logo:
+    weight: 16
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+    type: image_image
+  field_metatag_image:
+    weight: 14
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+    type: image_image
+  field_number_of_members:
+    weight: 10
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+  field_registration_period:
+    weight: 8
+    settings: {  }
+    third_party_settings: {  }
+    type: daterange_default
+  field_saturday_schedule:
+    weight: 13
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textarea
+  field_scheduler_description:
+    weight: 11
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textarea
+  field_training_date:
+    weight: 7
+    settings: {  }
+    third_party_settings: {  }
+    type: daterange_default
+  field_website_link:
+    weight: 17
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+    type: link_default
+  path:
+    type: path
+    weight: 5
+    settings: {  }
+    third_party_settings: {  }
+  promote:
+    type: boolean_checkbox
+    settings:
+      display_label: true
+    weight: 3
+    third_party_settings: {  }
+  sticky:
+    type: boolean_checkbox
+    settings:
+      display_label: true
+    weight: 4
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 0
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  uid:
+    type: entity_reference_autocomplete
+    weight: 1
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden: {  }

@@ -1,0 +1,44 @@
+<?php
+
+/**
+ * @file
+ * Contains hook implementations.
+ */
+
+use Drupal\dcc_gtd_registration\Form\GlobalTrainingRegistrationForm;
+
+/**
+ * Implements hook_mail().
+ *
+ * {@inheritdoc}
+ */
+function dcc_email_mail($key, &$message, $params) {
+  $formatter = \Drupal::service('dcc_email.email_factory');
+  $formatterService = $formatter->getEmail($key, $message, $params);
+  if (!empty($formatterService)) {
+    $message = $formatterService->formatMessage($message, $params);
+  }
+}
+
+/**
+ * Implements hook_theme().
+ *
+ * {@inheritdoc}
+ */
+function dcc_email_theme($existing, $type, $theme, $path) {
+  return [
+    GlobalTrainingRegistrationForm::GLOBAL_TRAINING_REGISTRATION_EMAIL_KEY => [
+      'variables' => [
+        'first_name' => NULL,
+        'last_name' => NULL,
+        'logo_url' => NULL,
+        'big_image_url' => NULL,
+        'left_image_url' => NULL,
+        'activation_link' => NULL,
+        'cancel_link' => NULL,
+        'base_url' => NULL,
+      ],
+      'template' => 'global-registration-email',
+    ],
+  ];
+}

@@ -1,0 +1,32 @@
+name: Drupal Community Theme
+type: theme
+description: This is a sub theme with the theme base BusinessGroup Zymphonies Theme
+core: 8.x
+base theme: businessgroup_zymphonies_theme
+libraries:
+  - dcc_theme/global-styling
+
+regions:
+  header: 'Header'
+  primary_menu: 'Primary Menu'
+  slideshow: 'Slideshow'
+  topwidget_first: 'Top First Widget'
+  topwidget_second: 'Top Second Widget'
+  topwidget_third: 'Top Third Widget'
+  highlighted: 'Highlighted'
+  page_title: 'Page Title'
+  breadcrumb: 'Breadcrumb'
+  search: 'Search'
+  content: 'Content'
+  sidebar_first: 'Left Sidebar'
+  sidebar_second: 'Right Sidebar'
+  bottom_first: 'Bottom First Widget'
+  bottom_second: 'Bottom Second Widget'
+  bottom_third: 'Bottom Third Widget'
+  bottom_forth: 'Bottom Forth Widget'
+  footer_first: 'Footer First Widget'
+  footer_second: 'Footer Second Widget'
+  footer_third: 'Footer Third Widget'
+  footer_menu: 'Footer Menu'
+  google_map: 'Google Map'
+  auto_hidden_block: 'Auto hidden blocks'

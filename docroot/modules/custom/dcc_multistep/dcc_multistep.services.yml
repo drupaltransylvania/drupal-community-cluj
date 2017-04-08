@@ -1,0 +1,4 @@
+services:
+  plugin.manager.dcc_multistep.steps:
+    class: Drupal\dcc_multistep\StepPluginManager
+    parent: default_plugin_manager

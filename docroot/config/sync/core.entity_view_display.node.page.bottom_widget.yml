@@ -1,0 +1,22 @@
+uuid: e9fba60e-95fb-48e6-ae22-935f1993090a
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.bottom_widget
+    - field.field.node.page.field_metatag_image
+    - node.type.page
+  module:
+    - user
+_core:
+  default_config_hash: oZ-7vpIJxjxL2up9B5KrJGD0lazQ9aN0P-fIPo6OrSU
+id: node.page.bottom_widget
+targetEntityType: node
+bundle: page
+mode: bottom_widget
+content: {  }
+hidden:
+  addtoany: true
+  field_layout: true
+  field_metatag_image: true
+  links: true

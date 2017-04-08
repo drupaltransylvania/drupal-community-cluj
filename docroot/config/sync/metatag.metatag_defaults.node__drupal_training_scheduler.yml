@@ -1,0 +1,8 @@
+uuid: eca20686-9065-4cef-b541-c2e95667510f
+langcode: en
+status: true
+dependencies: {  }
+id: node__drupal_training_scheduler
+label: 'Content: Drupal Training Scheduler'
+tags:
+  og_image: '[node:field_metatag_image:open_graph]'

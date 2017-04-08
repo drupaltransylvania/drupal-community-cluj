@@ -1,0 +1,12 @@
+uuid: ad8ec2ea-6f3d-49eb-a7ca-8993772d197e
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: ShncZd3oX-UZDBGDUrgbRiZ2BmIJYSLHvIIPjq6tRAQ
+id: taxonomy_term
+label: 'Taxonomy term'
+tags:
+  description: '[term:description]'
+  title: '[term:name] | [site:name]'
+  keywords: 'Drupal, Cluj-Napoca, Cluj, Global Training Days, Romania, Community, Meetups, Sprints, Drupal Camps'

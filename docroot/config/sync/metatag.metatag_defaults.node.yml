@@ -1,0 +1,14 @@
+uuid: 0ae9b4a2-e6ff-4e90-ad41-5c81dea68a0e
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: ydpmSCtxLjO9xqkBxObkeYx0Bf2dkW-d8bB_6Q1Ggjs
+id: node
+label: Content
+tags:
+  description: '[node:summary]'
+  title: '[node:title] | [site:name]'
+  keywords: 'Drupal, Cluj-Napoca, Cluj, Global Training Days, Romania, Community, Meetups, Sprints, Drupal Camps'
+  og_title: '[node:title]'
+  og_site_name: 'Drupal Community Cluj-Napoca'

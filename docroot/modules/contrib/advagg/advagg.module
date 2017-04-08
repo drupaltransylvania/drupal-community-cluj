@@ -1,0 +1,692 @@
+<?php
+
+/**
+ * @file
+ * Advanced CSS/JS aggregation module.
+ */
+
+use Drupal\Core\Url;
+use Drupal\Component\Utility\Crypt;
+
+// Core hook implementations.
+/**
+ * Implements hook_hook_info().
+ */
+function advagg_hook_info() {
+  // List of hooks that should be inside of *.advagg.inc files.
+  // All advagg hooks except for:
+  // advagg_current_hooks_hash_array_alter
+  // advagg_hooks_implemented_alter
+  // because these 3 hooks are used on most requests.
+  $advagg_hooks = [
+    'advagg_aggregate_grouping_alter',
+    'advagg_css_contents_alter',
+    'advagg_js_contents_alter',
+    'advagg_scan_file_alter',
+  ];
+  $hooks = [];
+  foreach ($advagg_hooks as $hook) {
+    $hooks[$hook] = ['group' => 'advagg'];
+  }
+  return $hooks;
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ *
+ * Move advagg' and various submodule's implementations to last.
+ */
+function advagg_module_implements_alter(&$implementations, $hook) {
+  if ($hook === 'js_alter' && isset($implementations['advagg'])) {
+    // Move advagg and advagg_mod to the bottom, advagg is above advagg_mod.
+    $item = $implementations['advagg'];
+    unset($implementations['advagg']);
+    $implementations['advagg'] = $item;
+    if (isset($implementations['advagg_mod'])) {
+      $item = $implementations['advagg_mod'];
+      unset($implementations['advagg_mod']);
+      $implementations['advagg_mod'] = $item;
+    }
+  }
+  elseif ($hook === 'css_alter' && isset($implementations['advagg'])) {
+    $item = $implementations['advagg'];
+    unset($implementations['advagg']);
+    $implementations['advagg'] = $item;
+    if (isset($implementations['advagg_mod'])) {
+      $item = $implementations['advagg_mod'];
+      unset($implementations['advagg_mod']);
+      $implementations['advagg_mod'] = $item;
+    }
+  }
+  if ($hook === 'file_url_alter' && isset($implementations['advagg'])) {
+    $item = $implementations['advagg'];
+    unset($implementations['advagg']);
+    $implementations['advagg'] = $item;
+  }
+  if ($hook === 'requirements') {
+    if (isset($implementations['advagg'])) {
+      $item = $implementations['advagg'];
+      unset($implementations['advagg']);
+      $implementations['advagg'] = $item;
+    }
+    if (isset($implementations['advagg_cdn'])) {
+      $item = $implementations['advagg_cdn'];
+      unset($implementations['advagg_cdn']);
+      $implementations['advagg_cdn'] = $item;
+    }
+    if (isset($implementations['advagg_css_minify'])) {
+      $item = $implementations['advagg_css_minify'];
+      unset($implementations['advagg_css_minify']);
+      $implementations['advagg_css_minify'] = $item;
+    }
+    if (isset($implementations['advagg_js_minify'])) {
+      $item = $implementations['advagg_js_minify'];
+      unset($implementations['advagg_js_minify']);
+      $implementations['advagg_js_minify'] = $item;
+    }
+  }
+}
+
+/**
+ * Implements hook_cron().
+ *
+ * This will be ran once a day at most.
+ *
+ * @param bool $bypass_time_check
+ *   Set to TRUE to skip the 24 hour check.
+ */
+function advagg_cron($bypass_time_check = FALSE) {
+  $state = \Drupal::state();
+  // Execute once a day (24 hours).
+  if (!$bypass_time_check && $state->get('advagg.cron_timestamp', REQUEST_TIME) > (REQUEST_TIME - \Drupal::config('advagg.settings')->get('cron_frequency'))) {
+    return [];
+  }
+  $state->set('advagg.cron_timestamp', REQUEST_TIME);
+
+  $return = [];
+  $return['stale'] = [
+    'js' => \Drupal::service('asset.js.collection_optimizer')->deleteStale(),
+    'css' => \Drupal::service('asset.css.collection_optimizer')->deleteStale(),
+  ];
+
+  return $return;
+}
+
+/**
+ * Implements hook_js_alter().
+ */
+function advagg_js_alter(&$js) {
+  // Skip if advagg is disabled.
+  if (!advagg_enabled()) {
+    return;
+  }
+
+  // Add DNS information for some of the more popular modules.
+  foreach ($js as &$value) {
+    if (!is_string($value['data'])) {
+      continue;
+    }
+    // Google Ad Manager.
+    if (strpos($value['data'], '/google_service.') !== FALSE) {
+      if (!empty($value['dns_prefetch']) && is_string($value['dns_prefetch'])) {
+        $temp = $value['dns_prefetch'];
+        unset($value['dns_prefetch']);
+        $value['dns_prefetch'] = [$temp];
+      }
+      // Domains in the google_service.js file.
+      $value['dns_prefetch'][] = 'https://csi.gstatic.com';
+      $value['dns_prefetch'][] = 'https://pubads.g.doubleclick.net';
+      $value['dns_prefetch'][] = 'https://partner.googleadservices.com';
+      $value['dns_prefetch'][] = 'https://securepubads.g.doubleclick.net';
+
+      // Domains in the google_ads.js file.
+      $value['dns_prefetch'][] = 'https://pagead2.googlesyndication.com';
+
+      // Other domains that usually get hit.
+      $value['dns_prefetch'][] = 'https://cm.g.doubleclick.net';
+      $value['dns_prefetch'][] = 'https://tpc.googlesyndication.com';
+    }
+
+    // Google Analytics.
+    // @ignore sniffer_whitespace_openbracketspacing_openingwhitespace
+    if (strpos($value['data'], 'GoogleAnalyticsObject') !== FALSE
+      || strpos($value['data'], '.google-analytics.com/ga.js') !== FALSE
+    ) {
+      if (!empty($value['dns_prefetch']) && is_string($value['dns_prefetch'])) {
+        $temp = $value['dns_prefetch'];
+        unset($value['dns_prefetch']);
+        $value['dns_prefetch'] = [$temp];
+      }
+      if (strpos($value['data'], '.google-analytics.com/ga.js') !== FALSE) {
+        $value['dns_prefetch'][] = 'https://ssl.google-analytics.com';
+      }
+      $value['dns_prefetch'][] = 'https://stats.g.doubleclick.net';
+    }
+  }
+  unset($value);
+
+  // Fix type if it was incorrectly set.
+  if (\Drupal::config('advagg.settings')->get('js_fix_type')) {
+    // Get hostname and base path.
+    $mod_base_url = substr($GLOBALS['base_root'] . $GLOBALS['base_path'], strpos($GLOBALS['base_root'] . $GLOBALS['base_path'], '//') + 2);
+    $mod_base_url_len = strlen($mod_base_url);
+
+    foreach ($js as &$value) {
+      // Skip if the data is empty or not a string.
+      if (empty($value['data']) || !is_string($value['data'])) {
+        continue;
+      }
+
+      // Default to file if not file or external.
+      if ($value['type'] !== 'file' && $value['type'] !== 'external') {
+        if ($value['type'] === 'settings') {
+          $value['type'] = 'setting';
+        }
+        else {
+          $value['type'] = 'file';
+        }
+      }
+
+      // If type is external but doesn't start with http, https, or // change it
+      // to file.
+      // @ignore sniffer_whitespace_openbracketspacing_openingwhitespace
+      if ($value['type'] === 'external'
+        && stripos($value['data'], 'http://') !== 0
+        && stripos($value['data'], 'https://') !== 0
+        && stripos($value['data'], '//') !== 0
+        ) {
+        $value['type'] = 'file';
+      }
+
+      // If type is file but it starts with http, https, or // change it to
+      // external.
+      // @ignore sniffer_whitespace_openbracketspacing_openingwhitespace
+      if ($value['type'] === 'file'
+        && (stripos($value['data'], 'http://') === 0
+        || stripos($value['data'], 'https://') === 0
+        || (stripos($value['data'], '//') === 0 && stripos($value['data'], '///') === FALSE))
+        ) {
+        $value['type'] = 'external';
+      }
+
+      // If type is external and starts with http, https, or // but points to
+      // this host change to file, but move it to the top of the aggregation
+      // stack.
+      // @ignore sniffer_whitespace_openbracketspacing_openingwhitespace
+      if ($value['type'] === 'external'
+        && stripos($value['data'], $mod_base_url) !== FALSE
+        && (stripos($value['data'], 'http://') === 0
+          || stripos($value['data'], 'https://') === 0
+          || stripos($value['data'], '//') === 0
+          )
+      ) {
+        $value['type'] = 'file';
+        $value['group'] = JS_LIBRARY;
+        $value['every_page'] = TRUE;
+        $value['weight'] = -40000;
+        $value['data'] = substr($value['data'], stripos($value['data'], $mod_base_url) + $mod_base_url_len);
+      }
+    }
+    unset($value);
+  }
+}
+
+/**
+ * Implements hook_css_alter().
+ */
+function advagg_css_alter(&$css) {
+  if (!advagg_enabled()) {
+    return;
+  }
+  if (\Drupal::config('advagg.settings')->get('css.fix_type')) {
+    // Fix type if it was incorrectly set.
+    foreach ($css as &$value) {
+      if (empty($value['data']) || !is_string($value['data'])) {
+        continue;
+      }
+
+      // Default to file if not set.
+      if ($value['type'] !== 'file' && $value['type'] !== 'external') {
+        $value['type'] = 'file';
+      }
+
+      // If type is external but doesn't start with http, https, or // change it
+      // to file.
+      // @ignore sniffer_whitespace_openbracketspacing_openingwhitespace
+      if ($value['type'] === 'external'
+        && stripos($value['data'], 'http://') !== 0
+        && stripos($value['data'], 'https://') !== 0
+        && stripos($value['data'], '//') !== 0
+        ) {
+        $value['type'] = 'file';
+      }
+
+      // If type is file but it starts with http, https, or // change it to
+      // external.
+      // @ignore sniffer_whitespace_openbracketspacing_openingwhitespace
+      if ($value['type'] === 'file'
+        && (stripos($value['data'], 'http://') === 0
+        || stripos($value['data'], 'https://') === 0
+        || (stripos($value['data'], '//') === 0
+        && stripos($value['data'], '///') === FALSE
+        )
+        )
+      ) {
+        $value['type'] = 'external';
+      }
+    }
+    unset($value);
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Give advice on how to temporarily disable css/js aggregation.
+ */
+function advagg_form_system_performance_settings_alter(&$form, &$form_state) {
+  $msg = t('NOTE: If you wish to bypass aggregation for a set amount of time, you can go to the <a href="@operations">AdvAgg operations</a> page and press the "aggregation bypass cookie" button.', [
+    '@operations' => Url::fromRoute('advagg.operations')->toString(),
+  ]);
+
+  if (\Drupal::currentUser()->hasPermission('bypass advanced aggregation')) {
+    $msg .= t('You can also selectively bypass aggregation by adding <code>@code</code> to the URL of any page.', [
+      '@code' => '?advagg=0',
+    ]);
+  }
+  else {
+    $msg .= t('You do not have the <a href="@permission">bypass advanced aggregation permission</a> so adding <code>@code</code> to the URL will not work at this time for you; either grant this permission to your user role or use the bypass cookie if you wish to selectively bypass aggregation.', [
+      '@permission' => Url::fromRoute('user.admin_permissions')->toString(),
+      '@code' => '?advagg=0',
+    ]);
+  }
+
+  $form['bandwidth_optimization']['advagg_note'] = [
+    '#markup' => $msg,
+  ];
+}
+
+/**
+ * Returns TRUE if the CSS is being loaded via JavaScript.
+ *
+ * @return bool
+ *   TRUE if CSS loaded via JS. FALSE if not.
+ */
+function advagg_css_in_js() {
+  if (\Drupal::moduleHandler()->moduleExists('advagg_mod')
+      && \Drupal::config('advagg_mod.settings')->get('css_defer')
+    ) {
+    return TRUE;
+  }
+  return \Drupal::config('advagg.settings')->get('advagg_css_in_js');
+}
+
+// Helper functions.
+/**
+ * Function used to see if aggregation is enabled.
+ *
+ * @return bool
+ *   The value of the advagg_enabled variable.
+ */
+function advagg_enabled() {
+  $init = &drupal_static(__FUNCTION__);
+
+  if (!empty($init)) {
+    return $init['advagg'];
+  }
+
+  $advagg_config = \Drupal::config('advagg.settings');
+  $user = \Drupal::currentUser();
+  $init['advagg'] = $advagg_config->get('enabled');
+
+  // Disable AdvAgg if maintenance mode is defined.
+  if (defined('MAINTENANCE_MODE')) {
+    $init['advagg'] = FALSE;
+    return FALSE;
+  }
+  // Allow for AdvAgg to be enabled/disabled per request.
+  if (isset($_GET['advagg']) && $user->hasPermission('bypass advanced aggregation')) {
+    if ($_GET['advagg'] == 1) {
+      $init['advagg'] = TRUE;
+    }
+    else {
+      $init['advagg'] = FALSE;
+    }
+  }
+
+  // Do not use AdvAgg if the disable cookie is set.
+  $cookie_name = 'AdvAggDisabled';
+  $key = Crypt::hashBase64(\Drupal::service('private_key')->get());
+  if (!empty($_COOKIE[$cookie_name]) && $_COOKIE[$cookie_name] == $key) {
+    $init['advagg'] = FALSE;
+
+    // Let the user know that the AdvAgg bypass cookie is currently set.
+    static $msg_set;
+    if (!isset($msg_set) && $advagg_config->get('show_bypass_cookie_message')) {
+      $msg_set = TRUE;
+      if (\Drupal::currentUser()->hasPermission('administer site configuration')) {
+        drupal_set_message(t('The AdvAgg bypass cookie is currently enabled. Turn it off by going to the <a href="@advagg_operations">AdvAgg Operations</a> page and clicking the <em>Toggle the "aggregation bypass cookie" for this browser</em> button.', [
+          '@advagg_operations' => Url::fromRoute('advagg.operations', [], ['fragment' => 'edit-bypass'])->toString(),
+        ]));
+      }
+      else {
+        drupal_set_message(t('The AdvAgg bypass cookie is currently enabled. Turn it off by <a href="@login">logging in</a> with a user with the "administer site configuration" permissions and going to the AdvAgg Operations page (located at @advagg_operations) and clicking the <em>Toggle the "aggregation bypass cookie" for this browser</em> button.', [
+          '@login' => '/user/login',
+          '@advagg_operations' => Url::fromRoute('advagg.operations')->toString(),
+        ]));
+      }
+    }
+  }
+
+  // Enable debugging if requested.
+  // @ignore sniffer_whitespace_openbracketspacing_openingwhitespace
+  if (isset($_GET['advagg-debug'])
+    && $_GET['advagg-debug'] == 1
+    && $user->hasPermission('bypass advanced aggregation')
+    ) {
+    global $config;
+    $config['advagg.settings']['debug'] = TRUE;
+  }
+
+  return $init['advagg'];
+}
+
+/**
+ * Get an array of all hooks and settings that affect aggregated files contents.
+ *
+ * @return array
+ *   ['variables' => [], 'hooks' => []]
+ */
+function advagg_current_hooks_hash_array() {
+  $aggregate_settings = &drupal_static(__FUNCTION__);
+  if (isset($aggregate_settings)) {
+    return $aggregate_settings;
+  }
+
+  $config = \Drupal::config('advagg.settings');
+
+  // Put all enabled hooks and settings into a big array.
+  $aggregate_settings = [
+    'variables' => ['advagg' => $config->get()],
+    'hooks' => advagg_hooks_implemented(FALSE),
+  ];
+
+  // Add in language if locale is enabled.
+  if (\Drupal::moduleHandler()->moduleExists('locale')) {
+    $aggregate_settings['variables']['language'] = isset(\Drupal::languageManager()->getCurrentLanguage()->language) ? \Drupal::languageManager()->getCurrentLanguage()->language : '';
+  }
+
+  // Add the base url if so desired to.
+  if ($config->get('include_base_url')) {
+    $aggregate_settings['variables']['base_url'] = $GLOBALS['base_url'];
+  }
+
+  // Allow other modules to add in their own settings and hooks.
+  // Call hook_advagg_current_hooks_hash_array_alter().
+  \Drupal::moduleHandler()->alter('advagg_current_hooks_hash_array', $aggregate_settings);
+
+  return $aggregate_settings;
+}
+
+/**
+ * Get the serialization function.
+ *
+ * @return string
+ *   The serializer. Defaults to json_encode.
+ */
+function get_serializer() {
+  $serialize_function = \Drupal::config('advagg.settings')->get('serializer');
+  if (!is_string($serialize_function) || !is_callable($serialize_function)) {
+    $serialize_function = 'json_encode';
+  }
+  return $serialize_function;
+}
+
+/**
+ * Get the hash of all hooks and settings that affect aggregated files contents.
+ *
+ * @return string
+ *   hash value.
+ */
+function advagg_get_current_hooks_hash() {
+  $current_hash = &drupal_static(__FUNCTION__);
+
+  if (!isset($current_hash)) {
+    // Get all advagg hooks and variables in use.
+    $aggregate_settings = advagg_current_hooks_hash_array();
+
+    // Generate the hash.
+    $serialize_function = get_serializer();
+    $current_hash = Crypt::hashBase64($serialize_function($aggregate_settings));
+  }
+
+  return $current_hash;
+}
+
+/**
+ * Get back what hooks are implemented.
+ *
+ * @param bool $all
+ *   If TRUE get all hooks related to css/js files.
+ *   if FALSE get only the subset of hooks that alter the filename/contents.
+ *
+ * @return array
+ *   List of hooks and what modules have implemented them.
+ */
+function advagg_hooks_implemented($all = TRUE) {
+  $hooks = &drupal_static(__FUNCTION__);
+  if ($hooks) {
+    return $hooks;
+  }
+  $module_handler = \Drupal::moduleHandler();
+
+  // Get hooks in use.
+  $hooks = [
+    'advagg_aggregate_grouping_alter' => [],
+    'advagg_css_contents_alter' => [],
+    'advagg_js_contents_alter' => [],
+    'advagg_current_hooks_hash_array_alter' => [],
+    'advagg_hooks_implemented' => [],
+  ];
+  if ($all) {
+    $hooks += [
+      'js_alter' => [],
+      'css_alter' => [],
+    ];
+  }
+  // Call hook_advagg_hooks_implemented_alter().
+  $module_handler->alter('advagg_hooks_implemented', $hooks, $all);
+
+  // Cache module_implements as this will load up .inc files.
+  $serialize_function = get_serializer();
+  $cid = 'advagg_hooks_implemented:' . (int) $all . ':' . Crypt::hashBase64($serialize_function($hooks));
+  $cache = \Drupal::cache('bootstrap')->get($cid);
+  if (!empty($cache->data)) {
+    $hooks = $cache->data;
+  }
+  else {
+    foreach ($hooks as $hook => $values) {
+      $hooks[$hook] = $module_handler->getImplementations($hook);
+
+      // Also check themes as drupal_alter() allows for themes to alter things.
+      $theme_keys = \Drupal::service('theme_handler')->listInfo();
+      if (!empty($theme_keys)) {
+        foreach ($theme_keys as $theme_key => $info) {
+          $function = $theme_key . '_' . $hook;
+          if (function_exists($function)) {
+            $hooks[$hook][] = $info['name'];
+          }
+        }
+      }
+    }
+    \Drupal::cache('bootstrap')->set($cid, $hooks, REQUEST_TIME + 600);
+  }
+  return $hooks;
+}
+
+/**
+ * Given a uri, get the relative_path.
+ *
+ * @param string $uri
+ *   The uri for the stream wrapper.
+ *
+ * @return string
+ *   The relative path of the uri.
+ *
+ * @see https://www.drupal.org/node/837794#comment-9124435
+ */
+function advagg_get_relative_path($uri) {
+  $wrapper = \Drupal::service("stream_wrapper_manager")->getViaUri($uri);
+  if ($wrapper instanceof DrupalLocalStreamWrapper) {
+    $relative_path = $wrapper->getDirectoryPath() . '/' . file_uri_target($uri);
+  }
+  else {
+    $relative_path = parse_url(file_create_url($uri), PHP_URL_PATH);
+    if (substr($relative_path, 0, strlen($GLOBALS['base_path'])) == $GLOBALS['base_path']) {
+      $relative_path = substr($relative_path, strlen($GLOBALS['base_path']));
+    }
+  }
+  return $relative_path;
+}
+
+/**
+ * Return the global_counter variable.
+ *
+ * @return int
+ *   Int value.
+ */
+function advagg_get_global_counter() {
+  $counter = &drupal_static(__FUNCTION__);
+  if (!$counter) {
+    $counter = \Drupal::config('advagg.settings')->get('global_counter');
+    if ($counter === NULL) {
+      $counter = 0;
+    }
+  }
+  return $counter;
+}
+
+/**
+ * Stable sort for CSS and JS items.
+ *
+ * Preserves the order of items with equal sort criteria.
+ *
+ * The function will sort by:
+ * - $item['group'],      integer, ascending
+ * - $item['weight'],     integer, ascending
+ *
+ * @param array &$items
+ *   Array of JS or CSS items, as in hook_alter_js() and hook_alter_css().
+ *   The array keys can be integers or strings. The items themselves are arrays.
+ *
+ * @see hook_alter_js()
+ * @see hook_alter_css()
+ */
+function advagg_drupal_sort_css_js_stable(array &$items) {
+  $nested = [];
+  foreach ($items as $key => $item) {
+    // Weight cast to string to preserve float.
+    $weight = (string) $item['weight'];
+    $nested[$item['group']][$weight][$key] = $item;
+  }
+  // First order by group, so that, for example, all items in the CSS_SYSTEM
+  // group appear before items in the CSS_DEFAULT group, which appear before
+  // all items in the CSS_THEME group. Modules may create additional groups by
+  // defining their own constants.
+  $sorted = [];
+  // Sort group; then iterate over it.
+  ksort($nested);
+  foreach ($nested as &$group_items) {
+    // Order by weight and iterate over it.
+    ksort($group_items);
+    foreach ($group_items as &$weight_items) {
+      foreach ($weight_items as $key => &$item) {
+        $sorted[$key] = $item;
+      }
+      unset($item);
+    }
+    unset($weight_items);
+  }
+  unset($group_items);
+  $items = $sorted;
+}
+
+/**
+ * Converts absolute paths to be self references.
+ *
+ * @param string $path
+ *   Path to check.
+ *
+ * @return string
+ *   The path.
+ */
+function advagg_convert_abs_to_rel($path) {
+  if (strpos($path, $GLOBALS['base_url']) === 0) {
+    $base_url = $GLOBALS['base_url'];
+    // Add a slash if none is found.
+    if (stripos(strrev($base_url), '/') !== 0) {
+      $base_url .= '/';
+    }
+    $path = str_replace($base_url, $GLOBALS['base_path'], $path);
+  }
+  return $path;
+}
+
+/**
+ * Converts absolute paths to be protocol relative paths.
+ *
+ * @param string $path
+ *   Path to check.
+ *
+ * @return string
+ *   The path.
+ */
+function advagg_path_convert_protocol_relative($path) {
+  if (strpos($path, 'https://') === 0) {
+    $path = substr($path, 6);
+  }
+  elseif (strpos($path, 'http://') === 0) {
+    $path = substr($path, 5);
+  }
+  return $path;
+}
+
+/**
+ * Convert http:// to https://.
+ *
+ * @param string $path
+ *   Path to check.
+ *
+ * @return string
+ *   The path.
+ */
+function advagg_path_convert_force_https($path) {
+  if (strpos($path, 'http://') === 0) {
+    $path = 'https://' . substr($path, 7);
+  }
+  return $path;
+}
+
+/**
+ * Convert the saved advagg cache level to a time interval.
+ *
+ * @param int $level
+ *   The cache level.
+ *
+ * @return int
+ *   The time interval.
+ */
+function advagg_get_cache_time($level = 0) {
+  switch ($level) {
+    case 1:
+    case 3:
+      return 86400;
+
+    case 5:
+      return 604800;
+
+    case 0:
+    default:
+      return 0;
+  }
+}

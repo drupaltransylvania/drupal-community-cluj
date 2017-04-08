@@ -1,0 +1,19 @@
+field.field_settings.country:
+  label: 'Country settings'
+  type: mapping
+  mapping:
+    selectable_countries:
+      type: sequence
+      label: 'Selectable countries'
+      sequence:
+        type: string
+
+field.storage_settings.country:
+  label: 'Country settings'
+  type: mapping
+  mapping:
+    selectable_countries:
+      type: sequence
+      label: 'Selectable countries'
+      sequence:
+        type: string

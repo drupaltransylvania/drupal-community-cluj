@@ -1,0 +1,19 @@
+uuid: 708c3bbc-1fe6-4801-996f-b03eb6c7e90b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_drupal_user
+    - node.type.global_training_day_registration
+id: node.global_training_day_registration.field_drupal_user
+field_name: field_drupal_user
+entity_type: node
+bundle: global_training_day_registration
+label: 'Drupal user'
+description: 'If you registered on Drupal.org please provide us your Drupal username.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

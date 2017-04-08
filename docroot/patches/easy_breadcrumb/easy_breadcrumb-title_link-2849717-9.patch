@@ -1,0 +1,13 @@
+diff --git a/src/EasyBreadcrumbBuilder.php b/src/EasyBreadcrumbBuilder.php
+index 7d2c21a..79bb027 100644
+--- a/src/EasyBreadcrumbBuilder.php
++++ b/src/EasyBreadcrumbBuilder.php
+@@ -191,7 +191,7 @@ public function build(RouteMatchInterface $route_match) {
+           }
+ 
+           // Add a linked breadcrumb unless it's the current page.
+-          if ($i == 0 && $this->config->get(EasyBreadcrumbConstants::INCLUDE_TITLE_SEGMENT)) {
++          if ($i == 0 && $this->config->get(EasyBreadcrumbConstants::INCLUDE_TITLE_SEGMENT) && !$this->config->get(EasyBreadcrumbConstants::TITLE_SEGMENT_AS_LINK)) {
+               $links[] = Link::createFromRoute($title, '<none>');
+           }
+           else {

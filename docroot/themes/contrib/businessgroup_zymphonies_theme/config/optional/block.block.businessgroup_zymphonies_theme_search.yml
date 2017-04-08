@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - search
+  theme:
+    - businessgroup_zymphonies_theme
+id: businessgroup_zymphonies_theme_search
+theme: businessgroup_zymphonies_theme
+region: search
+weight: -1
+provider: null
+plugin: search_form_block
+settings:
+  id: search_form_block
+  label: Search
+  provider: search
+  label_display: visible
+visibility: {  }

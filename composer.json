@@ -1,0 +1,135 @@
+{
+    "name": "drupal-composer/drupal-project",
+    "description": "Project template for Drupal 8 projects with composer",
+    "type": "project",
+    "license": "GPL-2.0+",
+    "authors": [
+        {
+            "name": "",
+            "role": ""
+        }
+    ],
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    ],
+    "require": {
+        "composer/installers": "^1.2",
+        "drupal-composer/drupal-scaffold": "^2.2",
+        "cweagans/composer-patches": "~1.0",
+        "drupal/core": "8.2.6",
+        "drush/drush": "~8.0",
+        "drupal/console": "~1.0",
+        "drupal/devel": "~1.0",
+        "drupal/businessgroup_zymphonies_theme": "1.0.0",
+        "drupal/google_map_field": "1.2",
+        "drupal/country": "1.0.0-beta3",
+        "drupal/entityqueue": "1.alpha6",
+        "drupal/mailsystem": "4.1",
+        "drupal/swiftmailer": "1.0-alpha2",
+        "drupal/easy_breadcrumb": "1.5",
+        "drupal/acquia_connector": "1.7",
+        "drupal/recaptcha": "^2.2",
+        "drupal/eu_cookie_compliance": "1.0-beta7",
+        "drupal/addtoany": "1.7",
+        "drupal/metatag": "1.0",
+        "drupal/pathauto": "^1.0@RC",
+        "drupal/paragraphs": "^1.1",
+        "drupal/youtube": "^1.0@beta",
+        "drupal/video": "^1.2",
+        "drupal/advagg": "^2.0",
+        "drupal/simple_sitemap": "^2.8",
+        "drupal/google_analytics": "^2.1",
+        "acquia/blt": "^8.3"
+    },
+    "require-dev": {
+        "behat/mink": "~1.7",
+        "behat/mink-goutte-driver": "~1.2",
+        "jcalderonzumba/gastonjs": "~1.0.2",
+        "jcalderonzumba/mink-phantomjs-driver": "~0.3.1",
+        "mikey179/vfsStream": "~1.2",
+        "phpunit/phpunit": "~4.8",
+        "symfony/css-selector": "~2.8",
+        "drupal/coder": "^8.2"
+    },
+    "conflict": {
+        "drupal/drupal": "*"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "classmap": [
+            "scripts/composer/ScriptHandler.php"
+        ]
+    },
+    "scripts": {
+        "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
+        "pre-install-cmd": [
+            "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
+        ],
+        "pre-update-cmd": [
+            "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
+        ],
+        "post-install-cmd": [
+            "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
+        ],
+        "post-update-cmd": [
+            "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
+        ]
+    },
+    "extra": {
+        "installer-paths": {
+            "docroot/core": [
+                "type:drupal-core"
+            ],
+            "docroot/libraries/{$name}": [
+                "type:drupal-library"
+            ],
+            "docroot/modules/contrib/{$name}": [
+                "type:drupal-module"
+            ],
+            "docroot/profiles/contrib/{$name}": [
+                "type:drupal-profile"
+            ],
+            "docroot/themes/contrib/{$name}": [
+                "type:drupal-theme"
+            ],
+            "drush/contrib/{$name}": [
+                "type:drupal-drush"
+            ],
+            "docroot/modules/custom/{$name}": [
+                "type:drupal-custom-module"
+            ],
+            "docroot/profiles/custom/{$name}": [
+                "type:drupal-custom-profile"
+            ],
+            "docroot/themes/custom/{$name}": [
+                "type:drupal-custom-theme"
+            ]
+        },
+        "patches": {
+            "drupal/businessgroup_zymphonies_theme": {
+                "https://www.drupal.org/node/2840589": "https://www.drupal.org/files/issues/businessgroup_zymphonies_theme-icons_location-2840589-2-8.patch"
+            },
+            "drupal/easy_breadcrumb": {
+                "https://www.drupal.org/node/2849717": "https://www.drupal.org/files/issues/easy_breadcrumb-title_link-2849717-9.patch"
+            }
+        },
+        "enable-patching": true,
+        "merge-plugin": {
+            "require": [
+                "vendor/acquia/blt/composer.required.json",
+                "vendor/acquia/blt/composer.suggested.json"
+            ],
+            "include": [
+                "blt/composer.overrides.json"
+            ],
+            "merge-extra": true,
+            "merge-extra-deep": true,
+            "merge-scripts": true,
+            "replace": true
+        }
+    }
+}

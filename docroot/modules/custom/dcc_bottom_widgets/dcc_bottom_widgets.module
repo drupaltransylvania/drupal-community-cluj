@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * @file
+ * Contains hook implementations.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function dcc_bottom_widgets_theme($existing, $type, $theme, $path) {
+  return [
+    'dcc_bottom_widget_image_wrapper' => [
+      'variables' => [
+        'children' => NULL,
+      ],
+      'template' => 'bottom-widget-image-wrapper',
+    ],
+  ];
+}

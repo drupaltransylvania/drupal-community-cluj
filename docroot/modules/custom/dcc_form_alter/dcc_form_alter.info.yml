@@ -1,0 +1,5 @@
+name: Form Alter Events
+description: Allows developers to alter forms with event subscribers
+type: module
+package: Custom
+core: 8.x

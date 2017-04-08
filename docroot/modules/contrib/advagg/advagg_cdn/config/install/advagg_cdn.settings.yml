@@ -1,0 +1,8 @@
+cdn: 'google'
+jquery: true
+jquery_version: '2.1.4'
+jquery_ui_css: false
+jquery_ui_js: true
+jquery_ui_theme: 'smoothness'
+jquery_ui_version: '1.11.4'
+minified: true

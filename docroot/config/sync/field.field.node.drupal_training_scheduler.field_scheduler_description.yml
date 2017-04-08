@@ -1,0 +1,21 @@
+uuid: 29a3058e-d609-475f-82a2-69e681468373
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_scheduler_description
+    - node.type.drupal_training_scheduler
+  module:
+    - text
+id: node.drupal_training_scheduler.field_scheduler_description
+field_name: field_scheduler_description
+entity_type: node
+bundle: drupal_training_scheduler
+label: 'Scheduler Description'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

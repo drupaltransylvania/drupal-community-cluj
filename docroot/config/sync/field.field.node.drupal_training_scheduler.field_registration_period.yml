@@ -1,0 +1,21 @@
+uuid: 95cc9917-0d6f-437c-9c0e-2fec7affbc0a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_registration_period
+    - node.type.drupal_training_scheduler
+  module:
+    - datetime_range
+id: node.drupal_training_scheduler.field_registration_period
+field_name: field_registration_period
+entity_type: node
+bundle: drupal_training_scheduler
+label: 'Registration period'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: daterange

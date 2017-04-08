@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * Advanced CSS/JS aggregation module.
+ */
+
+/**
+ * Implements hook_page_attachments().
+ */
+function advagg_test_page_attachments(array &$page) {
+  $page['#attached']['library'][] = 'advagg_test/external';
+}

@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains hook implementations.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\dcc_form_alter\Event\FormAlterEvent;
+
+/**
+ * Implements hook_form_alter().
+ *
+ * {@inheritdoc}
+ */
+function dcc_form_alter_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  /* @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispather */
+  $eventDispather = \Drupal::service('event_dispatcher');
+  $event = new FormAlterEvent($form, $form_state, $form_id);
+
+  $eventDispather->dispatch(FormAlterEvent::FORM_ALTER_EVENT, $event);
+  $form = $event->getForm();
+  $form_state = $event->getFormState();
+}

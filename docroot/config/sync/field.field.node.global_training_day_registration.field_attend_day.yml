@@ -1,0 +1,21 @@
+uuid: 76084da8-c72a-4be2-bf4b-64396679756c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_attend_day
+    - node.type.global_training_day_registration
+  module:
+    - options
+id: node.global_training_day_registration.field_attend_day
+field_name: field_attend_day
+entity_type: node
+bundle: global_training_day_registration
+label: 'On which days will you attend the training ? '
+description: 'See the schedule ! '
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string
