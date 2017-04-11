@@ -2,10 +2,10 @@
 
 namespace Drupal\advagg\Tests;
 
-use Drupal\Core\Url;
-
 /**
  * Tests that all the asset path settings function correctly.
+ *
+ * @ingroup advagg_tests
  *
  * @group advagg
  */

@@ -142,7 +142,7 @@ class SettingsForm extends ConfigFormBase {
       '#description' => t('Start the DNS lookup for external CSS and JavaScript files as soon as possible.'),
     ];
     $options = [
-      - 1 => t('Development'),
+      -1 => t('Development'),
       1 => t('Normal'),
       3 => t('High'),
       5 => t('Aggressive'),
@@ -188,61 +188,33 @@ class SettingsForm extends ConfigFormBase {
       '#description' => t('Unless you have a good reason to adjust these values you should leave them alone.'),
     ];
 
-    // @ignore sniffer_squiz_commenting_poststatementcomment_found:27
-    $short_times = array_combine([
-      60 * 15, // 15 min.
-      60 * 30, // 30 min.
-      60 * 45, // 45 min.
-      60 * 60, // 1 hour.
-      60 * 60 * 2, // 2 hours.
-      60 * 60 * 4, // 4 hours.
-      60 * 60 * 6, // 6 hours.
-      60 * 60 * 8, // 8 hours.
-      60 * 60 * 10, // 10 hours.
-      60 * 60 * 12, // 12 hours.
-      60 * 60 * 18, // 18 hours.
-      60 * 60 * 24, // 1 day.
-      60 * 60 * 24 * 2, // 2 days.
-    ], [
-      60 * 15, // 15 min.
-      60 * 30, // 30 min.
-      60 * 45, // 45 min.
-      60 * 60, // 1 hour.
-      60 * 60 * 2, // 2 hours.
-      60 * 60 * 4, // 4 hours.
-      60 * 60 * 6, // 6 hours.
-      60 * 60 * 8, // 8 hours.
-      60 * 60 * 10, // 10 hours.
-      60 * 60 * 12, // 12 hours.
-      60 * 60 * 18, // 18 hours.
-      60 * 60 * 24, // 1 day.
-      60 * 60 * 24 * 2, // 2 days.
-    ]);
-    $long_times = array_combine([
-      60 * 60 * 24 * 2, // 2 days.
-      60 * 60 * 24 * 3, // 3 days.
-      60 * 60 * 24 * 4, // 4 days.
-      60 * 60 * 24 * 5, // 5 days.
-      60 * 60 * 24 * 6, // 6 days.
-      60 * 60 * 24 * 7, // 1 week.
-      60 * 60 * 24 * 7 * 2, // 2 weeks.
-      60 * 60 * 24 * 7 * 3, // 3 weeks.
-      60 * 60 * 24 * 30, // 1 month.
-      60 * 60 * 24 * 45, // 1 month 2 weeks.
-      60 * 60 * 24 * 60, // 2 months.
-    ], [
-      60 * 60 * 24 * 2, // 2 days.
-      60 * 60 * 24 * 3, // 3 days.
-      60 * 60 * 24 * 4, // 4 days.
-      60 * 60 * 24 * 5, // 5 days.
-      60 * 60 * 24 * 6, // 6 days.
-      60 * 60 * 24 * 7, // 1 week.
-      60 * 60 * 24 * 7 * 2, // 2 weeks.
-      60 * 60 * 24 * 7 * 3, // 3 weeks.
-      60 * 60 * 24 * 30, // 1 month.
-      60 * 60 * 24 * 45, // 1 month 2 weeks.
-      60 * 60 * 24 * 60, // 2 months.
-    ]);
+    $short_times = [
+      900 => t('15 minutes'),
+      1800 => t('30 minutes'),
+      2700 => t('45 minutes'),
+      3600 => t('1 hour'),
+      7200 => t('2 hours'),
+      14400 => t('4 hours'),
+      21600 => t('6 hours'),
+      43200 => t('12 hours'),
+      64800 => t('18 hours'),
+      86400 => t('1 day'),
+      172800 => t('2 days'),
+    ];
+
+    $long_times = [
+      172800 => t('2 days'),
+      259200 => t('3 days'),
+      345600 => t('4 days'),
+      432000 => t('5 days'),
+      518400 => t('6 days'),
+      604800 => t('1 week'),
+      1209600 => t('2 week'),
+      1814400 => t('3 week'),
+      2592000 => t('1 month'),
+      3628800 => t('6 weeks'),
+      4838400 => t('2 months'),
+    ];
     $last_ran = $this->state->get('advagg.cron_timestamp', NULL);
     if ($last_ran) {
       $last_ran = t('@time ago', ['@time' => $this->dateFormatter->formatInterval(REQUEST_TIME - $last_ran)]);
@@ -275,6 +247,18 @@ class SettingsForm extends ConfigFormBase {
       '#type' => 'details',
       '#title' => t('Obscure Options'),
       '#description' => t('Some of the more obscure AdvAgg settings. Odds are you do not need to change anything in here.'),
+    ];
+    $form['global']['obscure']['css_gzip'] = [
+      '#type' => 'checkbox',
+      '#title' => t('Gzip CSS assets'),
+      '#default_value' => $this->config('system.performance')->get('css.gzip'),
+      '#description' => t('This should be enabled unless you are experiencing corrupted compressed asset files.'),
+    ];
+    $form['global']['obscure']['js_gzip'] = [
+      '#type' => 'checkbox',
+      '#title' => t('Gzip JavaScript assets'),
+      '#default_value' => $this->config('system.performance')->get('js.gzip'),
+      '#description' => t('This should be enabled unless you are experiencing corrupted compressed asset files.'),
     ];
     $form['global']['obscure']['include_base_url'] = [
       '#type' => 'checkbox',
@@ -395,6 +379,8 @@ class SettingsForm extends ConfigFormBase {
       ->save();
     $this->config('system.performance')
       ->set('stale_file_threshold', $form_state->getValue('stale_file_threshold'))
+      ->set('css.gzip', $form_state->getValue('css_gzip'))
+      ->set('js.gzip', $form_state->getValue('js_gzip'))
       ->save();
 
     // Clear relevant caches.

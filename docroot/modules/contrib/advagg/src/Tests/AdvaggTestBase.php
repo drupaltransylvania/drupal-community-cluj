@@ -5,6 +5,15 @@ namespace Drupal\advagg\Tests;
 use Drupal\simpletest\WebTestBase;
 
 /**
+ * @defgroup advagg_tests Test Suit
+ *
+ * @{
+ * The automated test suit for Advanced Aggregates.
+ *
+ * @}
+ */
+
+/**
  * Base test class for Advagg test cases.
  */
 abstract class AdvaggTestBase extends WebTestBase {
@@ -24,14 +33,14 @@ abstract class AdvaggTestBase extends WebTestBase {
   protected $user;
 
   /**
-   * Editable Advagg configuration
+   * Editable Advagg configuration.
    *
    * @var \Drupal\Core\Config\Config
    */
   protected $config;
 
   /**
-   * Editable system configuration
+   * Editable system configuration.
    *
    * @var \Drupal\Core\Config\Config
    */

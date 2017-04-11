@@ -154,37 +154,6 @@ class AssetResolver extends CoreAssetResolver implements AssetResolverInterface 
   }
 
   /**
-   * Returns the JavaScript settings assets for this response's libraries.
-   *
-   * Gathers all drupalSettings from all libraries in the attached assets
-   * collection and merges them, then it merges individual attached settings,
-   * and finally invokes hook_js_settings_alter() to allow alterations of
-   * JavaScript settings by modules and themes.
-   *
-   * @param \Drupal\Core\Asset\AttachedAssetsInterface $assets
-   *   The assets attached to the current response.
-   *
-   * @return array
-   *   A (possibly optimized) collection of JavaScript assets.
-   */
-  protected function getJsSettingsAssets(AttachedAssetsInterface $assets) {
-    $settings = [];
-
-    foreach ($this->getLibrariesToLoad($assets) as $library) {
-      list($extension, $name) = explode('/', $library, 2);
-      $definition = $this->libraryDiscovery->getLibraryByName($extension, $name);
-      if (isset($definition['drupalSettings'])) {
-        $settings = NestedArray::mergeDeepArray([$settings, $definition['drupalSettings']], TRUE);
-      }
-    }
-
-    // Attached settings win over settings in libraries.
-    $settings = NestedArray::mergeDeepArray([$settings, $assets->getSettings()], TRUE);
-
-    return $settings;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function getJsAssets(AttachedAssetsInterface $assets, $optimize) {
@@ -193,7 +162,7 @@ class AssetResolver extends CoreAssetResolver implements AssetResolverInterface 
     // hook_js_alter(). Additionally add the current language to support
     // translation of JavaScript files.
     $libraries_to_load = $this->getLibrariesToLoad($assets);
-    $cid = 'js:' . $theme_info->getName() . ':' . $this->languageManager->getCurrentLanguage()->getId() . ':' . Crypt::hashBase64(serialize($libraries_to_load)) . (int) $optimize;
+    $cid = 'js:' . $theme_info->getName() . ':' . $this->languageManager->getCurrentLanguage()->getId() . ':' . Crypt::hashBase64(serialize($libraries_to_load)) . (int) (count($assets->getSettings()) > 0) . (int) $optimize;
 
     if ($cached = $this->cache->get($cid)) {
       list($js_assets_header, $js_assets_footer, $settings, $settings_in_header) = $cached->data;

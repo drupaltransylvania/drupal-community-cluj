@@ -56,14 +56,17 @@ function captcha_help($route_name, RouteMatchInterface $route_match) {
           ':contenttypes' => \Drupal::url('entity.node_type.collection'),
         ]) . '</p>';
       $output .= '<p>' . t('CAPTCHA is a trademark of Carnegie Mellon University.') . '</p>';
-      return $output;
+      return ['#markup' => $output];
 
     case 'captcha_settings':
       $output = '<p>' . t('A CAPTCHA can be added to virtually each Drupal form. Some default forms are already provided in the form list, but arbitrary forms can be easily added and managed when the option <em>Add CAPTCHA administration links to forms</em> is enabled.') . '</p>';
       $output .= '<p>' . t('Users with the <em>Skip CAPTCHA</em> <a href=":perm">permission</a> won\'t be offered a challenge. Be sure to grant this permission to the trusted users (e.g. site administrators). If you want to test a protected form, be sure to do it as a user without the <em>Skip CAPTCHA</em> permission (e.g. as anonymous user).', [
           ':perm' => \Drupal::url('user.admin_permissions'),
         ]) . '</p>';
-      return $output;
+      $output .= '<p><b>' . t('Note that the CAPTCHA module disables <a href=":performancesettings">page caching</a> of pages that include a CAPTCHA challenge.', [
+          ':performancesettings' => \Drupal::url('system.performance_settings'),
+        ]) . '</b></p>';
+      return ['#markup' => $output];
   }
 }
 
@@ -74,6 +77,7 @@ function captcha_help($route_name, RouteMatchInterface $route_match) {
  *   Form id string.
  *
  * @return \Drupal\Core\Entity\EntityInterface
+ *   An instance of an captcha_point entity.
  */
 function captcha_point_load($id) {
   return CaptchaPoint::load($id);
@@ -128,7 +132,6 @@ function template_preprocess_captcha(&$variables) {
     ];
   }
 }
-
 
 /**
  * Implements hook_form_alter().
@@ -186,7 +189,6 @@ function captcha_form_alter(array &$form, FormStateInterface $form_state, $form_
     ];
 
     if ($captcha_point !== NULL && $captcha_point->getCaptchaType()) {
-      $markup = '<a href="@change">change</a>';
       $captcha_element['#title'] = $captcha_point->status() ? t('CAPTCHA: challenge "@type" enabled', ['@type' => $captcha_point->getCaptchaType()]) : t('CAPTCHA: challenge "@type" disabled', ['@type' => $captcha_point->getCaptchaType()]);
       $captcha_point->status() ? $captcha_element['#description'] = t('Untrusted users will see a CAPTCHA here (<a href="@settings">general CAPTCHA settings</a>).',
         [
@@ -198,35 +200,13 @@ function captcha_form_alter(array &$form, FormStateInterface $form_state, $form_
       $captcha_element['challenge'] = [
         '#type' => 'item',
         '#title' => t('Enabled challenge'),
-        '#markup' => t($markup, [
-          '%type' => $captcha_point->getCaptchaType(),
+        '#markup' => t('<a href="@change">change</a>', [
           '@change' => $captcha_point->url('edit-form', [
             'query' => Drupal::destination()
               ->getAsArray(),
           ]),
-          // '@disable' => $captcha_point->url('disable', ['query' => Drupal::destination()->getAsArray()]),
-          // '@enable' => $captcha_point->url('enable', ['query' => Drupal::destination()->getAsArray()]),
         ]),
       ];
-//      // Add an example challenge with solution.
-//      // This does not work with the reCAPTCHA and Egglue challenges as
-//      // discussed in http://drupal.org/node/487032 and
-//      // http://drupal.org/node/525586. As a temporary workaround, we
-//      // blacklist the reCAPTCHA and Egglue challenges and do not show
-//      // an example challenge.
-//      // TODO: Once the issues mentioned above are fixed, this workaround
-//      // should be removed.
-//      $captcha_element['example'] = array(
-//        '#type' => 'details',
-//        '#title' => t('Example'),
-//        '#description' => t('This is a pre-solved, non-blocking example of this challenge.'),
-//        '#open' => TRUE,
-//      );
-//      $captcha_element['example']['example_captcha'] = array(
-//        '#type' => 'captcha',
-//        '#captcha_type' => $captcha_point->getCaptchaType(),
-//        '#captcha_admin_mode' => TRUE,
-//      );
     }
     else {
       $captcha_element['#title'] = t('CAPTCHA: no challenge enabled');
@@ -333,7 +313,7 @@ function captcha_validate_case_insensitive_ignore_spaces($solution, $response) {
  *
  * @param array $element
  *   The CAPTCHA element.
- * @param array $form_state
+ * @param FormStateInterface $form_state
  *   The form state structure to extract the info from.
  * @param string $this_form_id
  *   The form ID of the form we are currently processing
@@ -558,7 +538,7 @@ function captcha_captcha($op, $captcha_type = '') {
           '#type' => 'textfield',
           '#title' => t('Math question'),
           '#description' => t('Solve this simple math problem and enter the result. E.g. for 1+3, enter 4.'),
-          '#field_prefix' => t('@x + @y = ', ['@x' => $x, '@y' => $y]),
+          '#field_prefix' => t('@x + @y =', ['@x' => $x, '@y' => $y]),
           '#size' => 4,
           '#maxlength' => 2,
           '#required' => TRUE,

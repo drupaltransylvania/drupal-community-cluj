@@ -7,6 +7,8 @@ use Drupal\Core\Url;
 /**
  * Tests that all the admin path(s) return valid content.
  *
+ * @ingroup advagg_tests
+ *
  * @group advagg
  */
 class AdminPagesTest extends AdvaggTestBase {

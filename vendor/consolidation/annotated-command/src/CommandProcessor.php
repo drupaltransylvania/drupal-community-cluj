@@ -1,7 +1,9 @@
 <?php
 namespace Consolidation\AnnotatedCommand;
 
-use Symfony\Component\Console\Command\Command;
+use Consolidation\AnnotatedCommand\Hooks\Dispatchers\ReplaceCommandHookDispatcher;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
@@ -11,14 +13,24 @@ use Consolidation\OutputFormatters\Options\FormatterOptions;
 use Consolidation\AnnotatedCommand\Hooks\HookManager;
 use Consolidation\AnnotatedCommand\Options\PrepareFormatter;
 
+use Consolidation\AnnotatedCommand\Hooks\Dispatchers\InitializeHookDispatcher;
+use Consolidation\AnnotatedCommand\Hooks\Dispatchers\OptionsHookDispatcher;
+use Consolidation\AnnotatedCommand\Hooks\Dispatchers\InteractHookDispatcher;
+use Consolidation\AnnotatedCommand\Hooks\Dispatchers\ValidateHookDispatcher;
+use Consolidation\AnnotatedCommand\Hooks\Dispatchers\ProcessResultHookDispatcher;
+use Consolidation\AnnotatedCommand\Hooks\Dispatchers\StatusDeterminerHookDispatcher;
+use Consolidation\AnnotatedCommand\Hooks\Dispatchers\ExtracterHookDispatcher;
+
 /**
  * Process a command, including hooks and other callbacks.
  * There should only be one command processor per application.
  * Provide your command processor to the AnnotatedCommandFactory
  * via AnnotatedCommandFactory::setCommandProcessor().
  */
-class CommandProcessor
+class CommandProcessor implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     /** var HookManager */
     protected $hookManager;
     /** var FormatterManager */
@@ -73,7 +85,8 @@ class CommandProcessor
         $names,
         AnnotationData $annotationData
     ) {
-        return $this->hookManager()->initializeHook($input, $names, $annotationData);
+        $initializeDispatcher = new InitializeHookDispatcher($this->hookManager(), $names);
+        return $initializeDispatcher->initialize($input, $annotationData);
     }
 
     public function optionsHook(
@@ -81,7 +94,8 @@ class CommandProcessor
         $names,
         AnnotationData $annotationData
     ) {
-        $this->hookManager()->optionsHook($command, $names, $annotationData);
+        $optionsDispatcher = new OptionsHookDispatcher($this->hookManager(), $names);
+        $optionsDispatcher->getOptions($command, $annotationData);
     }
 
     public function interact(
@@ -90,7 +104,8 @@ class CommandProcessor
         $names,
         AnnotationData $annotationData
     ) {
-        return $this->hookManager()->interact($input, $output, $names, $annotationData);
+        $interactDispatcher = new InteractHookDispatcher($this->hookManager(), $names);
+        return $interactDispatcher->interact($input, $output, $annotationData);
     }
 
     public function process(
@@ -120,9 +135,18 @@ class CommandProcessor
     ) {
         // Validators return any object to signal a validation error;
         // if the return an array, it replaces the arguments.
-        $validated = $this->hookManager()->validateArguments($names, $commandData);
+        $validateDispatcher = new ValidateHookDispatcher($this->hookManager(), $names);
+        $validated = $validateDispatcher->validate($commandData);
         if (is_object($validated)) {
             return $validated;
+        }
+
+        $replaceDispatcher = new ReplaceCommandHookDispatcher($this->hookManager(), $names);
+        if ($this->logger) {
+            $replaceDispatcher->setLogger($this->logger);
+        }
+        if ($replaceDispatcher->hasReplaceCommandHook()) {
+            $commandCallback = $replaceDispatcher->getReplacementCommand($commandData);
         }
 
         // Run the command, alter the results, and then handle output and status
@@ -132,7 +156,8 @@ class CommandProcessor
 
     public function processResults($names, $result, CommandData $commandData)
     {
-        return $this->hookManager()->alterResult($names, $result, $commandData);
+        $processDispatcher = new ProcessResultHookDispatcher($this->hookManager(), $names);
+        return $processDispatcher->process($result, $commandData);
     }
 
     /**
@@ -140,7 +165,8 @@ class CommandProcessor
      */
     public function handleResults(OutputInterface $output, $names, $result, CommandData $commandData)
     {
-        $status = $this->hookManager()->determineStatusCode($names, $result);
+        $statusCodeDispatcher = new StatusDeterminerHookDispatcher($this->hookManager(), $names);
+        $status = $statusCodeDispatcher->determineStatusCode($result);
         // If the result is an integer and no separate status code was provided, then use the result as the status and do no output.
         if (is_integer($result) && !isset($status)) {
             return $result;
@@ -148,7 +174,8 @@ class CommandProcessor
         $status = $this->interpretStatusCode($status);
 
         // Get the structured output, the output stream and the formatter
-        $structuredOutput = $this->hookManager()->extractOutput($names, $result);
+        $extractDispatcher = new ExtracterHookDispatcher($this->hookManager(), $names);
+        $structuredOutput = $extractDispatcher->extractOutput($result);
         $output = $this->chooseOutputStream($output, $status);
         if ($status != 0) {
             return $this->writeErrorMessage($output, $status, $structuredOutput, $result);

@@ -18,7 +18,7 @@ class Drupal_Sniffs_Semantics_FunctionAliasSniff extends Drupal_Sniffs_Semantics
 {
 
     /**
-     * Holds all PHP funtion name aliases (keys) and orginals (values). See
+     * Holds all PHP function name aliases (keys) and originals (values). See
      * http://php.net/manual/en/aliases.php
      *
      * @var array
@@ -191,14 +191,13 @@ class Drupal_Sniffs_Semantics_FunctionAliasSniff extends Drupal_Sniffs_Semantics
     /**
      * Processes this function call.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile
-     *   The file being scanned.
-     * @param int                  $stackPtr
-     *   The position of the function call in the stack.
-     * @param int                  $openBracket
-     *   The position of the opening parenthesis in the stack.
-     * @param int                  $closeBracket
-     *   The position of the closing parenthesis in the stack.
+     * @param PHP_CodeSniffer_File $phpcsFile    The file being scanned.
+     * @param int                  $stackPtr     The position of the function call in
+     *                                           the stack.
+     * @param int                  $openBracket  The position of the opening
+     *                                           parenthesis in the stack.
+     * @param int                  $closeBracket The position of the closing
+     *                                           parenthesis in the stack.
      *
      * @return void
      */

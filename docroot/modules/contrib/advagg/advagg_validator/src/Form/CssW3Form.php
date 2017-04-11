@@ -30,7 +30,7 @@ class CssW3Form extends BaseValidatorForm {
    *
    * @var \Drupal\Core\Render\RendererInterface
    */
-   protected $renderer;
+  protected $renderer;
 
   /**
    * {@inheritdoc}

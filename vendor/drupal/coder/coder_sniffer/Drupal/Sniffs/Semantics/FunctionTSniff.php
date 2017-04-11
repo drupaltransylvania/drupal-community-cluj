@@ -45,14 +45,13 @@ class Drupal_Sniffs_Semantics_FunctionTSniff extends Drupal_Sniffs_Semantics_Fun
     /**
      * Processes this function call.
      *
-     * @param PHP_CodeSniffer_File $phpcsFile
-     *   The file being scanned.
-     * @param int                  $stackPtr
-     *   The position of the function call in the stack.
-     * @param int                  $openBracket
-     *   The position of the opening parenthesis in the stack.
-     * @param int                  $closeBracket
-     *   The position of the closing parenthesis in the stack.
+     * @param PHP_CodeSniffer_File $phpcsFile    The file being scanned.
+     * @param int                  $stackPtr     The position of the function call in
+     *                                           the stack.
+     * @param int                  $openBracket  The position of the opening
+     *                                           parenthesis in the stack.
+     * @param int                  $closeBracket The position of the closing
+     *                                           parenthesis in the stack.
      *
      * @return void
      */
@@ -135,8 +134,7 @@ class Drupal_Sniffs_Semantics_FunctionTSniff extends Drupal_Sniffs_Semantics_Fun
     /**
      * Checks if a string can be concatenated with a translatable string.
      *
-     * @param string $string
-     *   The string that is concatenated to a t() call.
+     * @param string $string The string that is concatenated to a t() call.
      *
      * @return bool
      *   TRUE if the string is allowed to be concatenated with a translatable
@@ -144,15 +142,15 @@ class Drupal_Sniffs_Semantics_FunctionTSniff extends Drupal_Sniffs_Semantics_Fun
      */
     protected function checkConcatString($string)
     {
-        // Remove spaces, html and single quotes from the original string.
-        $string = str_replace("'", "", $string);
+        // Remove outer quotes, spaces and HTML tags from the original string.
+        $string = trim($string, '"\'');
         $string = trim(strip_tags($string));
 
         if ($string === '') {
             return true;
         }
 
-        if (in_array($string, ['(', ')', '[', ']', '-', '<', '>', '«', '»'], true)) {
+        if (in_array($string, ['(', ')', '[', ']', '-', '<', '>', '«', '»', '\n'], true)) {
             return true;
         }
 
