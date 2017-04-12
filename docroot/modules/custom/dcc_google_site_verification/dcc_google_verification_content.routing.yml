@@ -1,0 +1,9 @@
+dcc_google_verification_content.config:
+  path: '/admin/config/google-site-verification'
+  defaults:
+    _form: '\Drupal\dcc_google_verification_content\Form\ContentConfigForm'
+    _title: 'Google site verification content form'
+  requirements:
+    _permission: 'administer site configuration'
+  options:
+    _admin_route: TRUE

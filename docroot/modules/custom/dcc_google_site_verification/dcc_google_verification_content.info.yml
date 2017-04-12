@@ -1,0 +1,5 @@
+name: Google Verification Content
+type: module
+description: 'Module containing implementation of config storing google site verification content.'
+package: Custom
+core: '8.x'

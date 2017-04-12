@@ -19,6 +19,8 @@
  * - db_offline: A flag indicating if the database is offline.
  * - placeholder_token: The token for generating head, css, js and js-bottom
  *   placeholders.
+ * - google_site_verification_content: the hash used for the google-site-verification
+ *   meta tag.
  *
  * @see template_preprocess_html()
  */
@@ -34,7 +36,7 @@
 <!DOCTYPE html>
 <html{{ html_attributes }}>
   <head>
-    <meta name="google-site-verification" content="NKXRvc2bxEB5FWAdZuzU06_m-SXFsitOyq9UfjWVDLQ" />
+    <meta name="google-site-verification" content="{{ google_site_verification_content }}" >
     <head-placeholder token="{{ placeholder_token|raw }}">
     <title>{{ head_title|safe_join(' | ') }}</title>
     <css-placeholder token="{{ placeholder_token|raw }}">
