@@ -6,8 +6,12 @@
  */
 
 /**
- * @addtogroup hooks
+ * @defgroup advagg_hooks Advanced Aggregates Hooks
+ *
  * @{
+ * Hooks for modules to implement to extend or modify Advanced Aggregates.
+ *
+ * @see https://api.drupal.org/api/drupal/includes%21module.inc/group/hooks/7.x
  */
 
 /**
@@ -69,7 +73,6 @@ function hook_advagg_aggregate_grouping_alter(array &$groups, $type) {
 
   $groups = $final_groups;
 }
-
 
 /**
  * Allow other modules to add in their own settings and hooks.
@@ -191,5 +194,5 @@ function hook_advagg_bundler_analysis_alter(array &$analysis) {
 }
 
 /**
- * @} End of "addtogroup hooks".
+ * @} End of "addtogroup adv_hooks".
  */

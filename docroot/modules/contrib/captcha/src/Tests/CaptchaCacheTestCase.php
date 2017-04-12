@@ -11,13 +11,15 @@ class CaptchaCacheTestCase extends CaptchaBaseWebTestCase {
 
   /**
    * Modules to install for this Test class.
+   *
+   * @var array
    */
   public static $modules = ['block', 'image_captcha'];
 
   /**
    * {@inheritdoc}
    */
-  function setUp() {
+  public function setUp() {
     parent::setUp();
 
     $this->drupalPlaceBlock('user_login_block', ['id' => 'login']);

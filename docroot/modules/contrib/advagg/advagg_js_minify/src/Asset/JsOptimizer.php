@@ -266,7 +266,7 @@ class JsOptimizer implements AssetOptimizerInterface {
     // Do not use jsmin() if the function can not be called.
     if (!function_exists('jsmin')) {
       $this->logger->notice(t('The jsmin function does not exist. Using JSqueeze.'), []);
-      $contents = $this->minifyJsqueeze($contents);
+      $contents = $this->minifyJsqueeze($contents, $asset);
       return;
     }
 
@@ -275,7 +275,7 @@ class JsOptimizer implements AssetOptimizerInterface {
     // byte characters.
     if (version_compare(phpversion('jsmin'), '2.0.0', '<') && $this->stringContainsMultibyteCharacters($contents)) {
       $this->logger->notice('The currently installed jsmin version does not handle multibyte characters, you may concider to upgrade the jsmin extension. Using JSqueeze fallback.', []);
-      $contents = $this->minifyJsqueeze($contents);
+      $contents = $this->minifyJsqueeze($contents, $asset);
       return;
     }
 
@@ -289,7 +289,7 @@ class JsOptimizer implements AssetOptimizerInterface {
     $error = jsmin_last_error_msg();
     if ($error != 'No error') {
       $this->logger->warning('JSMin had an error processing, usng JSqueeze fallback. Error details: ' . $error, []);
-      $contents = $this->minifyJsqueeze($contents);
+      $contents = $this->minifyJsqueeze($contents, $asset);
       return;
     }
 

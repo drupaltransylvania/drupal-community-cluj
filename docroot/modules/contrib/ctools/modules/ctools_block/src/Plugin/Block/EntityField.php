@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\ctools\Plugin\Block\EntityField.
- */
-
 namespace Drupal\ctools_block\Plugin\Block;
 
 use Drupal\Component\Utility\NestedArray;

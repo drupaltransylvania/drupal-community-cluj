@@ -203,12 +203,12 @@ function advagg_cdn_js_alter(&$javascript) {
       // Ensure full jQuery.ui is loaded if required since it is merged on CDN.
       if ($values['require'] == 'window.jQuery.ui' && !isset($javascript['core/assets/vendor/jquery.ui/ui/core-min.js'])) {
         $javascript['core/assets/vendor/jquery.ui/ui/core-min.js'] = [
-          'minified' => true,
+          'minified' => TRUE,
           'weight' => -19.5,
           'group' => -100,
           'type' => 'external',
           'scope' => 'footer',
-          'data' => $targets['core/assets/vendor/jquery.ui/ui/core-min.js'][$cdn]
+          'data' => $targets['core/assets/vendor/jquery.ui/ui/core-min.js'][$cdn],
         ];
       }
     }

@@ -5,6 +5,7 @@
  * Advanced aggregation bundler module.
  */
 
+use Drupal\Core\Form\FormStateInterface;
 /**
  * Implements hook_advagg_current_hooks_hash_array_alter().
  */
@@ -28,7 +29,7 @@ function advagg_bundler_form_advagg_settings_alter(&$form, $form_state) {
 /**
  * Prevent the bundler config overrides from being saved into stored config.
  */
-function advagg_bundler_advagg_setting_form_submit(array &$form, \Drupal\Core\Form\FormStateInterface &$form_state) {
+function advagg_bundler_advagg_setting_form_submit(array &$form, FormStateInterface &$form_state) {
   $form_state->setValue('core_groups', \Drupal::config('advagg.settings')->getOriginal('core_groups', FALSE));
 }
 

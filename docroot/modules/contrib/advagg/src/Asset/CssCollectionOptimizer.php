@@ -95,7 +95,6 @@ class CssCollectionOptimizer extends CoreCssCollectionOptimizer implements Asset
     $this->requestStack = $request_stack;
   }
 
-
   /**
    * {@inheritdoc}
    */
@@ -243,7 +242,7 @@ class CssCollectionOptimizer extends CoreCssCollectionOptimizer implements Asset
     $log = [];
     $this->state->delete('system.css_cache_files');
     Cache::invalidateTags(['library_info']);
-    $delete_all = function($uri) use (&$log) {
+    $delete_all = function ($uri) use (&$log) {
       file_unmanaged_delete($uri);
       $log[] = $uri;
     };
@@ -259,7 +258,7 @@ class CssCollectionOptimizer extends CoreCssCollectionOptimizer implements Asset
     $log = [];
     $this->state->delete('system.css_cache_files');
     Cache::invalidateTags(['library_info']);
-    $delete_stale = function($uri) use (&$log) {
+    $delete_stale = function ($uri) use (&$log) {
       // Default stale file threshold is 30 days.
       if (REQUEST_TIME - fileatime($uri) > $this->systemConfig->get('stale_file_threshold')) {
         file_unmanaged_delete($uri);
@@ -277,7 +276,7 @@ class CssCollectionOptimizer extends CoreCssCollectionOptimizer implements Asset
     $log = [];
     $this->state->delete('system.css_cache_files');
     Cache::invalidateTags(['library_info']);
-    $delete_old = function($uri) use (&$log) {
+    $delete_old = function ($uri) use (&$log) {
       // Default stale file threshold is 30 days.
       // Delete old if > 3 times that.
       if (REQUEST_TIME - filemtime($uri) > $this->systemConfig->get('stale_file_threshold') * 3) {

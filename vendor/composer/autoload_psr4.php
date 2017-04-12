@@ -58,6 +58,7 @@ return array(
     'Drupal\\Driver\\' => array($baseDir . '/docroot/drivers/lib/Drupal/Driver'),
     'Drupal\\Core\\' => array($baseDir . '/docroot/core/lib/Drupal/Core'),
     'Drupal\\Console\\Core\\' => array($vendorDir . '/drupal/console-core/src'),
+    'Drupal\\Console\\Composer\\Plugin\\' => array($vendorDir . '/drupal/console-extend-plugin/src'),
     'Drupal\\Console\\' => array($vendorDir . '/drupal/console/src'),
     'Drupal\\Component\\' => array($baseDir . '/docroot/core/lib/Drupal/Component'),
     'DrupalComposer\\DrupalScaffold\\' => array($vendorDir . '/drupal-composer/drupal-scaffold/src'),

@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Drupal\Console\Core\Style\DrupalStyle;
 use Drupal\Console\Core\Utils\ArgvInputReader;
 use Drupal\Console\Core\Bootstrap\DrupalConsoleCore;
+use Drupal\Console\Utils\ExtendExtensionManager;
 
 class Drupal
 {
@@ -56,8 +57,12 @@ class Drupal
                     $_SERVER['DEVDESKTOP_DRUPAL_SETTINGS_DIR'] = $devDesktopSettingsDir;
                 }
             }
-
             $argvInputReader = new ArgvInputReader();
+            $command = $argvInputReader->get('command');
+            $rebuildServicesFile = false;
+            if ($command=='cache:rebuild' || $command=='cr') {
+                $rebuildServicesFile = true;
+            }
 
             if ($debug) {
                 $io->writeln('➤ Creating request');
@@ -75,7 +80,7 @@ class Drupal
 
             if ($debug) {
                 $io->writeln("\r\033[K\033[1A\r<info>✔</info>");
-               $io->writeln('➤ Creating Drupal kernel');
+                $io->writeln('➤ Creating Drupal kernel');
             }
             $drupalKernel = DrupalKernel::createFromRequest(
                 $request,
@@ -88,12 +93,14 @@ class Drupal
                 $io->writeln("\r\033[K\033[1A\r<info>✔</info>");
                 $io->writeln('➤ Registering dynamic services');
             }
+
             $drupalKernel->addServiceModifier(
                 new DrupalServiceModifier(
                     $this->root,
                     $this->appRoot,
                     'drupal.command',
-                    'drupal.generator'
+                    'drupal.generator',
+                    $rebuildServicesFile
                 )
             );
             if ($debug) {
@@ -114,7 +121,6 @@ class Drupal
             AnnotationRegistry::registerLoader([$this->autoload, "loadClass"]);
 
             $configuration = $container->get('console.configuration_manager')
-                ->loadConfiguration($this->root)
                 ->getConfiguration();
 
             $container->get('console.translator_manager')
@@ -122,6 +128,12 @@ class Drupal
                     $configuration->get('application.language'),
                     $this->root
                 );
+
+            $consoleExtendConfigFile = $this->root . DRUPAL_CONSOLE .'/extend.console.config.yml';
+            if (file_exists($consoleExtendConfigFile)) {
+                $container->get('console.configuration_manager')
+                    ->importConfigurationFile($consoleExtendConfigFile);
+            }
 
             $container->get('console.renderer')
                 ->setSkeletonDirs(

@@ -35,6 +35,11 @@ class JsCollectionRenderer extends CoreJsCollectionRenderer implements AssetColl
    * {@inheritdoc}
    */
   public function render(array $js_assets) {
+    // Check assets array to ensure that it isn't malformed.
+    if (count($js_assets) === 1 && isset($js_assets['-1']) && empty($js_assets[-1])) {
+      $js_assets = [];
+    }
+
     $elements = ['prefetch' => []];
     $prefetch = $this->config->get('dns_prefetch');
 
@@ -109,7 +114,9 @@ class JsCollectionRenderer extends CoreJsCollectionRenderer implements AssetColl
 
       $elements[] = $element;
     }
-
+    if (empty($elements['prefetch'])) {
+      unset($elements['prefetch']);
+    }
     return $elements;
   }
 

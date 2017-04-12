@@ -2,6 +2,7 @@
 
 namespace Drupal\advagg_js_minify\Form;
 
+use Drupal\Component\Utility\Xss;
 use Drupal\Core\Asset\AssetCollectionOptimizerInterface;
 use Drupal\Core\Asset\AssetOptimizerInterface;
 use Drupal\Core\Cache\Cache;
@@ -107,7 +108,7 @@ class SettingsForm extends ConfigFormBase {
       '#title' => t('Minification: Select a minifier'),
       '#default_value' => $config->get('minifier'),
       '#options' => $options,
-      '#description' => \Drupal\Component\Utility\Xss::filter($description),
+      '#description' => Xss::filter($description),
     ];
     $form['add_license'] = [
       '#type' => 'checkbox',

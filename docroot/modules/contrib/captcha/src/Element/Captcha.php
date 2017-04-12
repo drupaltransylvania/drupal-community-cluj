@@ -33,7 +33,7 @@ class Captcha extends FormElement {
     // insensitive validation.
     // TODO: shouldn't this be done somewhere else, e.g. in form_alter?
     if (CAPTCHA_DEFAULT_VALIDATION_CASE_INSENSITIVE == \Drupal::config('captcha.settings')
-        ->get('default_validation')
+      ->get('default_validation')
     ) {
       $captcha_element['#captcha_validate'] = 'captcha_validate_case_insensitive_equality';
     }
@@ -47,10 +47,10 @@ class Captcha extends FormElement {
     // Add captcha.inc file.
     module_load_include('inc', 'captcha');
 
-    // Add Javascript for general CAPTCHA functionality.
+    // Add JavaScript for general CAPTCHA functionality.
     $element['#attached']['library'][] = 'captcha/base';
 
-    if ($form_state->getTriggeringElement() && !empty($form_state->getTriggeringElement()['#limit_validation_errors'])) {
+    if ($form_state->getTriggeringElement() && is_array($form_state->getTriggeringElement()['#limit_validation_errors'])) {
       // This is a partial (ajax) submission with limited validation. Do not
       // change anything about the captcha element, assume that it will not
       // update the captcha element, do not generate anything, which keeps the
@@ -70,8 +70,14 @@ class Captcha extends FormElement {
       $captcha_sid = $posted_captcha_sid;
     }
     else {
-      // Generate a new CAPTCHA session if we could not reuse one from a posted form.
+      // Generate a new CAPTCHA session if we could
+      // not reuse one from a posted form.
       $captcha_sid = _captcha_generate_captcha_session($this_form_id, CAPTCHA_STATUS_UNSOLVED);
+      $captcha_token = md5(mt_rand());
+      db_update('captcha_sessions')
+        ->fields(['token' => $captcha_token])
+        ->condition('csid', $captcha_sid)
+        ->execute();
     }
 
     // Store CAPTCHA session ID as hidden field.
@@ -85,11 +91,12 @@ class Captcha extends FormElement {
     ];
 
     // Additional one time CAPTCHA token: store in database and send with form.
-    $captcha_token = hash('sha256', mt_rand());
-    db_update('captcha_sessions')
-      ->fields(['token' => $captcha_token])
-      ->condition('csid', $captcha_sid)
-      ->execute();
+    // $captcha_token = hash('sha256', mt_rand());
+    // db_update('captcha_sessions')
+    //   ->fields(['token' => $captcha_token])
+    //   ->condition('csid', $captcha_sid)
+    //   ->execute();
+    $captcha_token = db_query("SELECT token FROM {captcha_sessions} WHERE csid = :csid", [':csid' => $captcha_sid])->fetchField();
     $element['captcha_token'] = [
       '#type' => 'hidden',
       '#value' => $captcha_token,
@@ -99,8 +106,9 @@ class Captcha extends FormElement {
     list($captcha_type_module, $captcha_type_challenge) = _captcha_parse_captcha_type($element['#captcha_type']);
 
     // Store CAPTCHA information for further processing in
-    // - $form_state->get('captcha_info'), which survives a form rebuild (e.g. node
-    //   preview), useful in _captcha_get_posted_captcha_info().
+    // - $form_state->get('captcha_info'), which survives
+    //   a form rebuild (e.g. node preview),
+    //   useful in _captcha_get_posted_captcha_info().
     // - $element['#captcha_info'], for post processing functions that do not
     //   receive a $form_state argument (e.g. the pre_render callback).
     $form_state->set('captcha_info', [
@@ -125,13 +133,15 @@ class Captcha extends FormElement {
           $captcha_sid,
         ]);
 
-      // @todo Isn't this moment a bit late to figure out that we don't need CAPTCHA?
+      // @todo Isn't this moment a bit late to figure out
+      // that we don't need CAPTCHA?
       if (!isset($captcha)) {
         return $element;
       }
 
       if (!isset($captcha['form']) || !isset($captcha['solution'])) {
-        // The selected module did not return what we expected: log about it and quit.
+        // The selected module did not return what we expected:
+        // log about it and quit.
         \Drupal::logger('CAPTCHA')->error(
           'CAPTCHA problem: unexpected result from hook_captcha() of module %module when trying to retrieve challenge type %type for form %form_id.',
           [
@@ -170,7 +180,8 @@ class Captcha extends FormElement {
       $element['#captcha_info']['solution'] = $captcha['solution'];
 
       // Make sure we can use a top level form value
-      // $form_state->getValue('captcha_response'), even if the form has #tree=true.
+      // $form_state->getValue('captcha_response'),
+      // even if the form has #tree=true.
       $element['#tree'] = FALSE;
     }
 

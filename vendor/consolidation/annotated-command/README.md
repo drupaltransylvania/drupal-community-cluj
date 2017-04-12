@@ -51,6 +51,7 @@ class MyCommandClass
      * @command my:cat
      * @param integer $one The first parameter.
      * @param integer $two The other parameter.
+     * @option arr An option that takes multiple values.
      * @option flip Whether or not the second parameter should come first in the result.
      * @aliases c
      * @usage bet alpha --flip
@@ -65,6 +66,18 @@ class MyCommandClass
     }
 }
 ``` 
+## Option Default Values
+
+The `$options` array must be an associative array whose key is the name of the option, and whose value is one of:
+
+- The boolean value `false`, which indicates that the option takes no value.
+- A **string** containing the default value for options that may be provided a value, but are not required to.
+- NULL for options that may be provided an optional value, but that have no default when a value is not provided.
+- The special value InputOption::VALUE_REQUIRED, which indicates that the user must provide a value for the option whenever it is used.
+- An empty array, which indicates that the option may appear multiple times on the command line.
+
+No other values should be used for the default value. For example, `$options = ['a' => 1]` is **incorrect**; instead, use `$options = ['a' => '1']`. Similarly, `$options = ['a' => true]` is unsupported, or at least not useful, as this would indicate that the value of `--a` was always `true`, whether or not it appeared on the command line.
+
 ## Hooks
 
 Commandfiles may provide hooks in addition to commands. A commandfile method that contains a @hook annotation is registered as a hook instead of a command.  The format of the hook annotation is:
@@ -88,6 +101,7 @@ There are ten types of hooks supported:
 - Status
 - Extract
 - On-event
+- Replace Command
 
 Most of these also have "pre" and "post" varieties, to give more flexibility vis-a-vis hook ordering (and for consistency). Note that many validate, process and alter hooks may run, but the first status or extract hook that successfully returns a result will halt processing of further hooks of the same type.
 
@@ -181,6 +195,27 @@ class MyCommands implements CustomEventAwareInterface
 }
 ```
 It is up to the command that defines the custom event to declare what the expected parameters for the callback function should be, and what the return value is and how it should be used.
+
+### Replace Command Hook
+
+The replace-command ([ReplaceCommandHookInterface](src/Hooks/ReplaceCommandHookInterface.php)) hook permits you to replace a command's method with another method of your own.
+
+For instance, if you'd like to replace the `foo:bar` command, you could utilize the following code:
+
+```php
+<?php
+class MyReplaceCommandHook  {
+
+  /**
+   * @hook replace-command foo:bar
+   * 
+   * Parameters must match original command method. 
+   */
+  public function myFooBarReplacement($value) {
+    print "Hello $value!";
+  }
+}
+```
 
 ## Output
 
