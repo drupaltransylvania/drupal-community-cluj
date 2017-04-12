@@ -1,0 +1,9 @@
+dcc_google_tag.admin:
+  title: 'Google Tag Configuration'
+  menu_name: admin
+  weight: 1
+  description: 'Configure Google site verification content key'
+  parent: system.admin_config_development
+  expanded: false
+  enabled: true
+  route_name: dcc_google_tag.config

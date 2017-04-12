@@ -15,4 +15,17 @@ function dcc_theme_preprocess_breadcrumb(&$variables) {
   if (($node = \Drupal::routeMatch()->getParameter('node')) && $variables['breadcrumb']) {
     array_pop($variables['breadcrumb']);
   }
+
+}
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function dcc_theme_preprocess_html(&$variables) {
+  // This hook provides _html template with the hash for
+  // google site verification. It is stored in a configuration object
+  // and retrieved with configFactory service.
+  $data = Drupal::configFactory()->get('google_verification_content.settings')->get('site_verification_content');
+
+  $variables['google_site_verification_content'] = $data;
 }
