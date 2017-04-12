@@ -461,7 +461,12 @@ function _drush_config_export($destination, $destination_dir, $branch) {
   $storage_filters = drush_config_get_storage_filters();
   if (count(glob($destination_dir . '/*')) > 0) {
     // Retrieve a list of differences between the active and target configuration (if any).
-    $target_storage = new FileStorage($destination_dir);
+    if ($destination == CONFIG_SYNC_DIRECTORY) {
+      $target_storage = \Drupal::service('config.storage.sync');
+    }
+    else {
+      $target_storage = new FileStorage($destination_dir);
+    }
     /** @var \Drupal\Core\Config\StorageInterface $active_storage */
     $active_storage = \Drupal::service('config.storage');
     $comparison_source = $active_storage;
@@ -505,12 +510,17 @@ function _drush_config_export($destination, $destination_dir, $branch) {
       return drush_user_abort();
     }
     // Only delete .yml files, and not .htaccess or .git.
-    drush_scan_directory($destination_dir, '/\.yml$/', array('.', '..'), 'unlink');
+    $target_storage->deleteAll();
   }
 
   // Write all .yml files.
   $source_storage = \Drupal::service('config.storage');
-  $destination_storage = new FileStorage($destination_dir);
+  if ($destination == CONFIG_SYNC_DIRECTORY) {
+    $destination_storage = \Drupal::service('config.storage.sync');
+  }
+  else {
+    $destination_storage = new FileStorage($destination_dir);
+  }
   // If there are any filters, then attach them to the destination storage
   if (!empty($storage_filters)) {
     $destination_storage = new StorageWrapper($destination_storage, $storage_filters);
@@ -579,7 +589,6 @@ function drush_config_import_validate() {
   if (drush_get_option('partial') && !drush_module_exists('config')) {
     return drush_set_error('config_import_partial', 'Enable the config module in order to use the --partial option.');
   }
-  
   if ($source = drush_get_option('source')) {
     if (!file_exists($source)) {
       return drush_set_error('config_import_target', 'The source directory does not exist.');
@@ -649,7 +658,12 @@ function drush_config_import($source = NULL) {
     }
   }
   else {
-    $source_storage = new FileStorage($source_dir);
+    if ($source == CONFIG_SYNC_DIRECTORY) {
+      $source_storage = \Drupal::service('config.storage.sync');
+    }
+    else {
+      $source_storage = new FileStorage($source_dir);
+    }
   }
 
   // If our configuration storage is being filtered, then attach all filters
@@ -714,7 +728,20 @@ function _drush_config_import(StorageComparer $storage_comparer) {
   }
   else{
     try {
-      $config_importer->import();
+      // This is the contents of \Drupal\Core\Config\ConfigImporter::import.
+      // Copied here so we can log progress.
+      if ($config_importer->hasUnprocessedConfigurationChanges()) {
+        $sync_steps = $config_importer->initialize();
+        foreach ($sync_steps as $step) {
+          $context = array();
+          do {
+            $config_importer->doSyncStep($step, $context);
+            if (isset($context['message'])) {
+              drush_log(str_replace('Synchronizing', 'Synchronized', (string)$context['message']), LogLevel::OK);
+            }
+          } while ($context['finished'] < 1);
+        }
+      }
       drush_log('The configuration was imported successfully.', LogLevel::SUCCESS);
     }
     catch (ConfigException $e) {

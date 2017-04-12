@@ -218,7 +218,9 @@ class CssCollectionRenderer extends CoreCssCollectionRenderer implements AssetCo
           throw new \Exception('Invalid CSS asset type.');
       }
     }
-
+    if (empty($elements['prefetch'])) {
+      unset($elements['prefetch']);
+    }
     return $elements;
   }
 

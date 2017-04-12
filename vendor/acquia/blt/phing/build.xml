@@ -1,0 +1,107 @@
+<project name="blt" default="list" phingVersion="2.8.2">
+
+  <!-- Include custom task classes -->
+  <includepath classpath="${phing.dir}" />
+  <taskdef name="behat" classname="phingcludes.BehatTask"/>
+  <taskdef name="drush" classname="phingcludes.DrushTask"/>
+  <taskdef name="randomstring" classname="phingcludes.RandomStringTask" />
+  <taskdef name="disabletargets" classname="phingcludes.DisableTargetsTask" />
+  <taskdef name="filterFileListByFileSet" classname="phingcludes.FilterFileListByFileSetTask"/>
+  <taskdef name="verbosityTask" classname="phingcludes.VerbosityTask"/>
+  <taskdef name="phpVariable" classname="phingcludes.PhpVariableTask"/>
+  <taskdef name="yamlLint" classname="phingcludes.YamlLintTask"/>
+
+  <!--Increase PHP memory limit. -->
+  <property name="php.memory_limit" value="2G" override="false" />
+  <echo level="verbose">Setting memory allocation to ${php.memory_limit}</echo>
+  <php expression="ini_set('memory_limit', '${php.memory_limit}');" level="verbose"/>
+
+  <!-- Add environment variables to "env." namespace. -->
+  <property environment="env" />
+
+  <!-- Include task partials -->
+
+  <!-- Defines a list of default properties, available to all targets. -->
+  <import file="${phing.dir}/tasks/properties.xml"/>
+
+  <!-- Allow custom file to be imported. -->
+  <if>
+    <isset property="import" />
+    <then>
+      <echo level="verbose">Importing custom Phing file ${import}.</echo>
+      <import file="${import}"/>
+    </then>
+    <else>
+      <echo level="verbose">No custom Phing file specified.</echo>
+    </else>
+  </if>
+
+  <!-- Contains BLT tasks. -->
+  <import file="${phing.dir}/tasks/blt.xml"/>
+
+  <!-- Contains Continuous Integration tasks. -->
+  <import file="${phing.dir}/tasks/ci.xml"/>
+
+  <!-- Contains tasks relevant to validation. E.g., code metrics. -->
+  <import file="${phing.dir}/tasks/validate.xml"/>
+
+  <!-- Contains targets used for setting up environment. E.g., installing Drupal. -->
+  <import file="${phing.dir}/tasks/setup.xml"/>
+
+  <!-- Contains fileset definitions. E.g., patterns defining contrib locations, theming files, etc. -->
+  <import file="${phing.dir}/tasks/filesets.xml"/>
+
+  <!-- E.g., commit build artifacts, push to remote. -->
+  <import file="${phing.dir}/tasks/deploy.xml"/>
+
+  <!-- Contains frontend tasks. -->
+  <import file="${phing.dir}/tasks/frontend.xml"/>
+
+  <!-- Contains local syncing tasks. -->
+  <import file="${phing.dir}/tasks/local-sync.xml"/>
+
+  <!-- Contains acsf tasks. -->
+  <import file="${phing.dir}/tasks/acsf.xml"/>
+
+  <!-- Contains Drupal SimpleSAMLphp tasks. -->
+  <import file="${phing.dir}/tasks/simplesamlphp.xml"/>
+
+  <!-- Contains Drupal tasks. -->
+  <import file="${phing.dir}/tasks/drupal.xml"/>
+
+  <!-- Contains tasks that fix custom code. -->
+  <import file="${phing.dir}/tasks/fix.xml"/>
+
+  <!-- Disable targets defined in the disable-targets array in project.yml or project.local.yml. -->
+  <!-- This must be executed after all targets are defined. -->
+  <disabletargets file="${blt.config-files.project}" property="disable-targets"/>
+  <disabletargets file="${blt.config-files.local}" property="disable-targets"/>
+
+  <target name="list" hidden="true">
+    <exec dir="${repo.root}" command="cat ${blt.root}/scripts/blt/ascii-art.txt" logoutput="true" passthru="true" checkreturn="false"/>
+    <exec dir="${blt.root}" command="${repo.root}/vendor/bin/phing -f ${phing.dir}/build.xml -q -l" passthru="true"/>
+  </target>
+
+  <target name="target-hook:invoke" description="Executes a command defined in the target-hooks array." hidden="true">
+    <fail unless="hook-name"/>
+    <if>
+      <isset property="target-hooks.${hook-name}.command"/>
+      <then>
+        <if>
+          <available file="${target-hooks.${hook-name}.dir}" type="dir" property="dirExists" />
+          <then>
+            <echo>Executing command in ${target-hooks.${hook-name}.dir}:</echo>
+            <exec dir="${target-hooks.${hook-name}.dir}" command="${target-hooks.${hook-name}.command}" logoutput="true" checkreturn="true" level="info" passthru="true" />
+          </then>
+          <else>
+            <fail>The directory ${target-hooks.${hook-name}.dir} does not exist. Will not run command for ${hook-name}.</fail>
+          </else>
+        </if>
+      </then>
+      <else>
+        <echo>No commands are defined for ${hook-name}. Skipping.</echo>
+      </else>
+    </if>
+  </target>
+
+</project>

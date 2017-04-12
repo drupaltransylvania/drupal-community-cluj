@@ -60,7 +60,6 @@ class OperationsForm extends ConfigFormBase {
    */
   protected $advaggFiles;
 
-
   /**
    * Constructs the OperationsForm object.
    *
@@ -142,7 +141,7 @@ class OperationsForm extends ConfigFormBase {
     $form['smart_flush']['advagg_flush'] = [
       '#type' => 'submit',
       '#value' => t('Flush AdvAgg Cache'),
-      '#submit' => ['::advaggFlushCache'],
+      '#submit' => ['::flushCache'],
       '#ajax' => [
         'callback' => '::tasksAjax',
         'wrapper' => 'operations-wrapper',
@@ -155,27 +154,18 @@ class OperationsForm extends ConfigFormBase {
       '#title' => t('Aggregation Bypass Cookie'),
       '#description' => t('This will set or remove a cookie that disables aggregation for a set period of time.'),
     ];
-    $bypass_length = array_combine([
-      60 * 60 * 6,
-      60 * 60 * 12,
-      60 * 60 * 24,
-      60 * 60 * 24 * 2,
-      60 * 60 * 24 * 7,
-      60 * 60 * 24 * 30,
-      60 * 60 * 24 * 365,
-    ], [
-      60 * 60 * 6,
-      60 * 60 * 12,
-      60 * 60 * 24,
-      60 * 60 * 24 * 2,
-      60 * 60 * 24 * 7,
-      60 * 60 * 24 * 30,
-      60 * 60 * 24 * 365,
-    ]);
     $form['bypass']['timespan'] = [
       '#type' => 'select',
       '#title' => 'Bypass length',
-      '#options' => $bypass_length,
+      '#options' => [
+        21600 => t('6 hours'),
+        43200 => t('12 hours'),
+        86400 => t('1 day'),
+        172800 => t('2 days'),
+        604800 => t('1 week'),
+        2592000 => t('1 month'),
+        31536000 => t('1 year'),
+      ],
     ];
     $form['bypass']['submit'] = [
       '#type' => 'submit',
@@ -307,21 +297,11 @@ class OperationsForm extends ConfigFormBase {
    * Perform a smart flush.
    */
   public function flushCache() {
-    // TODO
-    $flushed = TRUE;
-    if ($flushed) {
-      Cache::invalidateTags(['library_info', 'advagg_css', 'advagg_js']);
-    }
+    Cache::invalidateTags(['library_info', 'advagg_css', 'advagg_js']);
 
-    if ($this->config->get('cache_level') >= 0) {
+    if ($this->config('advagg.settings')->get('cache_level') >= 0) {
       // Display a simple message if not in Development mode.
-      drupal_set_message(t('Advagg Caches Updated'));
-    }
-    else {
-      //if (empty($flushed)) {
-      //  drupal_set_message(t('No changes found. Nothing was cleared.'));
-      //  return;
-      //}
+      drupal_set_message(t('Advagg Caches Cleared'));
     }
   }
 

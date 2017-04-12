@@ -21,7 +21,7 @@ class AjaxResponseAttachmentsProcessor extends CoreAjaxResponseAttachmentsProces
    * {@inheritdoc}
    */
   protected function buildAttachmentsCommands(AjaxResponse $response, Request $request) {
-    $ajax_page_state = $request->request->get('ajax_page_state');
+    $ajax_page_state = $request->request->get('ajax_page_state') ?: $request->query->get('ajax_page_state');
 
     // Aggregate CSS/JS if necessary, but only during normal site operation.
     $optimize_css = !defined('MAINTENANCE_MODE') && $this->config->get('css.preprocess');

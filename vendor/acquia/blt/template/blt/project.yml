@@ -1,0 +1,111 @@
+project:
+  # Everyone: This will determine the the directory name of the new repository.
+  # Dev Desktop users: this should match your local site name.
+  machine_name: 'blted8'
+  # Used for enforcing correct git commit msg syntax.
+  prefix: 'BLT'
+  human_name: 'BLTed 8'
+  profile:
+    # You can generate a custom profile by running '../vendor/bin/drupal generate:profile' from the docroot.
+    name: 'lightning'
+  # This will be used as the local uri for all developers.
+  local:
+    protocol: http
+    hostname: local.${project.machine_name}.com
+
+# Configuration settings for new git repository.
+git:
+  default_branch: master
+  remotes: []
+
+drush:
+  # You can set custom project aliases in drush/site-aliases/aliases.drushrc.php.
+  aliases:
+    # The remote environment from which the database will be pulled.
+    remote: ${project.machine_name}.test
+    # The local environment against which all local drush commands are run.
+    local: self
+    # The drush alias against which all ci commands are run.
+    ci: self
+    # The default drush alias to be used when no environment is specified.
+  default_alias: ${drush.aliases.local}
+
+# Custom tasks that are triggered at pre-defined times in the build process.
+# The tasks hook into BLT's existing Phing targets. Available hooks keys are:
+# frontend-build, post-deploy-build, and post-setup-build.
+target-hooks:
+  # Executed when front end dependencies should be installed.
+  frontend-setup:
+    # E.g., ${docroot}/sites/all/themes/custom/mytheme.
+    dir: ${docroot}
+    # E.g., `npm install` or `bower install`.
+    command: echo 'No frontend-setup configured.'
+  # Executed when front end assets should be generated.
+  frontend-build:
+    # E.g., ${docroot}/sites/all/themes/custom/mytheme.
+    dir: ${docroot}
+    # E.g., `npm run build`.
+    command: echo 'No frontend-build configured.'
+  # Executed before configuration is imported.
+  pre-config-import:
+    dir: ${docroot}
+    command: echo 'No pre-config-import configured.'
+  # Executed after deployment artifact is created.
+  post-deploy-build:
+    dir: ${docroot}
+    command: echo 'No post-deploy build configured.'
+  # Executed after setup:build is run.
+  post-setup-build:
+    dir: ${docroot}
+    command: echo 'No post-setup build configured.'
+  # Executed after deploy:push-all is run.
+  post-deploy:
+    dir: ${docroot}
+    command: echo 'No post-deploy build configured.'
+
+
+# Configuration management options, such as core CM or features.
+# cm:
+#   features:
+#     bundle: blted8
+#     no-overrides: 'true'
+
+# Define any custom Phing files that you'd like to import. E.g., ${repo.root}/blt/phing/build.xml
+import: ~
+
+# An array of modules to be enabled or uninstalled automatically in local, ci, and deploy contexts.
+modules:
+  local:
+    enable:
+      - dblog
+      - devel
+      - seckit
+      - views_ui
+    uninstall:
+      - acsf
+      - acquia_connector
+      - shield
+  ci:
+    enable: []
+    uninstall:
+      - acquia_connector
+      - shield
+  dev:
+    enable:
+      - acquia_connector
+      - shield
+    uninstall: []
+  test:
+    enable:
+      - acquia_connector
+      - shield
+    uninstall:
+      - devel
+      - views_ui
+  prod:
+    enable:
+      - acquia_connector
+      - shield
+    uninstall:
+      - devel
+      - views_ui

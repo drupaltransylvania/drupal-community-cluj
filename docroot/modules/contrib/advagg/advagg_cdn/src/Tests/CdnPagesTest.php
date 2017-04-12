@@ -7,6 +7,8 @@ use Drupal\advagg\Tests\AdminPagesTest;
 /**
  * Tests that all the AdvAgg CDN path(s) return valid content.
  *
+ * @ingroup advagg_tests
+ *
  * @group advagg
  */
 class CdnPagesTest extends AdminPagesTest {

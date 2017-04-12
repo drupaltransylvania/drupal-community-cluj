@@ -1,0 +1,22 @@
+# These files from template dir will be included if they do not yet exist. They will not overwrite
+# existing files.
+.gitattributes
+.gitignore
+blt/composer.overrides.json
+blt/deploy-exclude-additions.txt
+blt/example.project.local.yml
+blt/project.yml
+composer.json
+composer.lock
+README.md
+drush/site-aliases/aliases.drushrc.php
+drush/drushrc.php
+docroot/sites/default/services.yml
+docroot/sites/default/settings/trusted_host.settings.php
+factory-hooks/pre-settings-php/includes.php
+tests/behat/behat.yml
+tests/behat/example.local.yml
+tests/behat/features/bootstrap/Drupal/FeatureContext.php
+tests/behat/features/Examples.feature
+tests/phpunit/phpunit.xml
+vendor

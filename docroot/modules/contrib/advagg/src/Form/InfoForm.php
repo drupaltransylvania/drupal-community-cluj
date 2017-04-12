@@ -104,6 +104,7 @@ class InfoForm extends ConfigFormBase {
       $container->get('string_translation')
     );
   }
+
   /**
    * {@inheritdoc}
    */

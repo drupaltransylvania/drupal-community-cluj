@@ -19,6 +19,9 @@
     <exclude name="PEAR.Commenting.ClassComment.MissingAuthorTag"/>
     <exclude name="PEAR.Commenting.ClassComment.MissingLicenseTag"/>
   </rule>
+  <rule ref="PEAR.NamingConventions.ValidFunctionName">
+    <exclude name="PEAR.NamingConventions.ValidFunctionName.PrivateNoUnderscore"/>
+  </rule>
   <rule ref="Generic.Files.LineLength">
     <exclude name="Generic.Files.LineLength.TooLong"/>
   </rule>
@@ -29,9 +32,8 @@
 
   <!-- The following sniffs are disabled because Coder is not compliant yet, see
     https://www.drupal.org/node/2734539 -->
-  <rule ref="PEAR.Commenting.FunctionComment">
-    <exclude name="PEAR.Commenting.FunctionComment.Missing"/>
-    <exclude name="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+  <rule ref="PEAR.Commenting.FunctionComment.MissingParamComment">
+    <exclude-pattern>*/DrupalPractice/Sniffs/CodeAnalysis/VariableAnalysisSniff.php</exclude-pattern>
   </rule>
 
 </ruleset>

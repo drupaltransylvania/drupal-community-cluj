@@ -84,27 +84,16 @@ class Drupal_Sniffs_Commenting_FunctionCommentSniff implements PHP_CodeSniffer_S
         $find   = PHP_CodeSniffer_Tokens::$methodPrefixes;
         $find[] = T_WHITESPACE;
 
-        $commentEnd = $phpcsFile->findPrevious($find, ($stackPtr - 1), null, true);
-        if ($tokens[$commentEnd]['code'] !== T_DOC_COMMENT_CLOSE_TAG
-            && $tokens[$commentEnd]['code'] !== T_COMMENT
+        $commentEnd       = $phpcsFile->findPrevious($find, ($stackPtr - 1), null, true);
+        $beforeCommentEnd = $phpcsFile->findPrevious(PHP_CodeSniffer_Tokens::$emptyTokens, ($commentEnd - 1), null, true);
+        if (($tokens[$commentEnd]['code'] !== T_DOC_COMMENT_CLOSE_TAG
+            && $tokens[$commentEnd]['code'] !== T_COMMENT)
+            || ($beforeCommentEnd !== false
+            // If there is something more on the line than just the comment then the
+            // comment does not belong to the function.
+            && $tokens[$beforeCommentEnd]['line'] === $tokens[$commentEnd]['line'])
         ) {
             $fix = $phpcsFile->addFixableError('Missing function doc comment', $stackPtr, 'Missing');
-            if ($fix === true) {
-                $before = $phpcsFile->findNext(T_WHITESPACE, ($commentEnd + 1), ($stackPtr + 1), true);
-                $phpcsFile->fixer->addContentBefore($before, "/**\n *\n */\n");
-            }
-
-            return;
-        }
-
-        // If the comment is the first comment in the file then this is a file
-        // comment, not a function comment.
-        $fileComment = $phpcsFile->findNext(T_WHITESPACE, 1, null, true);
-        if ($fileComment === $commentEnd
-            || ($tokens[$commentEnd]['code'] === T_DOC_COMMENT_CLOSE_TAG
-            && $tokens[$commentEnd]['comment_opener'] === $fileComment)
-        ) {
-            $fix = $phpcsFile->addFixableError('Missing function doc comment, only found file comment', $stackPtr, 'MissingFile');
             if ($fix === true) {
                 $before = $phpcsFile->findNext(T_WHITESPACE, ($commentEnd + 1), ($stackPtr + 1), true);
                 $phpcsFile->fixer->addContentBefore($before, "/**\n *\n */\n");
@@ -131,16 +120,19 @@ class Drupal_Sniffs_Commenting_FunctionCommentSniff implements PHP_CodeSniffer_S
             return;
         }
 
-        if ($tokens[$commentEnd]['line'] !== ($tokens[$stackPtr]['line'] - 1)) {
-            $error = 'There must be no blank lines after the function comment';
-            $fix   = $phpcsFile->addFixableError($error, $commentEnd, 'SpacingAfter');
-            if ($fix === true) {
-                $phpcsFile->fixer->replaceToken(($commentEnd + 1), '');
-            }
-        }
-
         $commentStart = $tokens[$commentEnd]['comment_opener'];
         foreach ($tokens[$commentStart]['comment_tags'] as $tag) {
+            // This is a file comment, not a function comment.
+            if ($tokens[$tag]['content'] === '@file') {
+                $fix = $phpcsFile->addFixableError('Missing function doc comment', $stackPtr, 'Missing');
+                if ($fix === true) {
+                    $before = $phpcsFile->findNext(T_WHITESPACE, ($commentEnd + 1), ($stackPtr + 1), true);
+                    $phpcsFile->fixer->addContentBefore($before, "/**\n *\n */\n");
+                }
+
+                return;
+            }
+
             if ($tokens[$tag]['content'] === '@see') {
                 // Make sure the tag isn't empty.
                 $string = $phpcsFile->findNext(T_DOC_COMMENT_STRING, $tag, $commentEnd);
@@ -148,6 +140,14 @@ class Drupal_Sniffs_Commenting_FunctionCommentSniff implements PHP_CodeSniffer_S
                     $error = 'Content missing for @see tag in function comment';
                     $phpcsFile->addError($error, $tag, 'EmptySees');
                 }
+            }
+        }//end foreach
+
+        if ($tokens[$commentEnd]['line'] !== ($tokens[$stackPtr]['line'] - 1)) {
+            $error = 'There must be no blank lines after the function comment';
+            $fix   = $phpcsFile->addFixableError($error, $commentEnd, 'SpacingAfter');
+            if ($fix === true) {
+                $phpcsFile->fixer->replaceToken(($commentEnd + 1), '');
             }
         }
 
@@ -317,6 +317,17 @@ class Drupal_Sniffs_Commenting_FunctionCommentSniff implements PHP_CodeSniffer_S
                     }
                 }//end for
 
+                // The first line of the comment must be indented no more than 3
+                // spaces, the following lines can be more so we only check the first
+                // line.
+                if (empty($commentLines[0]['indent']) === false && $commentLines[0]['indent'] > 3) {
+                    $error = 'Return comment indentation must be 3 spaces, found %s spaces';
+                    $fix   = $phpcsFile->addFixableError($error, ($commentLines[0]['token'] - 1), 'ReturnCommentIndentation', array($commentLines[0]['indent']));
+                    if ($fix === true) {
+                        $phpcsFile->fixer->replaceToken(($commentLines[0]['token'] - 1), '   ');
+                    }
+                }
+
                 if ($comment === '' && $type !== '$this' && $type !== 'static') {
                     if (strpos($type, ' ') !== false) {
                         $error = 'Description for the @return value must be on the next line';
@@ -461,7 +472,7 @@ class Drupal_Sniffs_Commenting_FunctionCommentSniff implements PHP_CodeSniffer_S
             $commentLines = array();
             if ($tokens[($tag + 2)]['code'] === T_DOC_COMMENT_STRING) {
                 $matches = array();
-                preg_match('/([^$&]+)(?:((?:\$|&)[^\s]+)(?:(\s+)(.*))?)?/', $tokens[($tag + 2)]['content'], $matches);
+                preg_match('/([^$&]*)(?:((?:\$|&)[^\s]+)(?:(\s+)(.*))?)?/', $tokens[($tag + 2)]['content'], $matches);
 
                 $typeLen   = strlen($matches[1]);
                 $type      = trim($matches[1]);
@@ -471,7 +482,11 @@ class Drupal_Sniffs_Commenting_FunctionCommentSniff implements PHP_CodeSniffer_S
                     $maxType = $typeLen;
                 }
 
-                if (isset($matches[4]) === true) {
+                // If there is more than one word then it is a comment that should be
+                // on the next line.
+                if (isset($matches[4]) === true && ($typeLen > 0
+                    || preg_match('/[^\s]+[\s]+[^\s]+/', $matches[4]) === 1)
+                ) {
                     $comment = $matches[4];
                     $error   = 'Parameter comment must be on the next line';
                     $fix     = $phpcsFile->addFixableError($error, ($tag + 2), 'ParamCommentNewLine');
@@ -487,6 +502,19 @@ class Drupal_Sniffs_Commenting_FunctionCommentSniff implements PHP_CodeSniffer_S
                     $var = $matches[2];
                 } else {
                     $var = '';
+                }
+
+                if (substr($var, -1) === '.') {
+                    $error = 'Doc comment parameter name "%s" must not end with a dot';
+                    $fix   = $phpcsFile->addFixableError($error, ($tag + 2), 'ParamNameDot', [$var]);
+                    if ($fix === true) {
+                        $content = $type.' '.substr($var, 0, -1);
+                        $phpcsFile->fixer->replaceToken(($tag + 2), $content);
+                    }
+
+                    // Continue with the next parameter to avoid confusing
+                    // overlapping errors further down.
+                    continue;
                 }
 
                 $varLen = strlen($var);
@@ -524,6 +552,17 @@ class Drupal_Sniffs_Commenting_FunctionCommentSniff implements PHP_CodeSniffer_S
                     }
                 }//end for
 
+                // The first line of the comment must be indented no more than 3
+                // spaces, the following lines can be more so we only check the first
+                // line.
+                if (empty($commentLines[0]['indent']) === false && $commentLines[0]['indent'] > 3) {
+                    $error = 'Parameter comment indentation must be 3 spaces, found %s spaces';
+                    $fix   = $phpcsFile->addFixableError($error, ($commentLines[0]['token'] - 1), 'ParamCommentIndentation', array($commentLines[0]['indent']));
+                    if ($fix === true) {
+                        $phpcsFile->fixer->replaceToken(($commentLines[0]['token'] - 1), '   ');
+                    }
+                }
+
                 if ($comment === '') {
                     $error = 'Missing parameter comment';
                     $phpcsFile->addError($error, $tag, 'MissingParamComment');
@@ -540,17 +579,25 @@ class Drupal_Sniffs_Commenting_FunctionCommentSniff implements PHP_CodeSniffer_S
                     $variableArguments = true;
                 }
 
-                if (isset($matches[2]) === false && $variableArguments === false) {
-                    if ($tokens[($tag + 2)]['content'][0] === '$'
-                        || $tokens[($tag + 2)]['content'][0] === '&'
-                    ) {
-                        $error = 'Missing parameter type';
-                        $phpcsFile->addError($error, $tag, 'MissingParamType');
+                if ($typeLen === 0) {
+                    $error = 'Missing parameter type';
+                    // If there is just one word as comment at the end of the line
+                    // then this is probably the data type. Move it before the
+                    // variable name.
+                    if (isset($matches[4]) === true && preg_match('/[^\s]+[\s]+[^\s]+/', $matches[4]) === 0) {
+                        $fix = $phpcsFile->addFixableError($error, $tag, 'MissingParamType');
+                        if ($fix === true) {
+                            $phpcsFile->fixer->replaceToken(($tag + 2), $matches[4].' '.$var);
+                        }
                     } else {
-                        $error = 'Missing parameter name';
-                        $phpcsFile->addError($error, $tag, 'MissingParamName');
+                        $phpcsFile->addError($error, $tag, 'MissingParamType');
                     }
-                }//end if
+                }
+
+                if (empty($matches[2]) === true && $variableArguments === false) {
+                    $error = 'Missing parameter name';
+                    $phpcsFile->addError($error, $tag, 'MissingParamName');
+                }
             } else {
                 $error = 'Missing parameter type';
                 $phpcsFile->addError($error, $tag, 'MissingParamType');
@@ -572,19 +619,21 @@ class Drupal_Sniffs_Commenting_FunctionCommentSniff implements PHP_CodeSniffer_S
 
         $checkPos = 0;
         foreach ($params as $pos => $param) {
+            if ($param['var'] === '') {
+                continue;
+            }
+
+            $foundParams[] = $param['var'];
+
             // If the type is empty, the whole line is empty.
             if ($param['type'] === '') {
                 continue;
             }
 
-            if ($param['var'] === '') {
-                continue;
-            }
-
             // Make sure the param name is correct.
             $matched = false;
-            // Parameter documentation can be ommitted for some parameters, so
-            // we have to search the rest for a match.
+            // Parameter documentation can be omitted for some parameters, so we have
+            // to search the rest for a match.
             $realName = '<undefined>';
             while (isset($realParams[($checkPos)]) === true) {
                 $realName = $realParams[$checkPos]['name'];
@@ -688,8 +737,6 @@ class Drupal_Sniffs_Commenting_FunctionCommentSniff implements PHP_CodeSniffer_S
                     }
                 }//end if
             }//end if
-
-            $foundParams[] = $param['var'];
 
             // Check number of spaces after the type.
             $spaces = 1;
@@ -799,6 +846,25 @@ class Drupal_Sniffs_Commenting_FunctionCommentSniff implements PHP_CodeSniffer_S
                 }
             }
         }//end foreach
+
+        // Missing parameters only apply to methods and not function because on
+        // functions it is allowed to leave out param comments for form constructors
+        // for example.
+        // It is also allowed to ommit pram tags completely, in which case we don't
+        // throw errors. Only throw errors if param comments exists but are
+        // incomplete on class methods.
+        if ($tokens[$stackPtr]['level'] > 0 && empty($foundParams) === false) {
+            foreach ($realParams as $realParam) {
+                $realParamKeyName = $realParam['name'];
+                if (in_array($realParamKeyName, $foundParams) === false
+                    && ($realParam['pass_by_reference'] === true
+                    && in_array("&$realParamKeyName", $foundParams) === true) === false
+                ) {
+                    $error = 'Parameter %s is not described in comment';
+                    $phpcsFile->addError($error, $commentStart, 'ParamMissingDefinition', [$realParam['name']]);
+                }
+            }
+        }
 
     }//end processParams()
 

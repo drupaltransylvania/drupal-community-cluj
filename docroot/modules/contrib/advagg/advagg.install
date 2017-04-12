@@ -13,9 +13,15 @@ use Drupal\Core\Url;
 function advagg_install() {
   // Make sure permissions for dirs are correct. Needed if installed via drush.
   $stat_public = stat('public://');
-  \Drupal::service('file_system')->mkdir('public://css');
+  // Check if this folder already exists - could be the case on re-install.
+  if (!file_exists('public://css')) {
+    \Drupal::service('file_system')->mkdir('public://css');
+  }
   $stat_css = stat('public://css');
-  \Drupal::service('file_system')->mkdir('public://js');
+  // Check if this folder already exists - could be the case on re-install.
+  if (!file_exists('public://js')) {
+    \Drupal::service('file_system')->mkdir('public://js');
+  }
   $stat_js = stat('public://js');
   if (isset($stat_public['uid'])) {
     if (isset($stat_css['uid']) && $stat_public['uid'] != $stat_css['uid']) {
@@ -35,7 +41,6 @@ function advagg_install() {
   }
 
 }
-
 
 /**
  * Implements hook_uninstall().

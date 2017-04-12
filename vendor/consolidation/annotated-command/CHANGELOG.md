@@ -1,5 +1,23 @@
 # Change Log
 
+### CURRENT
+
+- Allow multiple annotations with the same key. These are returned as a csv, or, alternately, can be accessed as an array via the new accessor.
+
+### 2.4.4 - 27 Feb 2017
+
+- BUGFIX: Avoid rewriting the command cache unless something has changed.
+- BUGFIX: Ensure that the default value of options are correctly cached.
+
+### 2.4.2 - 24 Feb 2017
+
+- Add SimpleCacheInterface as a documentation interface (not enforced).
+
+### 2.4.1 - 20 Feb 2017
+
+- Support array options: multiple options on the commandline may be passed in to options array as an array of values.
+- Add php 7.1 to the test matrix.
+
 ### 2.4.0 - 3 Feb 2017
 
 - Automatically rebuild cached commandfile data when commandfile changes.

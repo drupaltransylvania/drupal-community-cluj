@@ -31,7 +31,7 @@ class Files extends State implements StateInterface {
   /**
    * Save location for split files.
    *
-   * @var str
+   * @var string
    */
   protected $partsPath;
 
@@ -342,9 +342,6 @@ class Files extends State implements StateInterface {
       // Pass through if selector count is low.
       if ($selector_count < $selector_split_value) {
         $overall_split += $selector_count;
-        if ($last_chunk) {
-          $file_info['split_last_part'] = TRUE;
-        }
         $subfile = $this->createSubfile($chunks, $overall_split, $file_info);
         if (!$subfile) {
           // Somthing broke; do not create a subfile.
@@ -501,7 +498,8 @@ class Files extends State implements StateInterface {
 
     // Write the current chunk of the CSS into a file.
     $path = $this->partsPath . $file . $overall_split . '.css';
-    file_prepare_directory(dirname($path), FILE_CREATE_DIRECTORY);
+    $directory = dirname($path);
+    file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
     file_unmanaged_save_data($css, $path, FILE_EXISTS_REPLACE);
     if (!file_exists($path)) {
       return FALSE;

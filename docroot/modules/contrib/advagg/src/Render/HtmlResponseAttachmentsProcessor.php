@@ -37,7 +37,7 @@ class HtmlResponseAttachmentsProcessor extends CoreHtmlResponseAttachmentsProces
       // Optimize CSS if necessary, but only during normal site operation.
       $optimize_css = !defined('MAINTENANCE_MODE') && $this->config->get('css.preprocess');
       $variables['styles'] = $this->cssCollectionRenderer->render($this->assetResolver->getCssAssets($assets, $optimize_css));
-      $variables['prefetch'] = $variables['styles']['prefetch'];
+      $variables['prefetch'] = isset($variables['styles']['prefetch']) ? $variables['styles']['prefetch'] : [];
       unset($variables['styles']['prefetch']);
 
       // Allow other modules to alter the assets before rendering.
@@ -52,7 +52,7 @@ class HtmlResponseAttachmentsProcessor extends CoreHtmlResponseAttachmentsProces
       $optimize_js = !defined('MAINTENANCE_MODE') && !\Drupal::state()->get('system.maintenance_mode') && $this->config->get('js.preprocess');
       list($js_assets_header, $js_assets_footer) = $this->assetResolver->getJsAssets($assets, $optimize_js);
       $variables['scripts'] = $this->jsCollectionRenderer->render($js_assets_header);
-      $variables['prefetch'] += $variables['scripts']['prefetch'];
+      $variables['prefetch'] += isset($variables['scripts']['prefetch']) ? $variables['scripts']['prefetch'] : [];
       unset($variables['scripts']['prefetch']);
 
       // Allow other modules to alter the assets before rendering.
@@ -61,7 +61,7 @@ class HtmlResponseAttachmentsProcessor extends CoreHtmlResponseAttachmentsProces
       $this->moduleHandler->alter('advagg_asset_render', $variables['scripts'], $render_type, $asset_type);
 
       $variables['scripts_bottom'] = $this->jsCollectionRenderer->render($js_assets_footer);
-      $variables['prefetch'] += $variables['scripts_bottom']['prefetch'];
+      $variables['prefetch'] += isset($variables['scripts_bottom']['prefetch']) ? $variables['scripts_bottom']['prefetch'] : [];
       unset($variables['scripts_bottom']['prefetch']);
 
       // Allow other modules to alter the assets before rendering.

@@ -8,7 +8,7 @@
  */
 
 /**
- * Checks that \Drupal::service() and friends is not used in forms or controllers.
+ * Checks that \Drupal::service() and friends is not used in forms, controllers, services.
  *
  * @category PHP
  * @package  PHP_CodeSniffer
@@ -25,9 +25,15 @@ class DrupalPractice_Sniffs_Objects_GlobalDrupalSniff implements PHP_CodeSniffer
     public static $baseClasses = array(
                                   'BlockBase',
                                   'ConfigFormBase',
+                                  'ContentEntityForm',
                                   'ControllerBase',
-                                  'FormBase',
                                   'EntityForm',
+                                  'EntityReferenceFormatterBase',
+                                  'FileFormatterBase',
+                                  'FormatterBase',
+                                  'FormBase',
+                                  'ImageFormatter',
+                                  'ImageFormatterBase',
                                   'WidgetBase',
                                  );
 
@@ -82,7 +88,9 @@ class DrupalPractice_Sniffs_Objects_GlobalDrupalSniff implements PHP_CodeSniffer
         $classPtr    = key($tokens[$stackPtr]['conditions']);
         $extendsName = $phpcsFile->findExtendedClassName($classPtr);
 
-        if ($extendsName === false || in_array($extendsName, static::$baseClasses) === false) {
+        if (($extendsName === false || in_array($extendsName, static::$baseClasses) === false)
+            && DrupalPractice_Project::isServiceClass($phpcsFile, $classPtr) === false
+        ) {
             return;
         }
 
