@@ -1,15 +1,15 @@
 <?php
 
-namespace Drupal\dcc_google_verification_content\Form;
+namespace Drupal\dcc_google_tag\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class ContentConfigForm extends ConfigFormBase {
+class GoogleVerificationTagForm extends ConfigFormBase {
 
-  const GOOGLE_VERIFICATION_CONTENT = 'google_verification_content';
+  const GOOGLE_TAG = 'dcc_google_tag';
 
   /**
    * The config.factory service.
@@ -40,14 +40,14 @@ class ContentConfigForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildForm($form, $form_state);
-    $data = $this->configFactory->get(self::GOOGLE_VERIFICATION_CONTENT . '.settings')->getRawData();
+    $key = $this->configFactory->get(self::GOOGLE_TAG . '.settings')->get('dcc_google_tag');
 
-    $form['site_verification_content'] = array(
-      '#title' => $this->t('Google Site Verification Content'),
+    $form['dcc_google_tag'] = array(
+      '#title' => $this->t('Google Verification Tag Hash'),
       '#type' => 'textfield',
-      '#name' => 'site_verification_content',
+      '#name' => 'dcc_google_tag',
       '#require' => TRUE,
-      '#default_value' => $data['site_verification_content'],
+      '#default_value' => $key,
     );
 
     return $form;
@@ -57,8 +57,8 @@ class ContentConfigForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $config = $this->config(self::GOOGLE_VERIFICATION_CONTENT . '.settings');
-    $config->set('site_verification_content', $form_state->getValue('site_verification_content'));
+    $config = $this->config(self::GOOGLE_TAG . '.settings');
+    $config->set('dcc_google_tag', $form_state->getValue('dcc_google_tag'));
 
     $config->save();
     $message = $this->t('The key has been succesfully introduced into configurations');
@@ -69,13 +69,13 @@ class ContentConfigForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function getFormId(){
-    return 'google_verification_content_form';
+    return 'dcc_google_tag_form';
   }
 
   /**
    * {@inheritdoc}
    */
   public function getEditableConfigNames() {
-    return array(self::GOOGLE_VERIFICATION_CONTENT . '.settings');
+    return array(self::GOOGLE_TAG . '.settings');
   }
 }

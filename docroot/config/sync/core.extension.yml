@@ -23,7 +23,7 @@ module:
   dcc_email: 0
   dcc_encryption: 0
   dcc_form_alter: 0
-  dcc_google_verification_content: 0
+  dcc_google_tag: 0
   dcc_gtd_registration: 0
   dcc_gtd_scheduler: 0
   dcc_multistep: 0
