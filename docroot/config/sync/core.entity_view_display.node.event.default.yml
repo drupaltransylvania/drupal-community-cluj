@@ -1,0 +1,61 @@
+uuid: 0f3956c0-5aae-4fc2-97cd-03710706759d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.event.body
+    - field.field.node.event.field_date_of_event
+    - field.field.node.event.field_location_of_event
+    - field.field.node.event.field_main_image
+    - field.field.node.event.field_type_of_event
+    - image.style.content_image_style_670x480_
+    - node.type.event
+  module:
+    - datetime
+    - google_map_field
+    - image
+    - text
+    - user
+id: node.event.default
+targetEntityType: node
+bundle: event
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 1
+    settings: {  }
+    third_party_settings: {  }
+  field_date_of_event:
+    weight: 2
+    label: inline
+    settings:
+      format_type: medium
+      timezone_override: ''
+    third_party_settings: {  }
+    type: datetime_default
+  field_location_of_event:
+    weight: 3
+    label: inline
+    settings: {  }
+    third_party_settings: {  }
+    type: google_map_field_default
+  field_main_image:
+    weight: 0
+    label: hidden
+    settings:
+      image_style: content_image_style_670x480_
+      image_link: ''
+    third_party_settings: {  }
+    type: image
+  field_type_of_event:
+    weight: 4
+    label: inline
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+hidden:
+  addtoany: true
+  links: true
