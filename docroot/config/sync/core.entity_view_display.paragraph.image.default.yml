@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.paragraph.image.field_image
-    - image.style.content_image_style_670x480_
+    - image.style.content_image_style_670x480
     - paragraphs.paragraphs_type.image
   module:
     - image
@@ -18,7 +18,7 @@ content:
     weight: 0
     label: hidden
     settings:
-      image_style: content_image_style_670x480_
+      image_style: content_image_style_670x480
       image_link: ''
     third_party_settings: {  }
 hidden: {  }

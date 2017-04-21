@@ -2,7 +2,7 @@ uuid: 165cfd27-636a-4606-85c9-0e28a9a39595
 langcode: en
 status: true
 dependencies: {  }
-name: content_image_style_670x480_
+name: content_image_style_670x480
 label: 'Content image style (670x480)'
 effects:
   320a322a-0a56-404d-8a5b-0860519f2375:
