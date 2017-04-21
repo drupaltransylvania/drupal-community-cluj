@@ -34,4 +34,5 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
+  field_event_type: true
   field_metatag_image: true
