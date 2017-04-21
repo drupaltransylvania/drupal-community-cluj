@@ -5,21 +5,11 @@ dependencies:
   config:
     - core.entity_view_mode.paragraph.preview
     - field.field.paragraph.image.field_image
-    - image.style.medium
     - paragraphs.paragraphs_type.image
-  module:
-    - image
 id: paragraph.image.preview
 targetEntityType: paragraph
 bundle: image
 mode: preview
-content:
-  field_image:
-    weight: 0
-    label: hidden
-    settings:
-      image_style: medium
-      image_link: ''
-    third_party_settings: {  }
-    type: image
-hidden: {  }
+content: {  }
+hidden:
+  field_image: true

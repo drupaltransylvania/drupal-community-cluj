@@ -17,7 +17,7 @@ content:
     weight: 0
     label: hidden
     settings:
-      trim_length: 100
+      trim_length: 300
     third_party_settings: {  }
     type: text_trimmed
 hidden: {  }

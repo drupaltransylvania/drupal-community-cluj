@@ -13,18 +13,10 @@ bundle: video
 mode: default
 content:
   field_video:
-    type: youtube_video
+    type: youtube_url
     weight: 0
-    label: above
+    label: hidden
     settings:
-      youtube_size: 450x315
-      youtube_width: ''
-      youtube_height: ''
-      youtube_autoplay: false
-      youtube_loop: false
-      youtube_showinfo: false
-      youtube_controls: false
-      youtube_autohide: false
-      youtube_iv_load_policy: false
+      link: true
     third_party_settings: {  }
 hidden: {  }
