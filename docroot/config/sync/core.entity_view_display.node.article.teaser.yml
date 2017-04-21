@@ -4,13 +4,10 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
-    - field.field.node.article.body
-    - field.field.node.article.comment
-    - field.field.node.article.field_image
-    - field.field.node.article.field_tags
+    - field.field.node.article.field_article_layout
+    - field.field.node.article.field_link_to_event
     - node.type.article
   module:
-    - text
     - user
 _core:
   default_config_hash: U8ghxJXn8JE2p6Q2wLpPWAxpz4r_8crL1LxtapSrHAE
@@ -23,15 +20,7 @@ content:
     weight: 5
     settings: {  }
     third_party_settings: {  }
-  body:
-    type: text_summary_or_trimmed
-    weight: 0
-    settings:
-      trim_length: 600
-    third_party_settings: {  }
-    label: hidden
 hidden:
-  comment: true
-  field_image: true
-  field_tags: true
+  field_article_layout: true
+  field_link_to_event: true
   links: true
