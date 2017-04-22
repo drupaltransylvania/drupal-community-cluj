@@ -54,7 +54,7 @@ trait RegistrationEmailTrait {
    * @return array
    *   An array of user info.
    */
-  private function generateUserRegistrationInfo(PersonalInformation $personalInformation) {
+  protected function generateUserRegistrationInfo(PersonalInformation $personalInformation) {
     $params['registration_info'] = [
       'first_name' => $personalInformation->getFirstName(),
       'last_name' => $personalInformation->getLastName(),
