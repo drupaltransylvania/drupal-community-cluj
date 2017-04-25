@@ -1,0 +1,34 @@
+uuid: 0c6807d1-81ea-4bd4-a0e8-a3506bebe54a
+langcode: en
+status: true
+dependencies: {  }
+id: content_moderator
+label: 'Content Moderator'
+weight: -9
+is_admin: null
+permissions:
+  - 'add dcc scheduler'
+  - 'create article content'
+  - 'delete any article content'
+  - 'delete own article content'
+  - 'delete article revisions'
+  - 'edit any article content'
+  - 'edit own article content'
+  - 'revert article revisions'
+  - 'view article revisions'
+  - 'create drupal_training_scheduler content'
+  - 'delete any drupal_training_scheduler content'
+  - 'delete own drupal_training_scheduler content'
+  - 'delete drupal_training_scheduler revisions'
+  - 'edit any drupal_training_scheduler content'
+  - 'edit own drupal_training_scheduler content'
+  - 'revert drupal_training_scheduler revisions'
+  - 'view drupal_training_scheduler revisions'
+  - 'create event content'
+  - 'delete any event content'
+  - 'delete own event content'
+  - 'delete event revisions'
+  - 'edit any event content'
+  - 'edit own event content'
+  - 'revert event revisions'
+  - 'view event revisions'
