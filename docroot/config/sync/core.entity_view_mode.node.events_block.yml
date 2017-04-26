@@ -1,0 +1,10 @@
+uuid: 51b1eb15-ce3c-445f-95a7-85af25e84517
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.events_block
+label: 'Events Block'
+targetEntityType: node
+cache: true

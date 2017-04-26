@@ -1,25 +1,27 @@
-uuid: b6b39c2d-24d2-41fd-84e5-298e7eba7088
+uuid: e3a26870-35ba-4eab-af2f-9a3ec7a848fd
 langcode: en
 status: true
 dependencies:
+  config:
+    - views.view.upcoming_events_view
   module:
     - system
+    - views
   theme:
     - dcc_theme
-id: upcommingevents
+id: views_block__upcoming_events_view_block
 theme: dcc_theme
 region: sidebar_second
 weight: 0
 provider: null
-plugin: 'block_content:36619978-4367-4156-9b6e-e4c069a6a550'
+plugin: 'views_block:upcoming_events_view-block_1'
 settings:
-  id: 'block_content:36619978-4367-4156-9b6e-e4c069a6a550'
-  label: 'Upcomming events'
-  provider: core
+  id: 'views_block:upcoming_events_view-block_1'
+  label: ''
+  provider: views
   label_display: visible
-  status: true
-  info: ''
-  view_mode: full
+  views_label: ''
+  items_per_page: none
 visibility:
   request_path:
     id: request_path
