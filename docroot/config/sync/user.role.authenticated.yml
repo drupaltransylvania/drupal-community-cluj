@@ -6,7 +6,7 @@ _core:
   default_config_hash: dJ0L2DNSj5q6XVZAGsuVDpJTh5UeYkIPwKrUOOpr8YI
 id: authenticated
 label: 'Authenticated user'
-weight: 1
+weight: -8
 is_admin: false
 permissions:
   - 'access content'
@@ -19,3 +19,16 @@ permissions:
   - 'search content'
   - 'register to global training days'
   - 'display eu cookie compliance popup'
+  - 'create article content'
+  - 'delete own article content'
+  - 'edit own article content'
+  - 'view article revisions'
+  - 'access workbench'
+  - 'view moderation states'
+  - 'use review_after_updated transition'
+  - 'use save_as_draft transition'
+  - 'use send_for_review transition'
+  - 'access toolbar'
+  - 'view own unpublished content'
+  - 'view the administration theme'
+  - 'use update_while_in_review transition'

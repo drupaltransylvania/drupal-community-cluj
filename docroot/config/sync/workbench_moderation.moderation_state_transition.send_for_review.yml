@@ -1,0 +1,12 @@
+uuid: 0ddf1b65-3676-4100-991f-2480a51c376c
+langcode: en
+status: true
+dependencies:
+  config:
+    - workbench_moderation.moderation_state.draft
+    - workbench_moderation.moderation_state.needs_review
+id: send_for_review
+label: 'Send for Review'
+stateFrom: draft
+stateTo: needs_review
+weight: 0

@@ -1,0 +1,11 @@
+uuid: 809214a7-9c3d-4ea1-bdac-3e016de8d76e
+langcode: en
+status: true
+dependencies:
+  config:
+    - workbench_moderation.moderation_state.published
+id: update
+label: Update
+stateFrom: published
+stateTo: published
+weight: -7

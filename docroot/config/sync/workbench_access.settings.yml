@@ -1,0 +1,15 @@
+scheme: menu
+parents:
+  workbench: workbench
+label: Section
+plural_label: Sections
+fields:
+  node:
+    article: menu
+    drupal_training_scheduler: ''
+    event: ''
+    global_training_day_registration: ''
+    item: ''
+    page: ''
+_core:
+  default_config_hash: delTKALrhPWSM78GuDlZP2HmxNAJjxCvv4fQezJ7Dak

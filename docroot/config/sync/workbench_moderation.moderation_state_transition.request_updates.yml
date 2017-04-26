@@ -1,0 +1,12 @@
+uuid: b8455feb-c2c7-477e-993e-787fa3deacd8
+langcode: en
+status: true
+dependencies:
+  config:
+    - workbench_moderation.moderation_state.needs_review
+    - workbench_moderation.moderation_state.needs_update
+id: request_updates
+label: 'Request Updates'
+stateFrom: needs_review
+stateTo: needs_update
+weight: -3

@@ -1,0 +1,12 @@
+uuid: c320069c-a2d2-4a7f-8392-77fb2018cefe
+langcode: en
+status: true
+dependencies:
+  config:
+    - workbench_moderation.moderation_state.published
+    - workbench_moderation.moderation_state.unpublished
+id: republish
+label: Republish
+stateFrom: unpublished
+stateTo: published
+weight: -8
