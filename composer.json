@@ -44,7 +44,8 @@
         "drupal/google_analytics": "^2.1",
         "drupal/workbench": "^1.0@alpha",
         "drupal/workbench_moderation": "^1.2",
-        "drupal/workbench_access": "^1.0@alpha"
+        "drupal/workbench_access": "^1.0@alpha",
+        "drupal/view_unpublished": "^1.0@alpha"
     },
     "require-dev": {
         "behat/mink": "~1.7",
