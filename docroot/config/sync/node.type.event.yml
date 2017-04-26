@@ -4,11 +4,24 @@ status: true
 dependencies:
   module:
     - menu_ui
+    - workbench_access
+    - workbench_moderation
 third_party_settings:
   menu_ui:
     available_menus:
       - main
     parent: 'main:'
+  workbench_access:
+    workbench_access_status: false
+  workbench_moderation:
+    enabled: true
+    allowed_moderation_states:
+      - published
+      - draft
+      - needs_review
+      - needs_update
+      - unpublished
+    default_moderation_state: draft
 name: Event
 type: event
 description: 'This content type is used to describe any type of event (Sprints, Meetups, Conferences, Global Training Days).'

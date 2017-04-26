@@ -2,10 +2,8 @@ uuid: b6b39c2d-24d2-41fd-84e5-298e7eba7088
 langcode: en
 status: true
 dependencies:
-  content:
-    - 'block_content:basic:36619978-4367-4156-9b6e-e4c069a6a550'
   module:
-    - block_content
+    - system
   theme:
     - dcc_theme
 id: upcommingevents
@@ -17,9 +15,14 @@ plugin: 'block_content:36619978-4367-4156-9b6e-e4c069a6a550'
 settings:
   id: 'block_content:36619978-4367-4156-9b6e-e4c069a6a550'
   label: 'Upcomming events'
-  provider: block_content
+  provider: core
   label_display: visible
   status: true
   info: ''
   view_mode: full
-visibility: {  }
+visibility:
+  request_path:
+    id: request_path
+    pages: "/admin/workbench/*\r\n/admin/workbench"
+    negate: true
+    context_mapping: {  }

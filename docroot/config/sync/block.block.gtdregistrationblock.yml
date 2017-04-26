@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - dcc_gtd_registration
+    - system
   theme:
     - dcc_theme
 id: gtdregistrationblock
@@ -17,4 +18,9 @@ settings:
   label: 'Register for the next GTD'
   provider: dcc_gtd_registration
   label_display: visible
-visibility: {  }
+visibility:
+  request_path:
+    id: request_path
+    pages: "/admin/workbench/*\r\n/admin/workbench"
+    negate: true
+    context_mapping: {  }
