@@ -3,10 +3,14 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.user.user.field_drupal_org_account
+    - field.field.user.user.field_workbench_access
     - field.field.user.user.user_picture
     - image.style.thumbnail
   module:
     - image
+    - link
+    - path
     - user
 _core:
   default_config_hash: LLAieeozVsoZDb-2PbFxRJpQqnKmpR7-4OoRJnduz-U
@@ -19,6 +23,15 @@ content:
     weight: -10
   contact:
     weight: 5
+  field_drupal_org_account:
+    weight: 31
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+    type: link_default
+  google_analytics:
+    weight: 3
   language:
     weight: 0
   path:
@@ -35,4 +48,5 @@ content:
       preview_image_style: thumbnail
     third_party_settings: {  }
     weight: -1
-hidden: {  }
+hidden:
+  field_workbench_access: true

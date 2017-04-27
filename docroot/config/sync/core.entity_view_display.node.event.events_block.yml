@@ -1,8 +1,9 @@
-uuid: 0f3956c0-5aae-4fc2-97cd-03710706759d
+uuid: 7424f2fe-f66f-46c8-b973-1274a27b8d22
 langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.node.events_block
     - field.field.node.event.body
     - field.field.node.event.field_date_of_event
     - field.field.node.event.field_location_of_event
@@ -12,23 +13,16 @@ dependencies:
     - node.type.event
   module:
     - datetime
-    - google_map_field
+    - dcc_gtd_registration
     - image
-    - text
     - user
-id: node.event.default
+id: node.event.events_block
 targetEntityType: node
 bundle: event
-mode: default
+mode: events_block
 content:
-  body:
-    label: hidden
-    type: text_default
-    weight: 1
-    settings: {  }
-    third_party_settings: {  }
   field_date_of_event:
-    weight: 2
+    weight: 1
     label: inline
     settings:
       format_type: medium
@@ -36,11 +30,11 @@ content:
     third_party_settings: {  }
     type: datetime_default
   field_location_of_event:
-    weight: 3
+    type: google_map_field_name_formatter
+    weight: 2
     label: inline
     settings: {  }
     third_party_settings: {  }
-    type: google_map_field_default
   field_main_image:
     weight: 0
     label: hidden
@@ -49,17 +43,9 @@ content:
       image_link: ''
     third_party_settings: {  }
     type: image
-  field_type_of_event:
-    weight: 4
-    label: inline
-    settings:
-      link: true
-    third_party_settings: {  }
-    type: entity_reference_label
-  workbench_moderation_control:
-    weight: -20
-    settings: {  }
-    third_party_settings: {  }
 hidden:
   addtoany: true
+  body: true
+  field_type_of_event: true
   links: true
+  workbench_moderation_control: true

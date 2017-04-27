@@ -1,0 +1,23 @@
+uuid: 7980b734-aa81-4603-9d7c-41cdc167983a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_drupal_org_account
+  module:
+    - link
+    - user
+id: user.user.field_drupal_org_account
+field_name: field_drupal_org_account
+entity_type: user
+bundle: user
+label: 'drupal.org Account'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  link_type: 17
+  title: 1
+field_type: link
