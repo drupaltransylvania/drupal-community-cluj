@@ -3,10 +3,13 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.user.user.field_drupal_org_account
+    - field.field.user.user.field_workbench_access
     - field.field.user.user.user_picture
-    - image.style.thumbnail
+    - image.style.large
   module:
     - image
+    - link
     - user
 _core:
   default_config_hash: L2mtwGWH_7wDRCMIR4r_Iu_jmvQ10DV1L8ht8iNZ5qY
@@ -15,14 +18,28 @@ targetEntityType: user
 bundle: user
 mode: default
 content:
+  field_drupal_org_account:
+    weight: 6
+    label: inline
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
   member_for:
     weight: 5
+    settings: {  }
+    third_party_settings: {  }
   user_picture:
     type: image
     weight: 0
     settings:
-      image_style: thumbnail
+      image_style: large
       image_link: content
     third_party_settings: {  }
     label: hidden
-hidden: {  }
+hidden:
+  field_workbench_access: true
