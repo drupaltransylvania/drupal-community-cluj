@@ -7,8 +7,11 @@ dependencies:
     - field.field.node.article.field_article_layout
     - field.field.node.article.field_comments
     - field.field.node.article.field_link_to_event
+    - field.field.node.article.field_main_image
+    - image.style.content_image_style_670x480
     - node.type.article
   module:
+    - dcc_bottom_widgets
     - entity_reference_revisions
     - link
     - user
@@ -20,12 +23,12 @@ bundle: article
 mode: article_listing
 content:
   addtoany:
-    weight: 3
+    weight: 5
     settings: {  }
     third_party_settings: {  }
   field_article_layout:
     type: entity_reference_revisions_entity_view
-    weight: 0
+    weight: 2
     label: hidden
     settings:
       view_mode: preview
@@ -33,7 +36,7 @@ content:
     third_party_settings: {  }
   field_link_to_event:
     type: link
-    weight: 1
+    weight: 3
     label: above
     settings:
       trim_length: 80
@@ -42,8 +45,20 @@ content:
       url_only: false
       url_plain: false
     third_party_settings: {  }
+  field_main_image:
+    type: bottom_widget_image_field_formatter
+    weight: 1
+    label: above
+    settings:
+      image_style: content_image_style_670x480
+      image_link: ''
+    third_party_settings: {  }
   links:
-    weight: 2
+    weight: 4
+    settings: {  }
+    third_party_settings: {  }
+  workbench_moderation_control:
+    weight: 0
     settings: {  }
     third_party_settings: {  }
 hidden:

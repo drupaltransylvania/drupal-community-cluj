@@ -7,10 +7,12 @@ dependencies:
     - field.field.node.article.field_article_layout
     - field.field.node.article.field_comments
     - field.field.node.article.field_link_to_event
+    - field.field.node.article.field_main_image
     - node.type.article
   module:
     - comment
     - entity_reference_revisions
+    - image
     - link
     - user
 _core:
@@ -47,9 +49,19 @@ content:
       target: ''
     third_party_settings: {  }
     type: link
+  field_main_image:
+    weight: 4
+    label: above
+    settings:
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+    type: image
   links:
     weight: 0
     settings: {  }
     third_party_settings: {  }
+  workbench_moderation_control:
+    weight: -20
 hidden:
   addtoany: true
