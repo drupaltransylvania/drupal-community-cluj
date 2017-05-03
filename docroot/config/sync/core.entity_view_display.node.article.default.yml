@@ -24,14 +24,14 @@ mode: default
 content:
   field_article_layout:
     type: entity_reference_revisions_entity_view
-    weight: 1
+    weight: 3
     label: hidden
     settings:
       view_mode: default
       link: ''
     third_party_settings: {  }
   field_comments:
-    weight: 3
+    weight: 5
     label: above
     settings:
       pager_id: 0
@@ -39,7 +39,7 @@ content:
     third_party_settings: {  }
     type: comment_default
   field_link_to_event:
-    weight: 2
+    weight: 4
     label: inline
     settings:
       trim_length: 80
@@ -50,18 +50,20 @@ content:
     third_party_settings: {  }
     type: link
   field_main_image:
-    weight: 4
-    label: above
+    weight: 2
+    label: hidden
     settings:
       image_style: ''
       image_link: ''
     third_party_settings: {  }
     type: image
   links:
-    weight: 0
+    weight: 1
     settings: {  }
     third_party_settings: {  }
   workbench_moderation_control:
-    weight: -20
+    weight: 0
+    settings: {  }
+    third_party_settings: {  }
 hidden:
   addtoany: true

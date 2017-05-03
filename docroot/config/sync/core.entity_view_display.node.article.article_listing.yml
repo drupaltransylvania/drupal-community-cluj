@@ -48,7 +48,7 @@ content:
   field_main_image:
     type: bottom_widget_image_field_formatter
     weight: 1
-    label: above
+    label: hidden
     settings:
       image_style: content_image_style_670x480
       image_link: ''

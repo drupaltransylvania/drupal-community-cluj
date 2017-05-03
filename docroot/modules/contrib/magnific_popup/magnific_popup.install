@@ -1,0 +1,38 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Magnific Popup module.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function magnific_popup_requirements($phase) {
+  $requirements = [];
+
+  if ($phase == 'runtime') {
+    $requirements['magnific_popup']['title'] = t('Magnific Popup Library');
+
+    // Verify library files are present.
+    if (file_exists(DRUPAL_ROOT . '/libraries/magnific-popup/jquery.magnific-popup.min.js') && file_exists(DRUPAL_ROOT . '/libraries/magnific-popup/magnific-popup.css')) {
+      $requirements['magnific_popup']['value'] = t('Installed');
+      $requirements['magnific_popup']['severity'] = REQUIREMENT_OK;
+    }
+    else {
+      $requirements['magnific_popup']['value'] = t('Not Installed');
+      $requirements['magnific_popup']['severity'] = REQUIREMENT_ERROR;
+
+      // Check for 8.x-1.1 'magnific_popup' folder.
+      // See https://www.drupal.org/node/2653026.
+      if (file_exists(DRUPAL_ROOT . '/libraries/magnific_popup')) {
+        $requirements['magnific_popup']['description'] = t('Please rename the DRUPAL_ROOT/libraries/magnific_popup folder to DRUPAL_ROOT/libraries/magnific-popup. See https://www.drupal.org/node/2653026');
+      }
+      else {
+        $requirements['magnific_popup']['description'] = t('Please download the Magnific Popup Library from :url and install in DRUPAL_ROOT/libraries/magnific-popup.', [':url' => 'https://github.com/dimsemenov/Magnific-Popup/releases']);
+      }
+    }
+  }
+
+  return $requirements;
+}

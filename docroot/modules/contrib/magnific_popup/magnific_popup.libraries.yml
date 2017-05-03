@@ -1,0 +1,20 @@
+magnific_popup:
+  remote: http://dimsemenov.com/plugins/magnific-popup/
+  version: 1.0
+  license:
+      name: MIT
+  js:
+    js/magnific-popup.js: {}
+    /libraries/magnific-popup/jquery.magnific-popup.min.js: {minified: true}
+  css:
+    base:
+      /libraries/magnific-popup/magnific-popup.css: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+video_embed_field:
+  js:
+    js/magnific-popup.video-embed.js: {}
+  css:
+    theme:
+      css/magnific-popup.video-embed.css: {}

@@ -1,0 +1,24 @@
+uuid: 3d8a75ce-b871-4e10-b4f3-a258bef69411
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.image_gallery.field_image_for_gallery
+    - paragraphs.paragraphs_type.image_gallery
+  module:
+    - magnific_popup
+id: paragraph.image_gallery.default
+targetEntityType: paragraph
+bundle: image_gallery
+mode: default
+content:
+  field_image_for_gallery:
+    weight: 0
+    label: inline
+    settings:
+      thumbnail_image_style: medium
+      popup_image_style: ''
+      gallery_type: all_items
+    third_party_settings: {  }
+    type: magnific_popup
+hidden: {  }

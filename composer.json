@@ -45,7 +45,8 @@
         "drupal/workbench": "^1.0@alpha",
         "drupal/workbench_moderation": "^1.2",
         "drupal/workbench_access": "^1.0@alpha",
-        "drupal/view_unpublished": "^1.0@alpha"
+        "drupal/view_unpublished": "^1.0@alpha",
+        "drupal/magnific_popup": "^1.2"
     },
     "require-dev": {
         "behat/mink": "~1.7",
