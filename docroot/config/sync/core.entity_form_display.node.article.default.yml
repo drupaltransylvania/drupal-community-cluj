@@ -6,12 +6,16 @@ dependencies:
     - field.field.node.article.field_article_layout
     - field.field.node.article.field_comments
     - field.field.node.article.field_link_to_event
+    - field.field.node.article.field_main_image
+    - image.style.thumbnail
     - node.type.article
   module:
     - comment
+    - image
     - link
     - paragraphs
     - path
+    - workbench_moderation
 _core:
   default_config_hash: 7CvVDwPYotAZFBa36mcpMKZOfVRRp_iGuPHpHaavI6E
 id: node.article.default
@@ -21,12 +25,12 @@ mode: default
 content:
   created:
     type: datetime_timestamp
-    weight: 3
+    weight: 4
     settings: {  }
     third_party_settings: {  }
   field_article_layout:
     type: entity_reference_paragraphs
-    weight: 1
+    weight: 2
     settings:
       title: Paragraph
       title_plural: Paragraphs
@@ -36,32 +40,39 @@ content:
       default_paragraph_type: ''
     third_party_settings: {  }
   field_comments:
-    weight: 26
+    weight: 9
     settings: {  }
     third_party_settings: {  }
     type: comment_default
   field_link_to_event:
-    weight: 2
+    weight: 3
     settings:
       placeholder_url: ''
       placeholder_title: ''
     third_party_settings: {  }
     type: link_default
+  field_main_image:
+    weight: 1
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+    type: image_image
   path:
     type: path
-    weight: 5
+    weight: 6
     settings: {  }
     third_party_settings: {  }
   promote:
     type: options_buttons
-    weight: 6
+    weight: 7
     settings: {  }
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 4
+    weight: 5
     third_party_settings: {  }
   title:
     type: string_textfield
@@ -72,7 +83,7 @@ content:
     third_party_settings: {  }
   uid:
     type: options_select
-    weight: 7
+    weight: 8
     settings: {  }
     third_party_settings: {  }
 hidden: {  }

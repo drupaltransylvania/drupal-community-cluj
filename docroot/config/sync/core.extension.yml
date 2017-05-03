@@ -44,6 +44,7 @@ module:
   history: 0
   image: 0
   link: 0
+  magnific_popup: 0
   mailsystem: 0
   menu_ui: 0
   metatag: 0

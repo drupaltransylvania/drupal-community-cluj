@@ -6,6 +6,7 @@ dependencies:
     - field.storage.node.field_layout
     - node.type.page
     - paragraphs.paragraphs_type.image
+    - paragraphs.paragraphs_type.image_gallery
     - paragraphs.paragraphs_type.text
     - paragraphs.paragraphs_type.video
   module:
@@ -27,6 +28,7 @@ settings:
       text: text
       image: image
       video: video
+      image_gallery: image_gallery
     target_bundles_drag_drop:
       text:
         enabled: true
@@ -37,4 +39,7 @@ settings:
       video:
         enabled: true
         weight: -5
+      image_gallery:
+        enabled: true
+        weight: 6
 field_type: entity_reference_revisions

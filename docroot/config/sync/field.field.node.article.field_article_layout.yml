@@ -6,6 +6,7 @@ dependencies:
     - field.storage.node.field_article_layout
     - node.type.article
     - paragraphs.paragraphs_type.image
+    - paragraphs.paragraphs_type.image_gallery
     - paragraphs.paragraphs_type.text
     - paragraphs.paragraphs_type.video
   module:
@@ -26,6 +27,7 @@ settings:
     target_bundles:
       image: image
       text: text
+      image_gallery: image_gallery
       video: video
     target_bundles_drag_drop:
       image:
@@ -34,6 +36,9 @@ settings:
       text:
         enabled: true
         weight: 5
+      image_gallery:
+        enabled: true
+        weight: 6
       video:
         enabled: true
         weight: 6
