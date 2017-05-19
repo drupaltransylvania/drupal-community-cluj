@@ -1,4 +1,0 @@
-include_home_segment: TRUE
-home_segment_title: 'Home'
-include_title_segment: TRUE
-language_path_prefix_as_segment: FALSE

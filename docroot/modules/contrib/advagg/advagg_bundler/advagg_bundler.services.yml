@@ -1,5 +1,0 @@
-services:
-  advagg_bundler.overrider:
-    class: Drupal\advagg_bundler\ConfigOverrider
-    tags:
-      - { name: config.factory.override, priority: 100 }
