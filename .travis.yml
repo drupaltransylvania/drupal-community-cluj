@@ -5,13 +5,13 @@ php:
   - 5.6
 
 before_install:
-#  - composer selfupdate
+  - composer selfupdate
   - phpenv config-rm xdebug.ini
 
 install:
   # Load composer dependencies.
-#  - composer validate --no-check-all --ansi
-#  - composer install
+  - composer validate --no-check-all --ansi
+  - composer install
   # Prepare a list of files that should be checked for coding standard.
   # If the branch was force updated the commit range might not be good.
   # In this case we get the difference between the master and this.
