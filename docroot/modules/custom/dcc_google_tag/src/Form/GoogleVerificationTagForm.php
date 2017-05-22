@@ -7,6 +7,11 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Implements google tag form.
+ *
+ * @package Drupal\dcc_google_tag\Form
+ */
 class GoogleVerificationTagForm extends ConfigFormBase {
 
   const GOOGLE_TAG = 'dcc_google_tag';
@@ -26,11 +31,12 @@ class GoogleVerificationTagForm extends ConfigFormBase {
   }
 
   /**
-   * ContentConfigForm constructor
+   * Creates a google verification form.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory service.
    */
-  public function __construct(\Drupal\Core\Config\ConfigFactoryInterface $config_factory) {
+  public function __construct(ConfigFactoryInterface $config_factory) {
     parent::__construct($config_factory);
     $this->configFactory = $config_factory;
   }
@@ -40,15 +46,16 @@ class GoogleVerificationTagForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildForm($form, $form_state);
-    $key = $this->configFactory->get(self::GOOGLE_TAG . '.settings')->get('dcc_google_tag');
+    $key = $this->configFactory->get(self::GOOGLE_TAG . '.settings')
+      ->get('dcc_google_tag');
 
-    $form['dcc_google_tag'] = array(
+    $form['dcc_google_tag'] = [
       '#title' => $this->t('Google Verification Tag Hash'),
       '#type' => 'textfield',
       '#name' => 'dcc_google_tag',
       '#require' => TRUE,
       '#default_value' => $key,
-    );
+    ];
 
     return $form;
   }
@@ -68,7 +75,7 @@ class GoogleVerificationTagForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function getFormId(){
+  public function getFormId() {
     return 'dcc_google_tag_form';
   }
 
@@ -76,6 +83,7 @@ class GoogleVerificationTagForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function getEditableConfigNames() {
-    return array(self::GOOGLE_TAG . '.settings');
+    return [self::GOOGLE_TAG . '.settings'];
   }
+
 }

@@ -5,13 +5,13 @@ php:
   - 5.6
 
 before_install:
-#  - composer selfupdate
+  - composer selfupdate
   - phpenv config-rm xdebug.ini
 
 install:
   # Load composer dependencies.
-#  - composer validate --no-check-all --ansi
-#  - composer install
+  - composer validate --no-check-all --ansi
+  - composer install
   # Prepare a list of files that should be checked for coding standard.
   # If the branch was force updated the commit range might not be good.
   # In this case we get the difference between the master and this.
@@ -24,10 +24,8 @@ install:
       TRAVIS_COMMIT_RANGE=upstream/master...;
     fi
   - git diff --name-only $TRAVIS_COMMIT_RANGE > changed_files.txt
-  - echo -e "\033[0;34m-- All detected changes:\033[0m" && cat changed_files.txt || true
   # Filter out only the types of files we need to check.
   - sed -i '/inc$\|info$\|install$\|module$\|php$\|profile$\|test$\|theme$/!d' changed_files.txt
-  - echo -e "\033[0;34m-- Changed files after extension filetering:\033[0m" && cat changed_files.txt || true
   # Filter out deleted files which make code-sniffer fail.
   # Also make sure the file is not empty before filtering because,
   # in that case we will get a dot (.) in the file which will make
@@ -36,27 +34,7 @@ install:
     if [ -s changed_files.txt ] ; then
       cat changed_files.txt | xargs ls -d 2>/dev/null > changed_existing_files.txt || true;
     fi
-  - echo -e "\033[0;34m-- Files that will be sniffed:\033[0m" && cat changed_existing_files.txt || true
 
 script:
   # Run for each changed file the code sniffer.
   - if [ -s changed_existing_files.txt ]; then ./vendor/bin/phpcs --file-list=changed_existing_files.txt; fi
-
-before_deploy:
-  - openssl aes-256-cbc -K $encrypted_ddbdcf50acb4_key -iv $encrypted_ddbdcf50acb4_iv -in id_rsa.pub.enc -out /tmp/id_rsa.pub -d
-#  - eval "$(ssh-agent -s)"
-#  - chmod 600 /tmp/id_rsa.pub
-#  - ssh-add /tmp/id_rsa.pub
-
-deploy:
-  provider: script
-  script: deploy.sh
-  env:
-    global:
-      - USER="danielpopdan"
-      - EMAIL="popdan.daniel@gmail.com"
-      - REPO="drupal-community-cluj"
-      - GH_REPO="github.com/${USER}/${REPO}.git"
-      - ACQUIA_REPO="clujapocadc@svn-22901.prod.hosting.acquia.com:clujapocadc.git"
-  on:
-    branch: master

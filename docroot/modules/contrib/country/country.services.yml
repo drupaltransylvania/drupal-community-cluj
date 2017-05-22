@@ -1,4 +1,0 @@
-services:
-  country.field.manager:
-    class: Drupal\country\CountryManager
-    arguments: []
