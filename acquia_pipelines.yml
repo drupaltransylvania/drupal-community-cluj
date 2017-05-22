@@ -5,7 +5,23 @@ variables:
 events:
   build:
     steps:
-      - build:
+      - composer:
           type: script
           script:
-            - composer install
+            - composer install --no-interaction --no-dev --optimize-autoloader
+      - deploy:
+          script:
+            - develop
+  # When a GitHub pull request is merged, this deletes the coresponding ODE.
+  pr-merged:
+    steps:
+      - deploy:
+          script:
+            - develop
+
+  # When a GitHub pull request is closed, this deletes the coresponding ODE.
+  pr-closed:
+    steps:
+      - deploy:
+          script:
+            - develop
