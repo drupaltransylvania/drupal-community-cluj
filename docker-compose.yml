@@ -4,8 +4,6 @@ php5:
   container_name: dcc-stable
   volumes :
     - .:/var/www/html
-  ports:
-    - 4001:80
   extra_hosts:
     - "db:172.17.0.1"
 
@@ -13,8 +11,6 @@ varnish:
   build: ./dockers/varnish
   dockerfile: Dockerfile
   container_name: dcc-stable-varnish
-  ports:
-    - 5002:6081
   links:
     - php5
   volumes:
@@ -27,5 +23,3 @@ solr:
   container_name: dcc-stable-solr-4.5
   volumes:
     - ./solr:/opt/solr/example/solr/dcc
-  ports:
-    - 5003:8983
