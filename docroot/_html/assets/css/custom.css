@@ -1,0 +1,18 @@
+.logo {
+    height: 40px;
+}
+
+.logo img, .logo .logo-text {
+    height: inherit;
+    float: left;
+}
+
+.logo .logo-text {
+    line-height: 40px;
+    padding: 0px 0px 0px 10px;
+    font-size: 2vw;
+}
+
+.logo-text strong {
+    color: #0c76ab;
+}
