@@ -13,7 +13,7 @@ dependencies:
     - node.type.event
   module:
     - datetime
-    - dcc_gtd_registration
+    - google_map_field
     - image
     - user
 id: node.event.events_block
@@ -30,7 +30,7 @@ content:
     third_party_settings: {  }
     type: datetime_default
   field_location_of_event:
-    type: google_map_field_name_formatter
+    type: google_map_field_default
     weight: 2
     label: inline
     settings: {  }
