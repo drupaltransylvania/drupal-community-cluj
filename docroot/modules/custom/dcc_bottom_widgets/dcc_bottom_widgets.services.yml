@@ -1,6 +1,0 @@
-services:
-  dcc_bottom_widgets.form_alter_subscriber:
-    class: '\Drupal\dcc_bottom_widgets\EventSubscriber\FormAlterEventSubscriber'
-    tags:
-      - { name: 'form_alter', form_id: 'entity_subqueue_homepage_bottom_widgets_edit_form' }
-    arguments: ['@cache_tags.invalidator']

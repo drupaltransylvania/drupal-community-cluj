@@ -1,5 +1,0 @@
-name: Bottom Widgets
-type: module
-description: Handles the display of the bottom widgets.
-package: Custom
-core: 8.x

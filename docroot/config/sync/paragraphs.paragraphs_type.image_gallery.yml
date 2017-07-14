@@ -1,7 +1,0 @@
-uuid: f0c295ea-8b06-4777-b442-1675cc166f2e
-langcode: en
-status: true
-dependencies: {  }
-id: image_gallery
-label: 'Image Gallery'
-behavior_plugins: {  }
