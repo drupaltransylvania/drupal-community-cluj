@@ -9,7 +9,6 @@ use Drupal\Core\Asset\AttachedAssetsInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\node\NodeInterface;
-use Drupal\Core\Form\FormStateInterface;
 
 define('ACTIVATION_STATUS_PAGE', 'dcc_gtd_registration_activation_status_page');
 define('GOOGLE_MAP_FIELD_NAME', 'dcc_gtd_regisration_google_map_field_name');
@@ -123,4 +122,12 @@ function registration_form_number_validation(array $form, FormStateInterface $fo
   if (!empty($telephone[0]['value']) && strlen($telephone[0]['value']) <= 5) {
     $form_state->setErrorByName('field_phone', t('The telephone number may not be shorter than @min characters.', ['@min' => 6]));
   }
+}
+
+/**
+ * Implements hook_cron().
+ */
+function dcc_gtd_registration_cron() {
+  $queue = \Drupal::service('dcc_gtd_registration.queue');
+  $queue->addToQueue();
 }

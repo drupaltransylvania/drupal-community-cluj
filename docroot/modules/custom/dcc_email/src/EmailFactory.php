@@ -29,7 +29,8 @@ class EmailFactory {
       case GlobalTrainingRegistrationForm::GLOBAL_TRAINING_REGISTRATION_EMAIL_KEY:
         return \Drupal::service('dcc_email.success_email_formatter');
 
-      break;
+      case 'global_training_reminder':
+        return \Drupal::service('dcc_email.reminder_email_formatter');
 
       default:
         return NULL;
