@@ -38,5 +38,7 @@ install:
   - echo -e "\033[0;34m-- Files that will be sniffed:\033[0m" && cat changed_existing_files.txt || true
 
 script:
+  - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
+  - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH, PR=$PR, BRANCH=$BRANCH"
   # Run for each changed file the code sniffer.
-  - if [ "$TRAVIS_PULL_REQUEST" == "true" ] && [ -s changed_existing_files.txt ] && [ "$TRAVIS_BRANCH" != "master"] && [ "$TRAVIS_BRANCH" != "develop"] ; then ./vendor/bin/phpcs --file-list=changed_existing_files.txt; fi;
+  - if [ "$TRAVIS_PULL_REQUEST" == "true" ] && [ -s changed_existing_files.txt ] && [ "$BRANCH" != "master"] && [ "$BRANCH" != "develop"] ; then ./vendor/bin/phpcs --file-list=changed_existing_files.txt; fi;
